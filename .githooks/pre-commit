@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refuses a commit whose index.html and README.md say different things. See tools/check-sync.js.
+# To use it in a fresh clone: git config core.hooksPath .githooks
+exec node "$(git rev-parse --show-toplevel)/tools/check-sync.js" --staged
