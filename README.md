@@ -24,6 +24,9 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 2014
 
+- **[YU SciFi iPhone App (Objective-C)](https://github.com/mihailod/yu-scifi)** · **February**  
+  A catalogue of the science fiction, fantasy and horror books published in [Serbo-Croatian](https://en.wikipedia.org/wiki/Serbo-Croatian) in [Yugoslavia](https://en.wikipedia.org/wiki/Socialist_Federal_Republic_of_Yugoslavia) during the 20th century: 510 titles in 17 categories, from Kentaur and Polaris to X-100 SF, with their cover art, browsable and searchable with no network connection. Each book links to Google, [Goodreads](https://www.goodreads.com) and Wikipedia, and, for collectors, to the used-book sites of Serbia, Croatia, Slovenia and Bosnia and Herzegovina. Made at my startup, MiRteh, it was on the [App Store](https://en.wikipedia.org/wiki/App_Store_(Apple)) until 2022, and is back there since August 2026.
+
 - **[Arian Web Shop iOS App Prototype (Objective-C)](https://mihailod.github.io/attic/ArianPrototype/arian.html)** · **January**  
   A web shop iPhone app prototype for [Arian GmbH](https://www.arian.com/en/) (Austria), from the time of my startup, MiRteh, meant to lead to a big project that was later cancelled. It demoed product discovery (browse and search), a product-dependent configurator, a shopping cart and account management. Here it runs in the browser as it looked on iOS 7, with screenshots of the real app running today, and fixes for prices computed in floats, a cent or a few euros off.
 
