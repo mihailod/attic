@@ -2,7 +2,7 @@
 // Checks that index.html and README.md say the same: the title, the intro, and every year and entry, with the same
 // title, link, month and description. The README's links go to the site (https://mihailod.github.io/attic/...), the
 // index's are relative; that difference is expected. So are three parts only the README has, being about the
-// repository: the "Clean HTML version of this page" line, "Running them" and "Credits".
+// repository: the "HTML version of this page" line, "Running them" and "Credits".
 //
 //   node tools/check-sync.js            checks the files on disk
 //   node tools/check-sync.js --staged   checks what is staged for the next commit (the pre-commit hook uses this)
@@ -10,7 +10,7 @@
 const fs = require("fs"), path = require("path"), { execFileSync } = require("child_process");
 const ROOT = path.join(__dirname, "..");
 const SITE = "https://mihailod.github.io/attic/";
-const README_ONLY = [/^Clean HTML version of this page:/];
+const README_ONLY = [/^(Clean )?HTML version of this page:/];
 const README_ONLY_SECTIONS = ["Running them", "Credits"];
 
 const staged = process.argv.includes("--staged");

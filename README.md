@@ -2,7 +2,7 @@
 
 *(For my post-2015 work see my [GitHub](https://github.com/mihailod).)*
 
-Clean HTML version of this page: [mihailod.github.io/attic](https://mihailod.github.io/attic/)
+HTML version of this page: [mihailod.github.io/attic](https://mihailod.github.io/attic/)
 
 Historical programs I wrote for fun, school, interviews, and certifications since my childhood, brought back to life to run in any browser. Some are unchanged, others contain fixes for bugs discovered during modernization.
 
@@ -119,6 +119,11 @@ All programs originally written in **Java** unless stated otherwise.
 
 - **[Fly by Night Airline Booking](https://mihailod.github.io/attic/SCJD/flybynight.html)** · **January**  
   Search flights and book seats from two clients sharing one database, with record locking so they can’t double-book. My Sun Certified Java Developer assignment.
+
+## 1999
+
+- **[Teeko (C)](https://mihailod.github.io/attic/mscthesis/teeko.html)** · **March**  
+  Play [Teeko](https://en.wikipedia.org/wiki/Teeko) against the program of my master thesis [“Machine Learning in Strategic Games”](https://archive.org/details/ucenje-u-strateskim-igrama), which picks its moves with [heuristics](https://en.wikipedia.org/wiki/Heuristic), a [minimax](https://en.wikipedia.org/wiki/Minimax) search and a memory of the positions that won, and learns from every game. Runs here as it did in a Windows console, keeping what it learns in your browser, with the memories of the thesis experiments to load, and fixes for a search that seldom played its best move, a player O that read the memory backwards, a draw offered on every turn, and an opening that could hang. I finished it in California, after moving to the USA in 1998.
 
 ## 1998
 

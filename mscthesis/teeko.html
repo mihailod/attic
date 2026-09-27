@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teeko by Mihailo Despotovic, March 1999</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 20px; font-weight: bold; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 900px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button { font-size: 14px; padding: 3px 8px; }
+        .keys button { font: 13px ui-monospace, monospace; min-width: 2.2em; }
+        .run button { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+        .layout > div { min-width: 0; max-width: 100%; }
+        .dos {
+            margin: 0; background: #000; color: #c0c0c0; padding: 6px 8px; border-radius: 4px; outline: none;
+            font: 13px/16px ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; white-space: pre;
+            width: calc(80ch + 16px); max-width: 100%; height: calc(25 * 16px + 12px); overflow: auto; box-sizing: border-box;
+        }
+        .dos:focus { box-shadow: 0 0 0 2px #5a8dee; }
+        .cursor { text-decoration: underline; text-decoration-thickness: 2px; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { text-decoration-color: transparent; } }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        #board { display: grid; grid-template-columns: repeat(5, 44px); grid-template-rows: repeat(5, 44px); gap: 3px; margin: 0 0 4px; }
+        #board button { font: bold 22px/1 ui-monospace, monospace; padding: 0; background: #f4f4f4; border: 1px solid #bbb; border-radius: 4px; cursor: default; color: #000; }
+        #board.live button { background: #fff; cursor: pointer; border-color: #5a8dee; }
+        .coords { font: 12px ui-monospace, monospace; color: #777; margin: 0 0 10px; }
+        .side { width: 320px; max-width: 100%; }
+        #files { list-style: none; padding: 0; margin: 4px 0 8px; font-size: 14px; }
+        #files li { margin: 2px 0; }
+        #files li.none { color: #777; }
+        #files button, .saved button { font-size: 12px; padding: 1px 6px; }
+        .saved select { max-width: 100%; font-size: 13px; margin: 2px 0 4px; }
+        #view { margin: 12px 0 0; }
+        #view[hidden] { display: none; }
+        #view pre { font: 12px/1.4 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; max-height: 360px; overflow: auto; margin: 4px 0 0; }
+        #status { font-size: 14px; color: #a00; margin: 6px 0 0; max-width: 900px; }
+        #status:empty { display: none; }
+        .how { color: #555; font-size: 14px; max-width: 900px; }
+        .steps { font-size: 14px; max-width: 900px; margin: 4px 0 12px; }
+        .steps ol { margin: 4px 0 6px; padding-left: 22px; }
+        .steps li { margin: 2px 0; }
+        .how li { margin: 4px 0; }
+        details { margin: 8px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        #sources summary { font: 600 13px ui-monospace, monospace; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 8; }
+    </style>
+</head>
+<body>
+    <h1>Teeko by Mihailo Despotovic, March 1999</h1>
+    <p class="intro">The program of my master thesis, <a href="https://archive.org/details/ucenje-u-strateskim-igrama">“Učenje u
+        strateškim igrama”</a> (Machine Learning in Strategic Games), at the
+        <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>. It plays
+        <a href="https://en.wikipedia.org/wiki/Teeko">Teeko</a>, the game <a href="https://en.wikipedia.org/wiki/John_Scarne">John
+        Scarne</a> invented in 1937: two players with four pawns each, on a board of five by five. First they put their pawns down,
+        one at a time; then they move them, one field in any direction. Whoever first has four in a row, across, down or
+        diagonally, or four in a square, wins. The program plays you or itself, and learns as it plays: after each game it
+        remembers every position of it, with whether X or O went on to win, and in later games it prefers the moves that led to
+        wins. It runs here as it did in a Windows console, and its files are kept in your browser, so it goes on learning from the
+        games you play.</p>
+    <p class="intro">For each move it asks three advisers: its <a href="https://en.wikipedia.org/wiki/Heuristic">heuristics</a>
+        (make four, stop a four, make a three that can't be stopped…), a <a href="https://en.wikipedia.org/wiki/Minimax">minimax</a>
+        search two moves deep, and its memory. Then it plays the move its
+        <a href="https://en.wikipedia.org/wiki/Evaluation_function">evaluation function</a> likes best. In batch mode it plays
+        itself as many games as you ask, each side with its own memory, and that is how the experiments of the thesis were run.
+        The memories those left are on the thesis CD, and can be loaded here; the most experienced is the one after 10,000
+        games.</p>
+    <p class="intro">I wrote it from 1997 to 1999 in <a href="https://en.wikipedia.org/wiki/ANSI_C">ANSI C</a>, as portable as I
+        could make it: it was built with Turbo C 2.0, Borland C++ 3.1, Visual C++ 4.1 to 6.0, CodeWarrior 3.0 and the cc of Solaris
+        and AIX, and checked with <a href="https://en.wikipedia.org/wiki/Lint_(software)">lint</a>. Its <code>main()</code> was begun
+        on 14 November 1998 in Sunnyvale, California, five months after I moved to the USA. My advisors were <a href="https://poincare.matf.bg.ac.rs/~dugosija/">Đorđe Dugošija</a> and
+        <a href="https://www.linkedin.com/in/vladimir-srdanovic-8670184/">Vladimir Srdanović</a>, and I defended the thesis on 13 May 2002. The idea went on into
+        <a href="../tt/tt.html">TeekoTeacher</a>.</p>
+
+    <div class="steps">
+        <b>To play:</b>
+        <ol>
+            <li>Click or tap <b>teeko</b> below, or type <code>teeko</code> in the console and press Enter.</li>
+            <li>Press <b>2</b> and Enter to let the program begin, or <b>1</b> to begin yourself. (<b>3</b> has it play itself; Enter
+                shows each move.)</li>
+            <li>Put your four pawns down: type a field's row and column, like <code>13</code>, and Enter, or click the field on the
+                board.</li>
+            <li>Then move a pawn to a free field next to it: type both fields, like <code>1323</code>, or click your pawn and then
+                the field.</li>
+        </ol>
+        <b>q</b> stops a game, and <b>q</b> in the menu quits. <b>t</b> hides the program's thinking, <b>?</b> shows the score, and
+        <code>teeko -?</code> explains batch mode.
+    </div>
+
+    <div class="row run">
+        <span>Run:</span>
+        <button data-run="teeko">teeko</button>
+        <button data-run="teeko -?">teeko -?</button>
+        <button data-run="teeko +h+s+l +h+s+l mem2.m 100">teeko +h+s+l +h+s+l mem2.m 100</button>
+        <button id="stop" disabled>Stop (Ctrl+C)</button>
+        <label><input type="checkbox" id="fixed"> Fixed (from the next run)</label>
+    </div>
+    <div class="row keys">
+        <span>Keys:</span>
+        <button data-keys="1">1</button><button data-keys="2">2</button><button data-keys="3">3</button>
+        <button data-keys="q">q</button><button data-keys="t">t</button><button data-keys="?">?</button>
+        <button data-keys="y">y</button><button data-keys="n">n</button>
+        <button data-keys="Enter">Enter</button><button data-keys="Backspace">⌫</button>
+    </div>
+
+    <div class="layout">
+        <div>
+            <div class="label">The console</div>
+            <pre class="dos" id="screen" tabindex="0" aria-label="The console; click it and type"></pre>
+            <div id="status" aria-live="polite"></div>
+        </div>
+        <div class="side">
+            <div class="label">The board (click to type a field)</div>
+            <div id="board"></div>
+            <div class="coords">A field is its row, then its column: 00 is top left, 44 bottom right.</div>
+            <div class="label">C:\TEEKO, kept in this browser</div>
+            <ul id="files"></ul>
+            <div class="saved">
+                <div class="label">Saved memories, from the thesis</div>
+                <select id="saved" aria-label="A saved memory"></select><br>
+                <button id="saved-memory">Copy to memory.m</button>
+                <button id="saved-mem2">Copy to mem2.m</button>
+                <button id="saved-view">View</button>
+                <button id="empty">Delete all files</button>
+            </div>
+            <div id="view" hidden>
+                <div class="label"><span id="view-name"></span> <button id="view-close">Close</button></div>
+                <pre id="view-text"></pre>
+            </div>
+        </div>
+    </div>
+
+    <h2>How it works</h2>
+    <p class="how">The opening, while the pawns are put down, has its own heuristics: the middle first, then the fields
+        around it; later, four if it can make it, else stopping the opponent's four, else making three, else stopping the
+        opponent's three. After that, for each move, the heuristics try in turn to
+        make four, stop a four, make a three open at both ends, make a three that can't be stopped, and stop those of the opponent;
+        failing all of those, a random move. Making or stopping four is played at once. Otherwise the search writes every move of
+        the program to a file, <code>level1.s</code>, and every reply to each of them to <code>level2.s</code>, and takes the
+        move whose worst reply is the best. The evaluation adds 1000 for four, 15 for a three and 6 for the middle field, 3 for
+        each of the eight around it, less the opponent's.</p>
+    <p class="how">The memory, <code>memory.m</code>, is plain text: each position is 25 digits, the board row by row, followed by
+        how many games it was in that X won, and that O won, in four characters each. A position and the same with X and O
+        swapped are one. When a game is won, every position of it (after the opening) is added, or its count is raised. To recall,
+        the program looks for the positions its next move can reach, and takes the one with the most wins over losses. Drawn games
+        teach nothing. <code>stat.m</code> keeps the score.</p>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how" id="bugs">
+        <li><b>The search seldom plays the move it found.</b> <code>decide()</code> works out each move's worst reply, and the
+            best of those, as minimax should. But then it looks for that move by comparing the value with each move's own
+            evaluation, a different number, and reads the file back one or two moves short of where it stopped. In 400 games
+            against itself, the move it passed on was one of the best only 7.5% of the time (613 of 8,206 searches).</li>
+        <li><b>Player O reads the memory backwards.</b> A remembered position counts how often X won from it and how often O
+            did. Recalling, the program takes wins minus losses from X's side whichever side it plays, so O picks the moves that
+            went well for X. The thesis says the subtraction goes “depending on whether the computer is the first or the second
+            player” (6.4.3); the code doesn't ask. In batch mode, where O is player 2, O with the memory after 10,000 games won
+            20.9% of 3,000 games, less than O with no memory at all, 24.8%. With that one sign changed, 34.0%. The experiments of
+            chapter 6.9 ran on this code: the saved memories are from 29 to 31 October 2000, after <code>teeko.exe</code> was
+            built from these sources on 12 October.</li>
+        <li><b>When you move first, it learns the game the wrong way round.</b> It tells who won by whether the game ended on an
+            odd or an even move, which is right when its own pawns moved first. When yours did, every position is counted as a
+            win for the loser: in six games it won against a player who began, all the positions it learned, 8 to 32 a game,
+            went down as the player's wins.</li>
+        <li><b>From move 25 on, it offers you a draw on every one of its turns.</b> Against a person, <code>game()</code> looks for
+            cycles of 2, 3 and 5 moves, but <code>isdraw()</code> knows only 2, 3 and 4; asked for 5, it compares a position with
+            itself, and finds a draw. In 60 sessions of play, it offered a draw on all 1,134 of its turns past move 24, and the
+            position was repeating in none of them.</li>
+        <li><b>It can say it is making four, and not.</b> The heuristics' patterns use −1 for “no field”, but test
+            <code>x&gt;0</code>, so a field in row 0 is never left out; and four of the patterns of <code>make4</code> and
+            <code>avoid4</code> name a field off their line, 34 or 30 for 32. Either way it can play a “killer move” at once that
+            isn't one: with its pawns on 00, 02 and 03 it moves 00 to 01, and with 10, 21 and 43 and a pawn next to 32, it goes to
+            34 instead of winning on 32. And <code>avoid4</code> checks 00 where it means 04, so it doesn't stop that four when 00
+            is taken.</li>
+        <li><b>It can hang in the opening.</b> Some of its placements pick one of four fields at random until one is free, 11, 13, 31
+            and 33, or 12, 21, 23 and 32, and when all four are taken, it never stops. It happened 5 times in about 10,700 openings against a player
+            putting pawns anywhere. To see it: move first, put pawns on 40 and 04, and if its second pawn goes to 13 or 31, put
+            yours on 33, and then on 11.</li>
+        <li><b>Your moves aren't checked.</b> <code>getmove()</code> tests the third digit twice and the fourth never, and never
+            asks whether the field is next to the pawn. So <code>1344</code> jumps from 13 to 44, a fourth digit over 4 runs
+            on into the next row, and <code>4449</code>, with your pawn on 44, can put it past the end of the board, into the
+            program's other variables, and it is gone.</li>
+        <li><b>Smaller ones.</b> The statistics give the number of games it played second as those it played first. The square
+            patterns of <code>makenondefendable3</code> and <code>avoidnondefendable3</code> are in loops that start from a
+            variable left at 5, so they never run. <code>makedouble3</code> asks about the field 5,4, past the board, where it
+            means 4,<i>j</i>. <code>omake3</code> puts a pawn on 12 where it means 22, which can't happen in play, as the middle
+            is always taken by then. With searching off and learning on, <code>learnplay()</code> lists the moves from a board
+            it hasn't filled in yet, so it finds nothing in its memory. And quitting a game with q leaves <code>game.m</code>
+            open, so it stays behind when teeko ends.</li>
+    </ul>
+    <p class="how">Fixed does what was meant: the search plays its best move, each side reads the memory from its own side, a
+        game you began is learned the right way round, a draw is offered only when the moves repeat, your pawns move only to a
+        free field next to them, the patterns name the right fields and leave out the right ones, the square patterns run, the
+        opening puts its pawn on a random free field when the four are taken, the statistics give the right number, and learning
+        alone looks at the board it is on. The typos, such as “occured” and “positios”, are as they were.</p>
+    <p class="how" id="checked">The port was checked against the original C, compiled on a Mac with Microsoft's
+        <code>rand()</code>, the clock given, and the typing read from a script. In 400 sessions of random typing and command
+        lines, batch mode with the saved memories included, and 200 played by a program that reads the screen and answers as a
+        person might, mistakes and all, the screens and the files left behind are the same, hangs included. Each heuristic was
+        also run on 60,000 boards, reaching every line of them, with the same result every time. Where the C reads or writes
+        past the end of the board, the page does what it would if the variables lay in memory in the order
+        <code>defs.c</code> declares them, and the C was compiled so; the board <code>learnplay()</code> never fills in is
+        empty here, as it was in that C. Visual C++ 6 rounded a percentage that ends in exactly a half up, 3.125 to 3.13, and
+        the page does too.</p>
+
+    <h2>The original C code</h2>
+    <p class="how">Seventeen files, which <code>teeko.c</code> puts together with <code>#include</code>.</p>
+    <div id="sources"></div>
+
+    <script src="source.js"></script>
+    <script src="data.js"></script>
+    <script src="teeko.js"></script>
+</body>
+</html>
