@@ -2,7 +2,7 @@
 
 *(For my post-2015 work see my [GitHub](https://github.com/mihailod).)*
 
-Run them in your browser at [mihailod.github.io/attic](https://mihailod.github.io/attic/).
+Clean HTML version of this page: [mihailod.github.io/attic](https://mihailod.github.io/attic/)
 
 Historical programs I wrote for fun, school, interviews, and certifications since my childhood, brought back to life to run in any browser. Some are unchanged, others contain fixes for bugs discovered during modernization.
 
