@@ -1,3 +1,5 @@
+![Mihailo Despotovic's Software Attic, 1985 to 2015: screens of the old programs and 30 years in the ZX Spectrum font](social-preview.jpg)
+
 # Mihailo Despotovic's Software Attic 1985-2015
 
 *(For my post-2015 work see my [GitHub](https://github.com/mihailod).)*
