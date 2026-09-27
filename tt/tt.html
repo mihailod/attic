@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TeekoTeacher V1.0 by Mihailo Despotovic, June 2003</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 640px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 12px; }
+        h1 { font-size: 16px; font-weight: normal; margin: 0; }
+        nav { display: flex; gap: 12px; }
+        nav button { background: none; border: none; padding: 0; color: #0645ad; cursor: pointer; font-size: 13px; }
+        nav button:hover { text-decoration: underline; }
+        .main { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-start; }
+        #board {
+            display: grid;
+            grid-template-columns: 20px repeat(5, minmax(0, 1fr));
+            grid-template-rows: 20px repeat(5, minmax(0, 1fr));
+            gap: 3px;
+            width: 380px;
+            max-width: 100%;
+            aspect-ratio: 1;
+        }
+        #board .label { display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px; }
+        #board button {
+            font: bold 40px/1 ui-monospace, monospace;
+            background: #fff;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 0;
+            cursor: pointer;
+        }
+        #board button:disabled { cursor: default; }
+        #board button.x { color: blue; }
+        #board button.o { color: red; }
+        #board button.advice { background: yellow; }
+        #board button.selected { outline: 3px solid #333; outline-offset: -4px; }
+        .side { display: flex; flex-direction: column; gap: 8px; padding-top: 24px; }
+        .side fieldset { border: none; padding: 0; margin: 0 0 8px; display: flex; flex-direction: column; gap: 4px; }
+        .side legend { padding: 0; margin-bottom: 4px; }
+        .side label { white-space: nowrap; }
+        .side button { font-size: 14px; padding: 4px 14px; align-self: flex-start; }
+        #to-move { margin: 10px 0 0; min-height: 1.2em; color: #333; }
+        #log {
+            width: 100%;
+            box-sizing: border-box;
+            height: 10em;
+            margin-top: 12px;
+            font: 13px/1.4 ui-monospace, monospace;
+            resize: vertical;
+        }
+        dialog { border: 1px solid #999; border-radius: 6px; padding: 20px 24px; max-width: 34em; }
+        dialog p { margin: 0 0 12px; line-height: 1.45; }
+        dialog h2 { font-size: 15px; margin: 0 0 12px; }
+        dialog h3 { font-size: 14px; margin: 16px 0 6px; }
+        dialog form { text-align: center; margin-top: 16px; }
+        dialog form button { padding: 4px 20px; font-size: 14px; }
+        #instructions { max-height: 80vh; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TeekoTeacher V1.0 by Mihailo Despotovic, June 2003</h1>
+        <nav>
+            <button id="show-instructions">Instructions</button>
+            <button id="show-db">Database Info</button>
+            <button id="show-about">About</button>
+        </nav>
+    </header>
+    <div class="main">
+        <div>
+            <div id="board"></div>
+            <p id="to-move"></p>
+        </div>
+        <div class="side">
+            <fieldset>
+                <legend>Advise:</legend>
+                <label><input type="radio" name="advise" value="x"> Player 'X'</label>
+                <label><input type="radio" name="advise" value="o"> Player 'O'</label>
+                <label><input type="radio" name="advise" value="both" checked> Both</label>
+            </fieldset>
+            <label><input type="checkbox" id="show-log" checked> Show Log</label>
+            <button id="clear-log">Clear Log</button>
+            <button id="restart">Restart Game</button>
+        </div>
+    </div>
+    <textarea id="log" readonly></textarea>
+
+    <dialog id="end">
+        <p id="end-message"></p>
+        <form method="dialog"><button autofocus>OK</button></form>
+    </dialog>
+
+    <dialog id="db">
+        <p id="db-info"></p>
+        <form method="dialog"><button autofocus>OK</button></form>
+    </dialog>
+
+    <dialog id="about">
+        <p>TeekoTeacher, Version <span id="about-version"></span> by Mihailo Despotovic 2003.</p>
+        <p>Developed for the CAPS4 Conference paper “TeekoTeacher: A Tool for Learning Good Teeko Strategies”,
+            The Fourth International Conference on Human-System Learning, Glasgow, Scotland, UK, 2003.</p>
+        <form method="dialog"><button autofocus>OK</button></form>
+    </dialog>
+
+    <dialog id="instructions">
+        <h2>TeekoTeacher Instructions</h2>
+        <h3>1. Rules of Teeko</h3>
+        <p>The game is played on a five by five chess-like board. Each player has four equal pieces.</p>
+        <p>The first four moves define the opening phase. During this phase, each player alternatively puts one piece
+            on an unoccupied field on the board. Then, the pieces are treated as kings in Chess — they can be moved only
+            to unoccupied adjacent fields.</p>
+        <p>The goal of the game is to make a four in a row, diagonal or square formation. The game is considered to be
+            drawn if the same pair of moves (move = ply + reply) gets repeated three times in a row.</p>
+        <h3>2. How to play</h3>
+        <p>During the opening phase, just click on the field you want to play.
+            During the post-opening phase, two clicks are required to move a piece. First, click on the field occupied
+            by the piece you want to move. Then click on the field you want to move that piece to.</p>
+        <h3>3. How to learn</h3>
+        <p>TeekoTeacher allows you to play on behalf both sides and to learn from advices provided by the program. You can
+            choose to receive advices for the first player, for the second player and for both players.</p>
+        <p>During the game, depending on the setup and the availability of the current position in the database,
+            TeekoTeacher might provide an advice for the next best move (where "the best" is "the best according to the
+            database.") This advice will be represented as a flashing field (in the opening phase) and as a flashing pair
+            of board fields ('from' and 'to' fields) during the post-opening phase. You can follow those advices and try
+            to learn from them or, alternatively, you can choose to ignore them.</p>
+        <p>You can also use the log area to copy and then save game logs so you can study them later at your convenience.</p>
+        <form method="dialog"><button autofocus>OK</button></form>
+    </dialog>
+
+    <script src="ttdb.js"></script>
+    <script src="tt.js"></script>
+</body>
+</html>

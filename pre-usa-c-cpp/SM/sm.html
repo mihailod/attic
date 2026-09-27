@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Random Number Generator by Mihailo Despotovic, February 1997</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1180px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 900px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button, select, input[type=number] { font-size: 14px; padding: 3px 8px; }
+        input[type=number] { width: 5em; }
+        .keys button { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+        .dos {
+            margin: 0; background: #000; color: #aaa; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; white-space: pre; overflow-x: auto; outline: none;
+            max-width: 100%; box-sizing: border-box;
+        }
+        .dos:focus { box-shadow: 0 0 0 2px #5a8dee; }
+        .cursor { background: #aaa; color: #000; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { background: transparent; color: #aaa; } }
+        .english { margin: 0; color: #333; background: #f6f6f6; border: 1px solid #ddd; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, Menlo, Consolas, monospace; white-space: pre; overflow-x: auto; max-width: 100%; box-sizing: border-box; }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        #vectors-caption { font-size: 13px; color: #555; }
+        table { border-collapse: collapse; font-size: 14px; margin: 6px 0; }
+        th, td { border: 1px solid #ddd; padding: 4px 8px; text-align: left; vertical-align: top; }
+        #st-note { font-size: 13px; color: #555; }
+        .how { color: #555; font-size: 14px; max-width: 900px; }
+        .how li { margin: 3px 0; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>A Random Number Generator by Mihailo Despotovic, February 1997</h1>
+    <p class="intro">My term project for <span lang="sr">“Statističke metode u veštačkoj inteligenciji”</span> (Statistical Methods
+        in Artificial Intelligence) class, during my MSc studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>: a 16-bit “random” number made by
+        starting with random bits, each 1 with probability p, and applying the rule A(i) = A(i−1) OR A(i+1) n times. It runs here
+        as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian, with the English translation of the screen beside it. Click the screen and type, or use the
+        buttons: U enters p, n and how many numbers; O makes them.</p>
+
+    <div class="row keys">
+        <span>Keys:</span>
+        <button data-keys="U">U</button>
+        <button data-keys="U0.5\n10\n3\n">U, p 0.5, n 10, 3 numbers</button>
+        <button data-keys="O">O</button>
+        <button data-keys="P">P</button>
+        <button data-keys=" ">any key</button>
+        <button data-keys="\e">Esc</button>
+        <button id="restart">Start again</button>
+        <label><input type="checkbox" id="fixed"> Fixed</label>
+        <label><input type="checkbox" id="mute"> Mute the beep</label>
+    </div>
+
+    <div class="layout">
+        <div>
+            <div class="label">The DOS screen</div>
+            <pre class="dos" id="screen" tabindex="0" aria-label="The program's text screen; click it and type"></pre>
+        </div>
+        <div>
+            <div class="label">In English</div>
+            <pre class="english" id="english"></pre>
+        </div>
+        <div>
+            <div class="label">The vectors of the last number, one per row</div>
+            <canvas id="vectors" width="252" height="20"></canvas>
+            <div id="vectors-caption"></div>
+        </div>
+    </div>
+
+    <h2>How random is it?</h2>
+    <p class="how">The rule turns a bit on unless both its neighbors are off, so the 1s spread, and the vector soon stops
+        changing: within about 8 iterations when fixed, and about 16 as written, where the bit that is always 0 slows the spreading.
+        It ends up all 1s, which is 65535 fixed and 65534 as written. If the 1s started only on every other bit, it ends up with 1s on
+        every other bit, alternating between 43690 and 21845 (21844 as written). With no 1s at all, it stays 0. So beyond that, only
+        these four numbers can come out: with p = 0.5, about 99% of them are the same one, and with a small p, 0 is the most common.
+        Only a small n gives more variety.</p>
+    <div class="row">
+        <label>p <input type="number" id="st-p" min="0" max="1" step="0.05" value="0.5"></label>
+        <label>n <input type="number" id="st-n" min="1" max="999" value="10"></label>
+        <button id="st-run">Make 10,000 numbers each way</button>
+    </div>
+    <table id="st-table"></table>
+    <div id="st-note"></div>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how">
+        <li>The new last bit was computed into <code>novi[7]</code>, which the loop then overwrote, instead of <code>novi[15]</code>.
+            So <code>novi[15]</code> was never set and held whatever happened to be on the stack. That was almost surely not exactly
+            1, so the last bit of every new vector was 0, and the number was 65534 where it should have been 65535. As written, the
+            page takes the garbage to be “not 1”.</li>
+        <li>The starting vector could never have its top bit set: <code>postavi()</code> starts from 16384, while its comment says
+            binary 1000000000000000, which is 32768. Oddly, the task statement says 0 ≤ X ≤ 32767, which only 15 bits give, but the
+            iterations then set the top bit anyway.</li>
+        <li><code>init()</code> cleared <code>niz[0]</code> to <code>niz[1000]</code> in an array of 1000, and n = 1000 was accepted,
+            writing past the end of the array. n = 0 was accepted too, though the requirement says 0 &lt; n &lt; 1000.</li>
+        <li>“<span lang="sr">Ne postoje podaci !</span>” (there is no data), for O before U, was printed and at once cleared by the
+            menu, so it was never seen.</li>
+    </ul>
+    <p class="how">The port was checked against the original C++, compiled with 16-bit numbers as in Borland C and fed the same
+        keys and random numbers: every screen is the same, as written and fixed.</p>
+
+    <details>
+        <summary>The original C++ code</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="sm.js"></script>
+</body>
+</html>

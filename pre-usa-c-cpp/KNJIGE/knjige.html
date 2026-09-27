@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KNJIGE by Mihailo Despotovic, August 1995</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1440px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 900px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button { font-size: 14px; padding: 3px 8px; }
+        .keys button { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+        .layout > div { min-width: 0; max-width: 100%; }
+        .dos {
+            margin: 0; background: #000; color: #aaa; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; white-space: pre; overflow-x: auto; outline: none;
+            max-width: 100%; box-sizing: border-box;
+        }
+        .dos:focus { box-shadow: 0 0 0 2px #5a8dee; }
+        .cursor.solid { background: #aaa; color: #000; animation: blink 1s steps(1) infinite; }
+        .cursor.normal { text-decoration: underline; text-decoration-thickness: 2px; animation: blinkline 1s steps(1) infinite; }
+        @keyframes blink { 50% { background: transparent; color: #aaa; } }
+        @keyframes blinkline { 50% { text-decoration-color: transparent; } }
+        .english { margin: 0; color: #333; background: #f6f6f6; border: 1px solid #ddd; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, Menlo, Consolas, monospace; white-space: pre; overflow-x: auto; max-width: 100%; box-sizing: border-box; }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        #status { font-size: 14px; color: #a00; margin: 6px 0 0; max-width: 900px; }
+        #status:empty { display: none; }
+        .how { color: #555; font-size: 14px; max-width: 900px; }
+        .how li { margin: 4px 0; }
+        #paper { display: flex; flex-wrap: wrap; gap: 12px; }
+        .sheet { margin: 0; background: #fffef6; border: 1px solid #ccc; box-shadow: 1px 2px 4px rgba(0,0,0,.12); padding: 14px 16px;
+            font: 12px/1.3 ui-monospace, Menlo, Consolas, monospace; color: #222; white-space: pre; overflow-x: auto; max-width: 100%; box-sizing: border-box; }
+        #printer-empty { color: #777; font-size: 14px; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 8; }
+    </style>
+</head>
+<body>
+    <h1>KNJIGE by Mihailo Despotovic, August 1995</h1>
+    <p class="intro">A catalogue of my books for <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, <span lang="sr">“knjige”</span> meaning books, written in C in four days in August
+        1995. It shows one book at a time: the original title, author and awards, then the Serbian translation, its translator,
+        publisher and edition, and a note. You can page through the books, sort them by any field, search any field, and print a book.
+        The books are read from a text file, and this one is my catalogue as I last saved it, in May 1998. It runs here as it did in
+        DOS, in Serbian, with the English translation of the screen beside it. Click the screen and type, or use the buttons.</p>
+
+    <div class="row keys">
+        <span>Keys:</span>
+        <button data-keys="N">N next</button>
+        <button data-keys="P">P previous</button>
+        <button data-keys="@Home">Home</button>
+        <button data-keys="@End">End</button>
+        <button data-keys="S1">S 1: sort by title</button>
+        <button data-keys="T2clarke\n">T 2 clarke: search authors</button>
+        <button data-keys="T\n">T Enter: all books</button>
+        <button data-keys="OD">O D: print</button>
+        <button data-keys="U">U help</button>
+        <button data-keys=" ">any key</button>
+        <button data-keys="\e">Esc</button>
+    </div>
+    <div class="row">
+        <button id="restart">Start again</button>
+        <label><input type="checkbox" id="fixed"> Fixed</label>
+        <label><input type="checkbox" id="mute"> Mute the beep</label>
+    </div>
+
+    <div class="layout">
+        <div>
+            <div class="label">The DOS screen</div>
+            <pre class="dos" id="screen" tabindex="0" aria-label="The program's text screen; click it and type"></pre>
+        </div>
+        <div>
+            <div class="label">In English</div>
+            <pre class="english" id="english"></pre>
+        </div>
+    </div>
+    <div id="status" aria-live="polite"></div>
+
+    <h2>The printer</h2>
+    <p class="how">O prints the book on the screen to <code>stdprn</code>, the printer, after asking if it is completely ready; D is
+        <span lang="sr">“da”</span>, yes. Each book ends with a form feed, a new page, which a comment in the code calls “desirable for
+        InkJet and Laser (thanks to Magda)”. Magda is <a href="https://www.linkedin.com/in/davor-magdic">Davor Magdić</a>.</p>
+    <div class="row">
+        <button id="printer-save">Save the printout</button>
+        <button id="printer-clear">Throw it away</button>
+    </div>
+    <div id="printer-empty">Nothing printed yet.</div>
+    <div id="paper"></div>
+
+    <h2>The database</h2>
+    <p class="how">The books are in <span id="db-name">BAZA.KNJ</span>, a text file: <code>@</code> and a book's number, then one line
+        for each field, <code>#1</code> to <code>#E</code>. The help screen (U) explains it, with the limits.</p>
+    <div class="row">
+        <button id="db-save">Download it</button>
+        <label>Or load your own <input type="file" id="db-load"></label>
+    </div>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how">
+        <li><b>Search, End, then Next hung it.</b> After a search, End went to the position of the last of all the books, 158,
+            instead of the last one found. Previous from there showed books that weren't found, and Next looked for a book past
+            the list, which isn't in the file, and at the end of the file the loop that reads a book's number never ends.</li>
+        <li><b>Sorting by the note (E) lost most of the books.</b> The sort reads the first four characters of the field, even past
+            the end of its line. The note is the last field, so when it was empty, those four characters included the next
+            book's <code>@</code> and number, and that book was sorted under the number before it. Paging through, only 9 of the
+            158 books appear.</li>
+        <li><b>The 15th time you went back to all the books, it quit</b> with “<span lang="sr">FATALNA GRESKA : ne mogu da otvorim
+            fajl baze!</span>” (can't open the database file). Going back opened the file again without closing it, and Borland C
+            has 20 files open at most, five of them taken from the start.</li>
+        <li><b>PRVI !, ZADNJI! and NEMA !</b> (first, last, none found) were printed and at once covered by the redrawn screen, so
+            only the beep was left.</li>
+        <li><b>A search lost the sort</b>: the books found came in the order of the file, though a comment says the sort should win.</li>
+        <li><b>The sort wrote past its memory.</b> It asked for 2 bytes a book, the size of a pointer, instead of the 7 its records
+            take. With 158 books that ran into memory nothing else was using, but the comment at the top says bugs appeared after a
+            sort when the limit was 9,999 books, and this may have been why. It also took that memory before asking which field,
+            and kept it if you pressed Esc. The page doesn't simulate DOS memory, so neither of these shows here.</li>
+        <li>Smaller ones: <code>char sort[1]</code> is written at <code>sort[1]</code>, one past its end; and the help says F1 is the
+            same as [H], where the key is [U].</li>
+    </ul>
+    <p class="how">Fixed corrects the first five. The port was checked against the original C, compiled with a simulated DOS
+        screen, keyboard and printer: in 280 sessions, on this database and on a made-up one with every field at and past its
+        limits, it shows the same screens, beeps, printouts and hangs.</p>
+
+    <details>
+        <summary>The original C code</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="baza.js"></script>
+    <script src="source.js"></script>
+    <script src="knjige.js"></script>
+</body>
+</html>

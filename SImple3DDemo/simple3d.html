@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>3D Rendering from Scratch V1.0 by Mihailo Despotovic, Feb 2011</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1300px;
+            padding: 12px 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .help { font-weight: 600; margin: 0 0 8px; }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid #aaa;
+            box-sizing: border-box;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px 14px;
+            margin-top: 8px;
+        }
+        .controls label { white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <h1>3D Rendering from Scratch V1.0 by Mihailo Despotovic, Feb 2011</h1>
+    <p class="help">Translate: arrows &nbsp; Rotate: Q A (around x) O P (y) W S (z) &nbsp; Zoom: PgUp PgDn</p>
+    <canvas id="screen"></canvas>
+    <div class="controls">
+        <select id="body">
+            <option value="0">Tetrahedron</option>
+            <option value="1">Cube</option>
+        </select>
+        <label><input type="checkbox" id="hsr"> Hidden surface removal</label>
+        <label><input type="checkbox" id="fill"> Fill polygons</label>
+        <label><input type="checkbox" id="zorder"> z-ordering</label>
+        <label><input type="checkbox" id="ambient"> Ambient shading:</label>
+        <span>
+            <select id="ambient-r">
+                <option value="0">r 0%</option><option value="1">r 20%</option><option value="2">r 40%</option>
+                <option value="3">r 60%</option><option value="4">r 80%</option><option value="5" selected>r 100%</option>
+            </select>
+            <select id="ambient-g">
+                <option value="0">g 0%</option><option value="1">g 20%</option><option value="2">g 40%</option>
+                <option value="3">g 60%</option><option value="4">g 80%</option><option value="5" selected>g 100%</option>
+            </select>
+            <select id="ambient-b">
+                <option value="0">b 0%</option><option value="1">b 20%</option><option value="2">b 40%</option>
+                <option value="3">b 60%</option><option value="4">b 80%</option><option value="5" selected>b 100%</option>
+            </select>
+        </span>
+        <label><input type="checkbox" id="diffuse"> Diffuse shading</label>
+    </div>
+    <script src="simple3d.js"></script>
+</body>
+</html>

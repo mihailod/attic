@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Producers and Consumers by Mihailo Despotovic, December 2015</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 0 0 8px; }
+        .controls label { display: inline-flex; align-items: center; gap: 5px; }
+        .controls input[type=number] { width: 3.5em; font-size: 14px; padding: 2px 4px; }
+        button { font-size: 14px; padding: 4px 12px; }
+        .switches { background: #f7f7f7; border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; margin: 0 0 10px; }
+        .switches .hint { color: #555; font-size: 13px; margin: 4px 0 0; }
+        code { font-size: 13px; }
+        #problem { background: #fde2e2; border: 1px solid #e0a0a0; border-radius: 6px; padding: 8px 12px; margin: 0 0 10px; }
+        #problem strong { color: #b00; }
+        .stage { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin: 8px 0; }
+        @media (max-width: 640px) { .stage { grid-template-columns: 1fr; } }
+        .side h2 { font-size: 14px; margin: 0 0 6px; }
+        .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+        .chip {
+            width: 38px; height: 28px; border-radius: 6px; border: 2px solid transparent;
+            display: flex; align-items: center; justify-content: center; font: 600 12px ui-monospace, monospace;
+            background: #e6e6e6; color: #555; transition: background 0.1s;
+        }
+        .chip.blocked { background: #ffe3b3; color: #7a4a00; }
+        .chip.holding { background: #7ed38c; color: #000; border-color: #1a7f37; }
+        .chip.full, .chip.empty { background: #b9cff5; color: #1d3f86; }
+        .middle { text-align: center; }
+        #buffer { display: flex; flex-direction: column-reverse; gap: 3px; align-items: center; margin: 0 auto; }
+        .slot { width: 70px; height: 16px; border: 1px solid #999; border-radius: 3px; background: #fff; }
+        .slot.filled { background: #d9731f; border-color: #a0520f; }
+        .slot.extra { border-style: dashed; border-color: #ddd; }
+        .slot.bad { background: #c00; border-color: #800; }
+        #count { font: 600 22px ui-monospace, monospace; margin: 6px 0 0; }
+        #lock { font-size: 13px; color: #333; margin: 2px 0 0; }
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: #444; margin: 6px 0; }
+        .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+        .legend .l-sleeping::before { background: #e6e6e6; }
+        .legend .l-blocked::before { background: #ffe3b3; }
+        .legend .l-holding::before { background: #7ed38c; border: 1px solid #1a7f37; }
+        .legend .l-waiting::before { background: #b9cff5; }
+        #states, #rates { font-size: 13px; color: #444; }
+        #output {
+            height: 110px; overflow: auto; margin: 8px 0 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd;
+            font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
+        }
+        .clock { color: #555; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+    <h1>Producers and Consumers by Mihailo Despotovic, December 2015</h1>
+    <p class="intro">Producer threads put items into a shared buffer and consumer threads take them out, one lock guarding the count.
+        A producer that finds the buffer full calls <code>wait()</code>, and so does a consumer that finds it empty; whoever changes
+        the count calls <code>notifyAll()</code> to wake them. The count and the " F " and " E " (full, empty) printed as in the original
+        scroll at the bottom. The original also sleeps while holding the lock, so the threads mostly take turns: nearly all of
+        them are waiting for the lock at any moment.</p>
+
+    <div class="controls">
+        <label>Producers <input type="number" id="producers" min="1" max="40" value="20"></label>
+        <label>Consumers <input type="number" id="consumers" min="1" max="40" value="10"></label>
+        <label>Buffer full at <input type="number" id="capacity" min="1" max="20" value="9"></label>
+        <button id="defaults">Original settings</button>
+    </div>
+    <div class="switches">
+        <div class="controls" style="margin:0">
+            <strong>Break it:</strong>
+            <label><input type="checkbox" id="use-if"> <code>if</code> instead of <code>while</code> around <code>wait()</code></label>
+            <label><input type="checkbox" id="use-notify"> <code>notify()</code> instead of <code>notifyAll()</code></label>
+            <button id="small">Small setup: 3, 3, 1</button>
+        </div>
+        <p class="hint">With <code>if</code>, a woken thread doesn't check the count again, and the buffer soon overflows or goes below empty.
+            With <code>notify()</code>, the one thread woken can be the wrong kind, until every thread is waiting and none is left to wake the others;
+            that takes a while with 30 threads, so try the small setup at a high speed.</p>
+    </div>
+    <div class="controls">
+        <button id="pause">Pause</button>
+        <button id="restart">Restart</button>
+        <label>Speed <input type="range" id="speed" min="0.25" max="20" step="0.25" value="1"> <span id="speed-label">1×</span></label>
+        <span class="clock">Time <span id="clock">0.0 s</span></span>
+    </div>
+    <div id="problem" hidden><strong>Broken!</strong> <span id="problem-text"></span> <button id="restart2">Restart</button></div>
+
+    <div class="stage">
+        <div class="side">
+            <h2>Producers</h2>
+            <div class="chips" id="producer-list"></div>
+        </div>
+        <div class="middle">
+            <div id="buffer"></div>
+            <div id="count"></div>
+            <div id="lock"></div>
+        </div>
+        <div class="side">
+            <h2>Consumers</h2>
+            <div class="chips" id="consumer-list"></div>
+        </div>
+    </div>
+    <div class="legend">
+        <span class="l-sleeping">sleeping</span><span class="l-blocked">waiting for the lock</span>
+        <span class="l-holding">holding the lock</span><span class="l-waiting">in wait(): buffer full or empty</span>
+    </div>
+    <div id="states"></div>
+    <div id="rates"></div>
+    <pre id="output"></pre>
+    <script src="pc.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fly by Night Airline Booking by Mihailo Despotovic, January 2001</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1300px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        h1 { font-size: 18px; font-weight: 600; margin: 0 0 6px; }
+        .note { color: #444; margin: 0 0 12px; max-width: 900px; line-height: 1.45; }
+        #clients { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 12px; }
+        .client { border: 1px solid #aaa; border-radius: 6px; padding: 10px 12px; min-width: 0; }
+        .client h2 { font-size: 15px; margin: 0 0 8px; }
+        .client-a h2 { color: #0645ad; }
+        .client-b h2 { color: #8a2be2; }
+        .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 6px 0; }
+        .row label { color: #444; }
+        .seats { width: 4em; }
+        .flights-label { color: #444; font-size: 13px; margin: 8px 0 4px; }
+        .table-wrap { height: 300px; overflow: auto; border: 1px solid #ccc; }
+        table { border-collapse: collapse; width: 100%; font-size: 13px; }
+        th { position: sticky; top: 0; background: #eee; text-align: left; font-weight: 600; }
+        th, td { padding: 2px 6px; white-space: nowrap; border-bottom: 1px solid #eee; }
+        tbody tr { cursor: pointer; }
+        tbody tr:hover { background: #f3f3ff; }
+        tbody tr.locked-other { background: #fde2e2; }
+        tbody tr.selected { background: #0645ad; color: #fff; }
+        tbody tr.locked-mine td:first-child::before,
+        tbody tr.locked-other td:first-child::before { content: "🔒 "; }
+        .status { min-height: 1.4em; margin: 8px 0 0; font-weight: 600; }
+        .status.ok { color: #1a7f37; }
+        .status.error { color: #c00; }
+        .status.warning { color: #b35900; }
+        .status.waiting { color: #b35900; }
+        .shared { border: 1px solid #aaa; border-radius: 6px; padding: 10px 12px; margin-top: 12px; }
+        .shared h2, .converter summary { font-size: 15px; margin: 0 0 8px; font-weight: 600; }
+        #log {
+            height: 150px; overflow: auto; margin: 8px 0 0; padding: 4px 8px;
+            background: #f6f6f6; border: 1px solid #ddd; font: 12px/1.4 ui-monospace, monospace;
+        }
+        #log .client-a { color: #0645ad; }
+        #log .client-b { color: #8a2be2; }
+        #log .converter { color: #444; }
+        .converter { border: 1px solid #aaa; border-radius: 6px; padding: 10px 12px; margin-top: 12px; }
+        .converter summary { cursor: pointer; margin: 0; }
+        .converter[open] summary { margin-bottom: 8px; }
+        .converter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 12px; }
+        #ascii, #convert-log {
+            width: 100%; box-sizing: border-box; height: 260px; margin: 0;
+            font: 12px/1.4 ui-monospace, monospace; border: 1px solid #ccc; padding: 4px 6px;
+        }
+        #convert-log { overflow: auto; background: #f6f6f6; white-space: pre; }
+    </style>
+</head>
+<body>
+    <h1>Fly by Night Airline Booking by Mihailo Despotovic, January 2001</h1>
+    <p class="note">My Sun Certified Java Developer assignment. Two clients share one flight database, as if connected to the same server.
+        Search for flights, click one, enter the number of seats and click Book. Each booking locks the flight’s record, rereads it,
+        updates the seats and unlocks it. Turn on slow booking, book a flight in one client and quickly book the same flight in the
+        other: the second client waits for the lock, then sees the seats the first one left. A client’s table updates when it searches or books.</p>
+
+    <div id="clients"></div>
+
+    <template id="client-template">
+        <div class="client">
+            <h2></h2>
+            <div class="row">
+                <label>Origin Airport <select class="from"></select></label>
+                <label>Destination Airport <select class="to"></select></label>
+                <button class="search">Search</button>
+            </div>
+            <div class="row">
+                <label>Number of seats to book <input class="seats" list="seat-choices" value="1" inputmode="numeric"></label>
+                <button class="book">Book</button>
+            </div>
+            <div class="flights-label"></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="status"></div>
+        </div>
+    </template>
+    <datalist id="seat-choices"><option value="1"><option value="2"><option value="3"><option value="4"></datalist>
+
+    <div class="shared">
+        <h2>Database</h2>
+        <div class="row">
+            <label><input type="checkbox" id="slow"> Slow booking (hold the lock for 4 seconds)</label>
+            <button id="reset">Restore the original database</button>
+            <span>Database file: <span id="dbinfo"></span></span>
+        </div>
+        <div class="row">Locks: <span id="locks"></span></div>
+        <div id="log"></div>
+    </div>
+
+    <details class="converter">
+        <summary>Data converter: legacy ASCII flights to the binary database</summary>
+        <div class="converter-grid">
+            <div>
+                <textarea id="ascii" spellcheck="false"></textarea>
+                <div class="row">
+                    <button id="convert">Convert</button>
+                    <button id="use-converted" disabled>Use the converted database</button>
+                </div>
+            </div>
+            <pre id="convert-log"></pre>
+        </div>
+    </details>
+
+    <script src="db-data.js"></script>
+    <script src="flybynight.js"></script>
+</body>
+</html>

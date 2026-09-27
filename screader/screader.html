@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Serbian Cafe Forums Reader by Mihailo Despotovic, September 2001</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 4px; }
+        .note { color: #555; margin: 0 0 12px; font-size: 13px; }
+        .window {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) 3fr;
+            grid-template-rows: 55vh 35vh;
+            gap: 6px;
+        }
+        .pane { border: 1px solid #aaa; overflow: auto; }
+        #tree { padding: 6px 8px; }
+        #tree .root { font-weight: 600; margin-bottom: 4px; }
+        #tree details { margin: 2px 0; }
+        #tree summary { cursor: pointer; }
+        #tree .forum {
+            display: block;
+            background: none;
+            border: none;
+            padding: 1px 6px;
+            margin-left: 14px;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        #tree details > .forum { margin-left: 18px; }
+        #tree .forum:hover { background: #eef; }
+        #tree .forum.selected { background: #0645ad; color: #fff; }
+        .topics-pane { display: flex; flex-direction: column; }
+        #topics-title { font-weight: 600; padding: 6px 8px; border-bottom: 1px solid #ddd; }
+        #topics { padding: 4px 8px; overflow: auto; }
+        .topic { display: flex; gap: 8px; align-items: baseline; padding: 1px 0; }
+        .topic button { min-width: 3.2em; font-size: 12px; }
+        .topic.selected span { font-weight: 600; }
+        #thread {
+            grid-column: 1 / -1;
+            background: yellow;
+            margin: 0;
+            padding: 5px 20px 5px 5px;
+            white-space: pre-wrap;
+            font: 13px/1.4 ui-monospace, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Serbian Cafe Forums Reader by Mihailo Despotovic, September 2001</h1>
+    <p class="note">The Serbian Cafe forums closed permanently on December 3, 2024.
+        Offline example: the forum list is the real one from 2001, but the topics, threads and usernames are made up.
+        Pick a topic number to read its thread.</p>
+    <div class="window">
+        <div class="pane" id="tree"></div>
+        <div class="pane topics-pane">
+            <div id="topics-title"></div>
+            <div id="topics"></div>
+        </div>
+        <pre class="pane" id="thread"></pre>
+    </div>
+    <script src="sample-pages.js"></script>
+    <script src="screader.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WAV by Mihailo Despotovic, May 1998</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 20px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 0 0 8px; }
+        #play { font-size: 14px; padding: 3px 10px; }
+        .how { color: #555; font-size: 14px; }
+        .how li { margin: 4px 0; }
+        #explain { white-space: pre-line; font-size: 14px; color: #333; background: #f6f6f6; border: 1px solid #ddd; border-radius: 4px; padding: 8px 10px; margin: 8px 0 0; min-height: 3em; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+
+        /* Windows 98 */
+        #desktop {
+            position: relative; background: #008080; padding: 14px; border-radius: 4px; min-height: 420px;
+            font: 12px Tahoma, "MS Sans Serif", "Segoe UI", sans-serif; color: #000; overflow: hidden;
+        }
+        .raised { background: #c0c0c0; border: 2px solid; border-color: #fff #000 #000 #fff; box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf; }
+        #window {
+            display: flex; flex-direction: column; width: 600px; height: 400px; max-width: 100%; min-width: 180px; min-height: 140px;
+            resize: both; overflow: hidden; box-sizing: border-box; padding: 2px;
+        }
+        .titlebar {
+            display: flex; align-items: center; gap: 4px; height: 18px; padding: 0 2px 0 3px; color: #fff; font-weight: bold;
+            background: linear-gradient(90deg, #000080, #1084d0); flex: none;
+        }
+        .titlebar img { width: 16px; height: 16px; image-rendering: pixelated; }
+        .titlebar .title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .titlebar .x, .titlebar .ctl {
+            width: 16px; height: 14px; padding: 0; font: bold 11px/10px Tahoma, sans-serif; color: #000; background: #c0c0c0;
+            border: 1px solid; border-color: #fff #000 #000 #fff; box-shadow: inset -1px -1px #808080; cursor: default;
+        }
+        .menubar { display: flex; flex: none; padding: 1px 0; }
+        .menubar .item { position: relative; }
+        .menubar .item > button { font: inherit; background: none; border: 1px solid transparent; padding: 1px 6px; color: #000; }
+        .menubar .item > button:hover, .menubar .item > button[aria-expanded=true] { border-color: #fff #808080 #808080 #fff; }
+        .menubar .item > button[aria-expanded=true] { border-color: #808080 #fff #fff #808080; }
+        .menu { display: none; position: absolute; left: 0; top: 100%; z-index: 5; min-width: 170px; padding: 2px; }
+        .menu.open { display: block; }
+        .menu button {
+            display: flex; width: 100%; text-align: left; font: inherit; background: none; border: 0; padding: 3px 8px 3px 4px; color: #000; white-space: nowrap;
+        }
+        .menu button .check { width: 16px; flex: none; }
+        .menu button .key { margin-left: auto; padding-left: 24px; }
+        .menu button:not([disabled]):hover, .menu button:not([disabled]):focus { background: #000080; color: #fff; outline: none; }
+        .menu button[disabled] { color: #808080; text-shadow: 1px 1px #fff; }
+        .menu hr { border: 0; border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 3px 1px; }
+        u { text-decoration: underline; }
+        #toolbar { display: flex; align-items: center; gap: 0; padding: 2px 3px; flex: none; border-top: 1px solid #808080; box-shadow: inset 0 1px #fff; }
+        #toolbar[hidden] { display: none; }
+        #toolbar button { width: 24px; height: 22px; padding: 0; background: #c0c0c0; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; }
+        #toolbar button:hover { border-color: #fff #808080 #808080 #fff; }
+        #toolbar button:active { border-color: #808080 #fff #fff #808080; }
+        #toolbar img { width: 18px; height: 15px; image-rendering: pixelated; }
+        #toolbar .sep { width: 8px; }
+        #client {
+            flex: 1; min-height: 0; position: relative; background: #fff;
+            border: 2px solid; border-color: #808080 #fff #fff #808080; box-shadow: inset 1px 1px #000;
+        }
+        #canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+        #shortcut {
+            display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; background: none; border: 0; color: #fff; font: inherit; padding: 4px; cursor: default;
+        }
+        #shortcut[hidden] { display: none; }
+        #shortcut img { width: 32px; height: 32px; image-rendering: pixelated; }
+        #shortcut:focus span { background: #000080; outline: 1px dotted #fff; }
+        .shade { position: absolute; inset: 0; z-index: 9; }
+        .dialog {
+            position: absolute; z-index: 10; left: 50%; top: 50%; transform: translate(-50%, -50%); min-width: 250px; max-width: calc(100% - 20px);
+            padding: 2px; box-sizing: border-box;
+        }
+        .dialog { background: #c0c0c0; border: 2px solid; border-color: #dfdfdf #000 #000 #dfdfdf; box-shadow: inset -1px -1px #808080, inset 1px 1px #fff, 2px 2px 8px rgba(0,0,0,.3); }
+        .dbody { padding: 10px; }
+        .w98 {
+            font: inherit; min-width: 75px; height: 23px; padding: 0 8px; background: #c0c0c0; color: #000;
+            border: 1px solid; border-color: #fff #000 #000 #fff; box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+        }
+        .w98.default { outline: 1px solid #000; }
+        .w98:active { border-color: #000 #fff #fff #000; box-shadow: inset 1px 1px #808080; }
+        .w98:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+        .msgrow { display: flex; gap: 14px; align-items: flex-start; padding: 4px 6px 10px 0; }
+        .msgrow p { margin: 6px 0 0; white-space: pre-line; }
+        .msgicon { flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: bold 20px Georgia, serif; }
+        .msgicon.info { background: #fff; color: #00f; border: 1px solid #000; font-style: italic; }
+        .msgicon.stop { background: #f00; color: #fff; border: 1px solid #800000; font: bold 18px Tahoma, sans-serif; }
+        .buttons { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+        .about { display: flex; gap: 14px; align-items: flex-start; }
+        .about img { image-rendering: pixelated; margin: 6px 4px; }
+        .about div { flex: 1; }
+        .about p { margin: 2px 0 8px; }
+        .about .w98 { height: 60px; min-width: 60px; }
+        .open { width: min(340px, 100%); }
+        .open .lookin { margin: 0 0 6px; }
+        .open .combo { display: inline-block; background: #fff; border: 2px solid; border-color: #808080 #fff #fff #808080; padding: 1px 6px; min-width: 150px; }
+        .open .files { background: #fff; border: 2px solid; border-color: #808080 #fff #fff #808080; height: 110px; overflow: auto; padding: 2px; }
+        .open .file { display: flex; justify-content: space-between; padding: 1px 3px; cursor: default; }
+        .open .file .size { color: #555; }
+        .open .file.on { background: #000080; color: #fff; }
+        .open .file.on .size { color: #fff; }
+        .open .file:focus { outline: 1px dotted #000; }
+        .open .fname { display: flex; gap: 6px; align-items: center; margin: 8px 0; }
+        .open .field { flex: 1; min-width: 0; font: inherit; border: 2px solid; border-color: #808080 #fff #fff #808080; padding: 2px 4px; }
+    </style>
+</head>
+<body>
+    <h1>WAV by Mihailo Despotovic, May 1998</h1>
+    <p class="intro">A small Windows program in C++ that shows any file as a wave: open a file and
+        choose Start Drawing, and it reads 100 bytes spread through the file and draws them as a line, each byte's value its height.
+        I wrote it while learning <a href="https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library">MFC</a> and <a href="https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B">Visual C++</a> 5.0 in haste, before emigrating to the USA for my first job there.
+        The window below runs it as it was; the menus, the toolbar and the dialogs are the ones it had, and you can resize the window.
+        The Open dialog has a few files to try, or you can pick one of your own; nothing leaves your computer.</p>
+
+    <div class="row">
+        <label><input type="checkbox" id="fixed"> Fixed</label>
+        <button id="play" disabled>▶ Play</button>
+    </div>
+
+    <div id="desktop">
+        <button id="shortcut" hidden aria-label="Start WAV"><img data-img="icon" alt=""><span>WAV</span></button>
+        <div id="window" class="raised">
+            <div class="titlebar"><img data-img="small" alt=""><span class="title">Untitled - WAV</span>
+                <button class="ctl" tabindex="-1" aria-hidden="true">_</button><button class="ctl" tabindex="-1" aria-hidden="true">□</button>
+                <button class="x" data-cmd="exit" aria-label="Close">×</button></div>
+            <div class="menubar" role="menubar">
+                <div class="item"><button aria-haspopup="true" aria-expanded="false"><u>F</u>ile</button>
+                    <div class="menu raised" role="menu">
+                        <button data-cmd="open" role="menuitem"><span class="check"></span><span><u>O</u>pen...</span><span class="key">Ctrl+O</span></button>
+                        <button data-cmd="go" role="menuitem"><span class="check"></span><span><u>S</u>tart Drawing</span><span class="key">Ctrl+G</span></button>
+                        <hr>
+                        <button disabled role="menuitem"><span class="check"></span><span>Recent File</span></button>
+                        <hr>
+                        <button data-cmd="exit" role="menuitem"><span class="check"></span><span>E<u>x</u>it</span></button>
+                    </div></div>
+                <div class="item"><button aria-haspopup="true" aria-expanded="false"><u>V</u>iew</button>
+                    <div class="menu raised" role="menu">
+                        <button data-cmd="toolbar" role="menuitemcheckbox"><span class="check" id="toolbar-check">✓</span><span><u>T</u>oolbar</span></button>
+                    </div></div>
+                <div class="item"><button aria-haspopup="true" aria-expanded="false"><u>H</u>elp</button>
+                    <div class="menu raised" role="menu">
+                        <button data-cmd="help" role="menuitem"><span class="check"></span><span>Short Info</span></button>
+                        <hr>
+                        <button data-cmd="about" role="menuitem"><span class="check"></span><span><u>A</u>bout Wave</span></button>
+                    </div></div>
+            </div>
+            <div id="toolbar">
+                <button data-cmd="open" title="Open" aria-label="Open"><img data-img="open" alt=""></button>
+                <span class="sep"></span>
+                <button data-cmd="go" aria-label="Start Drawing"><img data-img="go" alt=""></button>
+                <span class="sep"></span>
+                <button data-cmd="help" aria-label="Short Info"><img data-img="help" alt=""></button>
+                <button data-cmd="about" title="About" aria-label="About"><img data-img="about" alt=""></button>
+            </div>
+            <div id="client"><canvas id="canvas" aria-label="WAV's window, where the file is drawn as a wave"></canvas></div>
+        </div>
+    </div>
+    <div id="explain" aria-live="polite"></div>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how">
+        <li><b>It read every (step + 1)th byte.</b> Go computes step = length / 100 and loops with <code>i += step</code>, but each
+            time it reads a byte, which moves the file on by one, and then seeks another step. So the reads drift ahead of
+            <code>i</code>, and the last ones fall past the end of the file, where nothing is read and the byte before is used again.
+            In a file under 200 bytes, step is 1 and it reads every other byte, so the right half of the wave is flat.</li>
+        <li><b>It stored more than 100 bytes.</b> step is rounded down, so the loop can run more than 100 times: up to 199, for a file of
+            199 bytes. The extra bytes went past the end of <code>data[]</code>, over <code>end</code>, and on into the heap. For a large
+            file it is only one byte too many, which landed in padding; NOTE.TXT shows a small file.</li>
+        <li><b>It dropped the last byte.</b> <code>end</code> is set to one less than the count, and the drawing stops before
+            <code>data[end]</code>.</li>
+        <li><b>A file of 1 byte crashed it</b>, with <code>end</code> = 0 and a division by it. <b>An empty file</b> set
+            <code>end</code> to −1, which is 4,294,967,295 as a DWORD, and the drawing set out to read that many bytes. Try
+            ONE.TXT and EMPTY.TXT.</li>
+        <li>Smaller ones: the constructor cleared <code>data[0]</code> to <code>data[100]</code>, one past the end; the wave is upside
+            down, larger values lower; it starts at x = 5 and then goes back to x = step; and it covers the window only as far as
+            a whole number of pixels per point reaches.</li>
+    </ul>
+    <p class="how">Fixed reads 100 bytes spread evenly through the file, draws them all across the whole window with larger values
+        higher, and says so when a file is empty. My 32×32 icon, the wave, is in the About box; the title bar shows the 16×16 icon,
+        which was still AppWizard's MFC one, as it was. The port was checked against the original C++, compiled with small
+        stand-ins for MFC: in 206 sessions of opening, drawing and resizing, with files from 0 to a million bytes, it draws the same
+        lines and crashes in the same places.</p>
+
+    <details>
+        <summary>The original C++ code (the parts I wrote, marked ********; the rest is from AppWizard)</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="wav.js"></script>
+</body>
+</html>

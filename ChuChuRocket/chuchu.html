@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChuChu Cheese V1.0 by Mihailo Despotovic, October 2003</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 980px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .tabs { display: flex; gap: 4px; border-bottom: 1px solid #aaa; margin: 0 0 12px; }
+        .tabs button { font-size: 15px; padding: 6px 16px; border: 1px solid #aaa; border-bottom: none; background: #eee; border-radius: 6px 6px 0 0; cursor: pointer; }
+        .tabs button.selected { background: #fff; font-weight: 600; margin-bottom: -1px; padding-bottom: 7px; }
+        .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 0 0 8px; }
+        button { font-size: 14px; padding: 4px 12px; }
+        select { font-size: 14px; padding: 3px 6px; }
+        .game { width: 100%; max-width: 727px; }
+        canvas { display: block; }
+        #board, #editor-board { width: 100%; height: auto; touch-action: none; cursor: pointer; }
+        .bar { display: flex; background: #000; width: 100%; }
+        #tray { width: 33.6%; height: auto; cursor: pointer; }
+        #banner { flex: 1; min-width: 0; height: auto; }
+        .bar .buttons { display: flex; width: 26.4%; }
+        .bar .buttons canvas { width: 33.33%; height: auto; cursor: pointer; }
+        #message { min-height: 1.4em; margin: 8px 0 0; font-weight: 600; }
+        #message.won { color: #1a7f37; }
+        #message.lost { color: #c00; }
+        .how { color: #555; font-size: 14px; margin: 10px 0 0; }
+        .editor { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+        .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 170px; }
+        .tools .wide { grid-column: 1 / -1; }
+        .tools label { grid-column: 1 / -1; font-size: 13px; color: #444; }
+        .tools input[type=text] { grid-column: 1 / -1; font-size: 14px; padding: 3px 5px; }
+        .tools button { padding: 5px 6px; background: #d3d3d3; border: 1px solid #999; border-radius: 3px; cursor: pointer; }
+        .tools button.selected { background: #00ff00; }
+        .pad { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 6px 0 0; }
+        .pad button { padding: 4px; }
+        .editor-main { flex: 1; min-width: 280px; max-width: 727px; }
+        #editor-tray { width: 33.6%; height: auto; background: #000; cursor: pointer; }
+        #editor-message { color: #c00; min-height: 1.3em; margin: 6px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>ChuChu Cheese V1.0 by Mihailo Despotovic, October 2003</h1>
+    <p class="intro">My version of the Puzzle mode of Sega's <a href="https://en.wikipedia.org/wiki/ChuChu_Rocket!">ChuChu Rocket!</a> for the <a href="https://en.wikipedia.org/wiki/Dreamcast">Dreamcast</a>, with a cheese instead of the rocket.
+        Put your arrows on the board, then press play: the mice and cats run along, turn when they hit a wall and follow the arrows.
+        Get every mouse into the cheese, without letting one fall into a hole, a cat reach the cheese or a cat catch a mouse.</p>
+
+    <div class="tabs">
+        <button id="tab-play" class="selected">Play</button>
+        <button id="tab-editor">Level editor</button>
+    </div>
+
+    <div id="panel-play">
+        <div class="row">
+            <button id="prev">◀ Previous</button>
+            <select id="level-select"></select>
+            <button id="next">Next ▶</button>
+            <button id="clear-arrows">Take back all arrows</button>
+            <button id="solve">Show a solution</button>
+            <label><input type="checkbox" id="mute"> Mute</label>
+        </div>
+        <div class="game">
+            <canvas id="board"></canvas>
+            <div class="bar">
+                <canvas id="tray"></canvas>
+                <canvas id="banner" width="240" height="64"></canvas>
+                <div class="buttons">
+                    <canvas id="btn-play" width="64" height="64" title="Play"></canvas>
+                    <canvas id="btn-ff" width="64" height="64" title="Fast forward"></canvas>
+                    <canvas id="btn-stop" width="64" height="64" title="Stop"></canvas>
+                </div>
+            </div>
+        </div>
+        <p id="message"></p>
+        <p class="how">Click an arrow in the tray, then a square on the board to put it there; click a placed arrow to take it back.
+            Arrows can't go on the cheese or a hole. ▶ plays, ▶▶ plays four times as fast, ■ stops and puts everyone back.
+            The four levels are my level files from 2003, which were really tests of the game rather than finished puzzles;
+            level 1 has one cat fewer than in 2003, so that it can be solved.</p>
+    </div>
+
+    <div id="panel-editor" hidden>
+        <div class="row">
+            <button id="editor-new">New</button>
+            <button id="editor-load">Load level file...</button>
+            <button id="editor-save">Save level file</button>
+            <select id="editor-open"></select>
+            <button id="editor-try">Try it ▶</button>
+            <input type="file" id="editor-file" hidden>
+        </div>
+        <div class="editor">
+            <div class="tools">
+                <label for="level-name">Level Name</label>
+                <input type="text" id="level-name" maxlength="40">
+                <button class="wide" data-tool="5">Wall</button>
+                <button data-tool="1">Mouse</button>
+                <button data-tool="2">Cat</button>
+                <button data-tool="4">Cheese</button>
+                <button data-tool="3">Hole</button>
+                <button class="wide" data-tool="6">Arrow</button>
+                <button class="wide" id="tool-erase">Erase</button>
+                <div class="pad">
+                    <span></span><button data-dir="3">^</button><span></span>
+                    <button data-dir="1">&lt;</button><span></span><button data-dir="2">&gt;</button>
+                    <span></span><button data-dir="4">V</button><span></span>
+                </div>
+            </div>
+            <div class="editor-main">
+                <canvas id="editor-board"></canvas>
+                <canvas id="editor-tray"></canvas>
+                <p id="editor-message"></p>
+                <p class="how">Pick a tool and a direction, then click the board: mice and cats face the chosen direction, and a wall
+                    goes on that side of the square. With Arrow chosen, click the tray below the board to give the level an arrow
+                    of that direction (up to four). Erase, or a right-click, removes what is on a square, or one of its walls per click,
+                    or the last arrow in the tray. Levels are saved in the 2003 file format.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="media.js"></script>
+    <script src="levels.js"></script>
+    <script src="chuchu.js"></script>
+</body>
+</html>

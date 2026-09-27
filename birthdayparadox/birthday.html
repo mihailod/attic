@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Birthday Paradox by Mihailo Despotovic, September 2005</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 14px; }
+        h2 { font-size: 15px; margin: 22px 0 6px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+        #people { width: 4.5em; font-size: 15px; padding: 3px 5px; }
+        #people-range { flex: 1; min-width: 140px; }
+        #answer { font-weight: 600; margin: 10px 0 8px; }
+        #chart { width: 100%; height: auto; display: block; touch-action: none; cursor: pointer; }
+        #chart .grid { stroke: #e3e3e3; }
+        #chart .ylabel { font: 11px system-ui, sans-serif; fill: #666; text-anchor: end; }
+        #chart .xlabel { font: 11px system-ui, sans-serif; fill: #666; text-anchor: middle; }
+        #chart .curve { fill: none; stroke: #0645ad; stroke-width: 2.5; }
+        #chart .mark { stroke: #999; stroke-dasharray: 4 3; }
+        #chart .marklabel { font: 11px system-ui, sans-serif; fill: #444; }
+        #chart .current { fill: #d9731f; stroke: #fff; stroke-width: 2; }
+        button { font-size: 14px; padding: 4px 12px; }
+        #room-result { margin: 10px 0 6px; min-height: 1.4em; }
+        #room-result.match { color: #c00; font-weight: 600; }
+        #calendar { font: 10px/1 system-ui, sans-serif; overflow-x: auto; }
+        .month { display: flex; align-items: center; gap: 2px; margin: 0 0 2px; }
+        .month-name { width: 2.6em; flex: none; color: #666; }
+        .day {
+            flex: none; width: 16px; height: 16px; border-radius: 3px; background: #f0f0f0;
+            display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 700;
+        }
+        .day.one { background: #9dc3f0; }
+        .day.shared { background: #d62828; }
+        #tally { color: #444; margin: 8px 0 0; }
+        details { margin: 22px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        #table { font: 12px/1.4 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 6px 8px; max-height: 320px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>The Birthday Paradox by Mihailo Despotovic, September 2005</h1>
+    <p class="intro">How many people must be in a room before two of them probably share a birthday? Surprisingly few:
+        with 23 people the chance is already better than even. The chance that everyone's birthday differs is
+        365/365 × 364/365 × 363/365 × …, one factor per person, and the chance of a shared birthday is 1 minus that.</p>
+
+    <div class="controls">
+        <label for="people">People in the room</label>
+        <input id="people" type="number" min="1" max="89" value="23">
+        <input id="people-range" type="range" min="1" max="89" value="23" aria-label="People in the room">
+    </div>
+    <p id="answer"></p>
+    <svg id="chart" viewBox="0 0 640 260" role="img" aria-label="Chance of a shared birthday by number of people"></svg>
+
+    <h2>Try it</h2>
+    <div class="controls">
+        <button id="fill">Fill a room with random birthdays</button>
+        <button id="fill-many">Fill 1,000 rooms</button>
+    </div>
+    <p id="room-result"></p>
+    <div id="calendar"></div>
+    <p id="tally"></p>
+
+    <details>
+        <summary>The original table, 0 to 89 people</summary>
+        <pre id="table"></pre>
+    </details>
+    <script src="birthday.js"></script>
+</body>
+</html>

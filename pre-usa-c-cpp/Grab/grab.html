@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GRAB by Mihailo Despotovic, March 1996</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 20px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin: 0 0 8px; }
+        button, select { font-size: 14px; padding: 3px 10px; }
+        #colors { display: inline-flex; gap: 2px; }
+        .swatch { width: 20px; height: 20px; padding: 0; border: 1px solid #999; border-radius: 3px; cursor: pointer; }
+        .swatch.on { outline: 2px solid #000; outline-offset: 1px; }
+        .monitor { background: #000; border-radius: 6px; padding: 10px; }
+        #screen { display: block; width: 100%; max-width: 640px; aspect-ratio: 4 / 3; margin: 0 auto; image-rendering: pixelated; cursor: crosshair; touch-action: none; }
+        #text-mode { color: #aaa; font: 14px ui-monospace, monospace; height: 200px; padding: 8px; }
+        #mask { font-size: 13px; color: #444; margin: 4px 0 0; }
+        #mask.warn { color: #b00; font-weight: 600; }
+        .planes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        @media (max-width: 640px) { .planes { grid-template-columns: repeat(2, 1fr); } }
+        .planes figure { margin: 0; }
+        .planes canvas { width: 100%; aspect-ratio: 4 / 3; image-rendering: pixelated; border: 1px solid #ccc; display: block; }
+        .planes figcaption { font-size: 12px; color: #555; }
+        .consoles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .consoles > div { min-width: 0; }
+        @media (max-width: 760px) { .consoles { grid-template-columns: 1fr; } }
+        .dos, .english {
+            margin: 0; height: 220px; overflow: auto; padding: 8px 10px; border-radius: 4px;
+            font: 12.5px/1.3 ui-monospace, Menlo, Consolas, monospace; white-space: pre;
+        }
+        .dos { background: #000; color: #aaa; }
+        .english { background: #f6f6f6; color: #333; border: 1px solid #ddd; }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        .prompt { display: flex; align-items: center; background: #000; color: #aaa; font: 13px ui-monospace, monospace; padding: 4px 10px; border-radius: 4px; margin: 6px 0; }
+        .prompt input { flex: 1; background: #000; color: #fff; border: none; outline: none; font: inherit; }
+        #disk { margin: 4px 0; padding-left: 20px; font-size: 14px; }
+        #disk button { font-size: 12px; padding: 1px 8px; }
+        .how { color: #555; font-size: 14px; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>GRAB by Mihailo Despotovic, March 1996</h1>
+    <p class="intro">A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> utility that saved the <a href="https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter">EGA</a>/<a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics screen to a file and loaded it back, working directly with the
+        video card. In the 16-color modes, the screen lives in four bit planes, each holding one bit of every pixel's color;
+        GRAB copies the four planes to the file, one after another, and back. Here the VGA card is simulated: paint on the screen,
+        then type <code>grab -s proba</code> to save it, change the picture, and <code>grab -l proba</code> to bring it back.
+        The program's messages are in Serbian, with the English beside them.</p>
+
+    <div class="row">
+        <label>Video mode <select id="mode">
+            <option value="18" selected>12h: 640×480, 16 colors (VGA)</option>
+            <option value="16">10h: 640×350, 16 colors (EGA/VGA)</option>
+            <option value="14">Eh: 640×200, 16 colors</option>
+            <option value="13">Dh: 320×200, 16 colors</option>
+            <option value="3">03h: 80×25 text</option>
+        </select></label>
+        <span id="colors"></span>
+        <label>Brush <input type="range" id="brush" min="0" max="10" value="3"></label>
+        <button id="sample">Draw a sample picture</button>
+        <button id="clear">Clear the screen</button>
+    </div>
+    <div class="monitor">
+        <canvas id="screen" width="640" height="480" aria-label="The simulated VGA screen; drag to paint"></canvas>
+        <div id="text-mode" hidden>(text mode: GRAB can't save it)</div>
+    </div>
+    <div id="mask"></div>
+
+    <h2>The four bit planes</h2>
+    <p class="how">What GRAB saves, one plane after the other: plane 0 holds the blue bit of every pixel's color, 1 the green, 2 the
+        red and 3 the intensity, so a color's number is the sum of 1, 2, 4 and 8 for the planes that have its bit on.</p>
+    <div class="planes">
+        <figure><canvas id="plane0"></canvas><figcaption>Plane 0 (blue, 1)</figcaption></figure>
+        <figure><canvas id="plane1"></canvas><figcaption>Plane 1 (green, 2)</figcaption></figure>
+        <figure><canvas id="plane2"></canvas><figcaption>Plane 2 (red, 4)</figcaption></figure>
+        <figure><canvas id="plane3"></canvas><figcaption>Plane 3 (intensity, 8)</figcaption></figure>
+    </div>
+
+    <h2>The DOS prompt</h2>
+    <div class="row">
+        <button data-cmd="grab -s proba">grab -s proba</button>
+        <button data-cmd="grab -l proba">grab -l proba</button>
+        <button data-cmd="grab">grab</button>
+        <button data-cmd="dir">dir</button>
+        <label><input type="checkbox" id="fixed"> Fixed</label>
+    </div>
+    <div class="prompt">C:\&gt;<input id="cmd" spellcheck="false" autocomplete="off" aria-label="DOS command" placeholder="grab -s proba"></div>
+    <div class="consoles">
+        <div><div class="label">The screen's text</div><pre class="dos" id="console"></pre></div>
+        <div><div class="label">In English</div><pre class="english" id="console-en"></pre></div>
+    </div>
+
+    <h2>The disk</h2>
+    <ul id="disk"></ul>
+    <label>Put a file on the disk <input type="file" id="upload" multiple></label>
+
+    <p class="how">The files are the same as in 1996: the four planes and nothing else, 153,600 bytes in mode 12h. There's no header,
+        so a file must be loaded in the mode it was saved in; loaded in another mode it shows garbage, as it did then, and a file
+        that is too short leaves the last planes with what the program's buffer still held. One bug: after loading, the program
+        “restored” the VGA's Map Mask register to 16 instead of 15. Only its four low bits choose the planes that writes reach, so
+        16 chooses none, and until a program or a mode change set it again, drawing on the screen changed nothing. Try painting
+        after <code>grab -l</code>; tick Fixed and it restores 15, and changing the mode resets it. GRAB itself sets the register
+        before it loads, so it always works. The port was checked against the original C++ on a simulated card: the same output,
+        screen, file and registers in 78 runs.</p>
+
+    <details>
+        <summary>The original C++ code</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="grab.js"></script>
+</body>
+</html>

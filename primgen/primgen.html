@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prime Number Generator and RSA Example by Mihailo Despotovic, May/June 2008</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 720px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 16px; }
+        h2 { font-size: 15px; margin: 28px 0 4px; }
+        .intro { color: #555; margin: 0 0 10px; }
+        form, .row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: end; }
+        label { display: flex; flex-direction: column; gap: 3px; font-size: 14px; }
+        input, select { font-size: 15px; padding: 4px 6px; }
+        input[type=number] { width: 6em; }
+        #test-number { width: 22em; max-width: 100%; font-family: ui-monospace, monospace; }
+        button { font-size: 15px; padding: 5px 14px; }
+        pre {
+            border: 1px solid #aaa;
+            padding: 8px;
+            margin: 10px 0 0;
+            max-height: 40vh;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font: 13px/1.4 ui-monospace, monospace;
+        }
+        pre:empty { display: none; }
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            font: 13px/1.4 ui-monospace, monospace;
+            word-break: break-all;
+        }
+        .keys label, .rsa label { margin-top: 10px; }
+        .note { font-size: 13px; color: #666; margin: 8px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>Prime Number Generator and RSA Example by Mihailo Despotovic, May/June 2008</h1>
+
+    <h2>Generate primes</h2>
+    <p class="intro">Random primes of a given size, each checked by trial division when that's quick.</p>
+    <form id="gen-form">
+        <label>Bits <input id="gen-bits" type="number" value="12" min="2" max="4096"></label>
+        <label>How many <input id="gen-count" type="number" value="100" min="1" max="1000"></label>
+        <button id="gen-button">Generate</button>
+    </form>
+    <pre id="gen-output"></pre>
+
+    <h2>Test a number</h2>
+    <p class="intro">Trial division: the 78,498 primes below one million, then every 6k ± 1 up to the square root.
+        Past about 20 digits this takes a very long time; the estimate shows how long.</p>
+    <form id="test-form">
+        <label>Number <input id="test-number" value="2305843009213693951" inputmode="numeric"></label>
+        <button id="test-button">Test</button>
+        <div class="row">
+            <label>or a random prime of
+                <select id="test-random-bits">
+                    <option value="20">20 bits</option>
+                    <option value="40" selected>40 bits</option>
+                    <option value="60">60 bits</option>
+                    <option value="80">80 bits</option>
+                </select>
+            </label>
+            <button type="button" id="test-random">Fill in</button>
+        </div>
+    </form>
+    <pre id="test-output"></pre>
+
+    <h2>RSA</h2>
+    <p class="intro">Generate a key pair, then encrypt and decrypt a message. Each block of text becomes one number, c = m<sup>e</sup> mod n.</p>
+    <div class="row">
+        <label>Prime size
+            <select id="rsa-bits">
+                <option value="64">64 bits</option>
+                <option value="128">128 bits</option>
+                <option value="256">256 bits</option>
+                <option value="512" selected>512 bits</option>
+                <option value="1024">1024 bits</option>
+            </select>
+        </label>
+        <button id="rsa-generate">Generate Keys</button>
+    </div>
+    <p class="note" id="rsa-info"></p>
+    <div class="keys">
+        <label>Exponent e <textarea id="rsa-e" rows="1" readonly></textarea></label>
+        <label>Public key n <textarea id="rsa-n" rows="4" readonly></textarea></label>
+        <label>Private key d <textarea id="rsa-d" rows="4" readonly></textarea></label>
+    </div>
+    <div class="rsa">
+        <label>Message <textarea id="rsa-message" rows="3">o tempora o mores amiga!</textarea></label>
+        <div class="row" style="margin-top: 8px"><button id="rsa-encrypt">Encrypt</button></div>
+        <label>Encrypted text <textarea id="rsa-cipher" rows="5"></textarea></label>
+        <div class="row" style="margin-top: 8px"><button id="rsa-decrypt">Decrypt</button></div>
+        <label>Decrypted text <textarea id="rsa-decrypted" rows="3" readonly></textarea></label>
+    </div>
+    <p class="note">This is textbook RSA for learning how it works: no real padding, and the same message always
+        encrypts the same way. Don't use it to protect anything.</p>
+
+    <script src="primgen.js"></script>
+</body>
+</html>

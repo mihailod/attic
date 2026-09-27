@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Permutations by Insertion by Mihailo Despotovic, May 2009</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 720px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+        #word { font: 18px ui-monospace, monospace; padding: 4px 8px; width: 9em; text-transform: none; }
+        .examples { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; color: #555; }
+        .examples button { font: 13px ui-monospace, monospace; padding: 3px 8px; }
+        #summary { font-weight: 600; margin: 12px 0 4px; }
+        #distinct-row { margin: 0 0 4px; }
+        h2 { font-size: 14px; margin: 16px 0 6px; }
+        .level { margin: 0 0 10px; }
+        .level-head { color: #444; margin: 0 0 3px; }
+        .level-head b { color: #c0392b; font-family: ui-monospace, monospace; }
+        .row { font: 14px/1.6 ui-monospace, monospace; padding-left: 12px; }
+        .row .from { color: #777; }
+        .row b { color: #c0392b; }
+        .row.more { font-family: system-ui, sans-serif; color: #777; font-size: 13px; }
+        #list-head { font: 13px ui-monospace, monospace; color: #444; margin: 0 0 4px; }
+        #list {
+            margin: 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd; max-height: 320px; overflow: auto;
+            font: 13px/1.6 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+<body>
+    <h1>Permutations by Insertion by Mihailo Despotovic, May 2009</h1>
+    <p class="intro">Every ordering of the letters of a word. Take the permutations of all but the last letter, and insert
+        the last letter into every position of each one; the same step, one letter at a time, builds them all.
+        A word of n letters has n! = 1 × 2 × … × n of them.</p>
+    <div class="controls">
+        <label for="word">Word</label>
+        <input id="word" value="ABC" maxlength="20" spellcheck="false" autocomplete="off">
+        <div class="examples">Try:
+            <button data-word="ABC">ABC</button>
+            <button data-word="ABCD">ABCD</button>
+            <button data-word="AAB">AAB</button>
+            <button data-word="MISSES">MISSES</button>
+        </div>
+    </div>
+    <p id="summary"></p>
+    <label id="distinct-row"><input type="checkbox" id="distinct"> Show only the different ones</label>
+    <h2>Step by step</h2>
+    <div id="steps"></div>
+    <h2>All of them</h2>
+    <div id="list-head"></div>
+    <pre id="list"></pre>
+    <script src="permutations.js"></script>
+</body>
+</html>

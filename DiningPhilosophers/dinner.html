@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dining Philosophers by Mihailo Despotovic, August 2005</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin: 0 0 6px; }
+        .controls label { display: inline-flex; align-items: center; gap: 5px; }
+        button { font-size: 14px; padding: 4px 12px; }
+        .main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 10px; }
+        @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
+        svg { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; }
+        .tabletop { fill: #f3e6cc; stroke: #c9ad7a; stroke-width: 2; }
+        .plate { fill: #fff; stroke: #bbb; stroke-width: 1.5; }
+        .food { font-size: 20px; text-anchor: middle; dominant-baseline: middle; opacity: 0; transition: opacity 0.2s; }
+        .eating .food { opacity: 1; }
+        .fork { transition: transform 0.35s ease; }
+        .fork line { stroke: #999; stroke-width: 3; stroke-linecap: round; }
+        .fork .tine { stroke-width: 1.6; }
+        .fork.held line { stroke: #333; }
+        .seat circle { stroke: #333; stroke-width: 1.5; transition: fill 0.2s; }
+        .seat text { font: 600 18px system-ui, sans-serif; text-anchor: middle; dominant-baseline: middle; }
+        .seat.thinking circle { fill: #dbe7f7; }
+        .seat.hungry circle { fill: #ffc56b; }
+        .seat.eating circle { fill: #7ed38c; }
+        .legend { display: flex; gap: 14px; justify-content: center; font-size: 13px; color: #444; margin: 4px 0 0; }
+        .legend span::before { content: ""; display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 1px solid #333; margin-right: 5px; vertical-align: -1px; }
+        .legend .thinking::before { background: #dbe7f7; }
+        .legend .hungry::before { background: #ffc56b; }
+        .legend .eating::before { background: #7ed38c; }
+        #deadlock { background: #fde2e2; border: 1px solid #e0a0a0; border-radius: 6px; padding: 8px 12px; margin: 8px 0 0; }
+        #deadlock strong { color: #b00; }
+        table { border-collapse: collapse; width: 100%; font-size: 14px; }
+        th, td { text-align: left; padding: 3px 8px; border-bottom: 1px solid #eee; }
+        th { font-weight: 600; background: #f3f3f3; }
+        td.thinking { color: #3b6db3; }
+        td.hungry { color: #b36b00; font-weight: 600; }
+        td.eating { color: #1a7f37; font-weight: 600; }
+        #log {
+            height: 260px; overflow: auto; margin: 12px 0 0; padding: 6px 8px;
+            background: #f6f6f6; border: 1px solid #ddd; font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap;
+        }
+        .clock { color: #555; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+    <h1>Dining Philosophers by Mihailo Despotovic, August 2005</h1>
+    <p class="intro">Philosophers sit around a table with a fork between each pair of neighbours. Each one thinks,
+        gets hungry, picks up the forks on both sides, eats and puts them back. If they all pick up the left fork
+        first, they can end up each holding one fork and waiting forever for the other. My solution: the odd-numbered
+        philosophers pick up the right fork first. Switch to the naive way and click
+        “Everyone gets hungry at once”: all the forks go back on the table and everyone reaches for one at the same moment.</p>
+
+    <div class="controls">
+        <label><input type="radio" name="mode" id="solution" checked> Odd ones take the right fork first (my solution)</label>
+        <label><input type="radio" name="mode" id="naive"> Everyone takes the left fork first</label>
+    </div>
+    <div class="controls">
+        <button id="hungry">Everyone gets hungry at once</button>
+        <button id="pause">Pause</button>
+        <button id="restart">Restart</button>
+        <label>Philosophers <select id="count"><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></label>
+        <label>Speed <input type="range" id="speed" min="0.25" max="8" step="0.25" value="1"> <span id="speed-label">1×</span></label>
+        <span class="clock">Time <span id="clock">0.0s</span></span>
+    </div>
+    <div id="deadlock" hidden><strong>Deadlock!</strong> Every philosopher holds one fork and waits for the other,
+        so nobody will ever eat again. <button id="restart2">Restart</button></div>
+
+    <div class="main">
+        <div>
+            <svg id="table" viewBox="0 0 400 400" role="img" aria-label="The table"></svg>
+            <div class="legend"><span class="thinking">thinking</span><span class="hungry">hungry</span><span class="eating">eating</span></div>
+        </div>
+        <div>
+            <table>
+                <thead><tr><th>Philosopher</th><th>State</th><th>Meals</th><th>Time waiting</th></tr></thead>
+                <tbody id="stats"></tbody>
+            </table>
+            <pre id="log"></pre>
+        </div>
+    </div>
+    <script src="dinner.js"></script>
+</body>
+</html>

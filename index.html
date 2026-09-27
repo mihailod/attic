@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mihailo Despotovic's Software Attic 1986-2015</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 24px 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        h1 { font-size: 32px; font-weight: 600; line-height: 1.2; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 24px; }
+        h2 { font-size: 32px; font-weight: 700; line-height: 1.2; margin: 32px 0 8px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { padding: 12px 0; border-top: 1px solid #ddd; }
+        li:last-child { border-bottom: 1px solid #ddd; }
+        .title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+        a { color: #0645ad; text-decoration: none; }
+        .title a { font-size: 20px; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+        .date { color: #000; font-size: 15px; font-weight: 600; white-space: nowrap; }
+        p { margin: 2px 0 0; color: #333; }
+        blockquote { margin: 0 0 24px; padding: 4px 0 4px 16px; border-left: 3px solid #ddd; font-style: italic; }
+        blockquote p { margin: 0; }
+        blockquote footer { color: #555; font-style: normal; margin: 4px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>Mihailo Despotovic's Software Attic 1986-2015</h1>
+    <p class="intro"><i>(For my post-2015 work see my <a href="https://github.com/mihailod">GitHub</a>.)</i></p>
+    <p class="intro">Historical programs I wrote for fun, school, interviews, and certifications since my childhood, brought back to life to run in any browser. Some are unchanged, others contain fixes for bugs discovered during modernization.</p>
+    <p class="intro">All programs originally written in <b>Java</b> unless stated otherwise.</p>
+    <blockquote>
+        <p>“Beware of bugs in the above code; I have only proved it correct, not tried it.”</p>
+        <footer>― Donald Knuth</footer>
+    </blockquote>
+    <h2>2015</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="producerconsumer/pc.html">Producers and Consumers</a><span class="date">December</span></div>
+            <p>A number of producers and consumers share one buffer, waiting when it is full or empty. Watch them take turns, then break it with if instead of while, or notify() instead of notifyAll().</p>
+        </li>
+        <li>
+            <div class="title"><a href="https://github.com/mihailod/cloudwatch-log4j-appender">CloudWatch Log4j Appender</a><span class="date">June</span></div>
+            <p>A <a href="https://logging.apache.org/log4j/2.12.x/">Log4j 2</a> appender that sends an application's log events to <a href="https://en.wikipedia.org/wiki/Amazon_CloudWatch">AWS CloudWatch</a> Logs, in batches flushed every few seconds, to a new log stream each time the application starts. Configured in the Log4j configuration like any other appender. Made during my tenure at Virtual Instruments (now <a href="https://www.virtana.com">Virtana</a>), and open-sourced per company policy.</p>
+        </li>
+    </ul>
+    <h2>2014</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="ArianPrototype/arian.html">Arian Web Shop iOS App Prototype (Objective-C)</a><span class="date">January</span></div>
+            <p>A web shop iPhone app prototype for <a href="https://www.arian.com/en/">Arian GmbH</a> (Austria), from the time of my startup, MiRteh, meant to lead to a big project that was later cancelled. It demoed product discovery (browse and search), a product-dependent configurator, a shopping cart and account management. Here it runs in the browser as it looked on iOS 7, with screenshots of the real app running today, and fixes for prices computed in floats, a cent or a few euros off.</p>
+        </li>
+    </ul>
+    <h2>2013</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="Trader/trader.html">Davor's Trader (Java, MQL4)</a><span class="date">December</span></div>
+            <p>A contract job from the time of my startup, MiRteh, for <a href="https://www.linkedin.com/in/davoru/">Davor Urošević</a>, a <a href="https://en.wikipedia.org/wiki/Foreign_exchange_market">FOREX</a> trader: a breakout strategy for EUR/USD, begun as a Java program and finished as an Expert Advisor for <a href="https://en.wikipedia.org/wiki/MetaTrader_4">MetaTrader 4</a> in <a href="https://docs.mql4.com/">MQL4</a>. Here the Expert Advisor runs in a small simulated MetaTrader 4 tester, with fixes for a sell with no breakout and for stopping for good after a weekend, among others.</p>
+        </li>
+    </ul>
+    <h2>2012</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="playground-lisp/lisp.html">Lisp Notebook (Lisp)</a><span class="date">January</span></div>
+            <p>My notes from learning Common Lisp: exercises from Budimac et al., <a href="https://www.goodreads.com/book/show/5838062-functional-programming-application-and-implementation">Henderson’s <i>Functional Programming</i></a> and <i><a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">SICP</a></i>, runnable and editable in a small Lisp interpreter written for the page, with notes on my slips.</p>
+        </li>
+    </ul>
+    <h2>2011</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="life/life.html">Conway's Game of Life</a><span class="date">February</span></div>
+            <p>The <a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life">classic cellular automaton</a> on a 500 × 350 board that wraps around at the edges.</p>
+        </li>
+        <li>
+            <div class="title"><a href="SImple3DDemo/simple3d.html">3D Rendering from Scratch</a><span class="date">February</span></div>
+            <p>A hand-built 3D pipeline: rotate a cube or tetrahedron, with hidden surfaces, z-ordering and shading. Based on <a href="https://en.wikipedia.org/wiki/Michael_Abrash">Michael Abrash</a>'s <a href="https://www.goodreads.com/en/book/show/946151.Graphics_Programming_Black_Book">Black Book</a>.</p>
+        </li>
+        <li>
+            <div class="title"><a href="Bresenham/bresenham.html">Bresenham's Line Algorithm</a><span class="date">February</span></div>
+            <p>Which pixels to light up to draw a straight line. Drag the ends and watch it work step by step. My version solves the basic direction and gets the other seven by mirroring it.</p>
+        </li>
+    </ul>
+    <h2>2009</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="permutations/permutations.html">Permutations by Insertion</a><span class="date">May</span></div>
+            <p>Every ordering of the letters of a word, built by inserting one letter at a time into every position. Watch it step by step.</p>
+        </li>
+        <li>
+            <div class="title"><a href="ProjectEuler/euler.html">Project Euler Solutions</a><span class="date">March</span></div>
+            <p>Solutions to 28 of the math and programming problems on <a href="https://projecteuler.net">Project Euler</a>, each runnable with its output and running time.</p>
+        </li>
+    </ul>
+    <h2>2008</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="tries/tries.html">Odds of Success over Repeated Tries</a><span class="date">June</span></div>
+            <p>How many tries it takes to be fairly sure of at least one success, given the chance of each try.</p>
+        </li>
+        <li>
+            <div class="title"><a href="investmortgage/im.html">Mortgage or Invest?</a><span class="date">May</span></div>
+            <p>Is it better to pay cash for a house, or take a mortgage and invest the savings? A year-by-year comparison, taxes included.</p>
+        </li>
+        <li>
+            <div class="title"><a href="primgen/primgen.html">Prime Number Generator and RSA Example</a><span class="date">May</span></div>
+            <p>Generate random primes, test a number by trial division, and encrypt a message with RSA built from scratch.</p>
+        </li>
+    </ul>
+    <h2>2007</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="ParallelSum/parallelsum.html">Parallel Sum Benchmark</a><span class="date">June</span></div>
+            <p>Add up a big array of numbers on one processor core, then split the work across several and see how much faster it gets.</p>
+        </li>
+        <li>
+            <div class="title"><a href="BigMatrix/bigmatrix.html">CPU Cache Impact: Row vs Column Matrix Addition</a><span class="date">April</span></div>
+            <p>Add two big matrices row by row, then column by column: the same additions, several times slower, because of the processor’s cache. Then split the rows across all cores.</p>
+        </li>
+    </ul>
+    <h2>2005</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="birthdayparadox/birthday.html">The Birthday Paradox</a><span class="date">September</span></div>
+            <p>How many people must be in a room before two probably share a birthday? Only 23. See the curve, and fill rooms with random birthdays to check it.</p>
+        </li>
+        <li>
+            <div class="title"><a href="DiningPhilosophers/dinner.html">Dining Philosophers</a><span class="date">August</span></div>
+            <p>Philosophers around a table share one fork between each pair, and need two to eat. Watch them think, wait and eat, and see the naive way deadlock while mine never does.</p>
+        </li>
+        <li>
+            <div class="title"><a href="ea/segments.html">Merging Line Segments</a><span class="date">August</span></div>
+            <p>Sort line segments on the number line and merge the ones that overlap. My answer to Electronic Arts' 90-minute Java interview problem.</p>
+        </li>
+        <li>
+            <div class="title"><a href="playground-c/lists.html">Linked Lists and Binary Search Trees (C)</a><span class="date">July</span></div>
+            <p>The classic interview data structures, from my C practice: a linked list (2005) and a binary search tree (2011), every operation animated step by step. With fixes for the memory bugs I found, which the printed output never showed.</p>
+        </li>
+    </ul>
+    <h2>2003</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="ChuChuRocket/chuchu.html">ChuChu Cheese (finished but needs more levels)</a><span class="date">October</span></div>
+            <p>My version of the Puzzle mode of Sega’s <a href="https://en.wikipedia.org/wiki/ChuChu_Rocket!">ChuChu Rocket!</a> for the <a href="https://en.wikipedia.org/wiki/Dreamcast">Dreamcast</a>, my favorite game: place arrows so every mouse reaches the cheese and none meets a cat. With my 2003 artwork, sounds, levels and level editor.</p>
+        </li>
+        <li>
+            <div class="title"><a href="lps/lps.html">Word Finder for Letter Puzzles</a><span class="date">October</span></div>
+            <p>Find every dictionary word that can be spelled from a set of letters.</p>
+        </li>
+        <li>
+            <div class="title"><a href="tt/tt.html">TeekoTeacher</a><span class="date">June</span></div>
+            <p>Learn Teeko with move advice from a database of played games. Based on my master thesis <a href="https://archive.org/details/ucenje-u-strateskim-igrama">“Machine Learning in Strategic Games”</a>. Written for my paper <a href="https://archive.org/details/teeko-teacher">“TeekoTeacher: A Tool for Learning Good Teeko Strategies”</a> published at the CAPS4 conference in Glasgow.</p>
+        </li>
+        <li>
+            <div class="title"><a href="sorting/sorting.html">Sorting Algorithms Visualized</a><span class="date">January</span></div>
+            <p>Watch ten sorting algorithms at work, from bubble sort to quick, heap and merge sort.</p>
+        </li>
+        <li>
+            <div class="title"><a href="ttt/ttt.html">Tic-Tac-Toe with Minimax and Alpha-Beta</a><span class="date">January</span></div>
+            <p>Play against a computer that searches the whole game tree, with or without alpha-beta pruning. A tiny part of my master thesis <a href="https://archive.org/details/ucenje-u-strateskim-igrama">“Machine Learning in Strategic Games”</a>.</p>
+        </li>
+        <li>
+            <div class="title"><a href="BooleanParser/parser.html">Boolean Expression Parser</a><span class="date">January</span></div>
+            <p>Parse boolean expressions like #1# AND ( #2# OR NOT #3# ) by recursive descent, and see the parse tree, postfix form and truth table.</p>
+        </li>
+    </ul>
+    <h2>2002</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="https://mihailod.github.io/jt/">JT (Java Tetris)</a><span class="date">April</span></div>
+            <p>The classic falling-blocks game, written as a Java applet. Modernized separately in its own repository, <a href="https://github.com/mihailod/jt">mihailod/jt</a>. <a href="https://mihailod.github.io/jt/">▶ Play it in your browser</a>.</p>
+        </li>
+    </ul>
+    <h2>2001</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="screader/screader.html">Serbian Cafe Forums Reader</a><span class="date">September</span></div>
+            <p>A desktop reader for the Serbian Cafe forums that screen-scraped the site’s pages. The forums closed permanently on December 3, 2024.</p>
+        </li>
+        <li>
+            <div class="title"><a href="SCJD/flybynight.html">Fly by Night Airline Booking</a><span class="date">January</span></div>
+            <p>Search flights and book seats from two clients sharing one database, with record locking so they can’t double-book. My Sun Certified Java Developer assignment.</p>
+        </li>
+    </ul>
+    <h2>1998</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/WAV/wav.html">WAV (C++)</a><span class="date">May</span></div>
+            <p>A Windows program that shows any file as a wave, drawn from 100 of its bytes. Runs here as it did, menus, toolbar and dialogs included, with fixes for sampling the wrong bytes, writing past the end of an array, and crashing on the smallest files. I wrote it while learning <a href="https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library">MFC</a> and <a href="https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B">Visual C++</a> 5.0 in haste, before emigrating to the USA for my first job there.</p>
+        </li>
+    </ul>
+    <h2>1997</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/Ndama/ndama.html">N Queens (C++)</a><span class="date">April</span></div>
+            <p>Place n queens on a chessboard so that none attacks another, solved by recursion and backtracking. Runs as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian with an English translation, plus the backtracking step by step. My term project for the Applications of Artificial Intelligence class, during my MSc studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>.</p>
+        </li>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/SM/sm.html">A Random Number Generator (C++)</a><span class="date">February</span></div>
+            <p>A “random” 16-bit number made by iterating the rule A(i) = A(i−1) OR A(i+1) on random bits. Runs as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian with an English translation, and shows how little randomness comes out. With fixes for a typo that left a bit to chance, among others. My term project for the Statistical Methods in Artificial Intelligence class, during my MSc studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>.</p>
+        </li>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/Htm2txt/htm2txt.html">HTM2TXT (C++)</a><span class="date">February</span></div>
+            <p>A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> command-line tool that turns a web page into plain text by leaving out everything between &lt; and &gt;. With a fix for a byte that made it stop early.</p>
+        </li>
+    </ul>
+    <h2>1996</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/Grab/grab.html">GRAB (C++)</a><span class="date">March</span></div>
+            <p>A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> utility that saved the <a href="https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter">EGA</a>/<a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics screen to a file and loaded it back by copying its four bit planes straight from video memory. Here the video card is simulated: paint, save, load, and see the planes.</p>
+        </li>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/Intro/intro.html">Intro-style Fade-in/out Star (C++)</a><span class="date">March</span></div>
+            <p>A little <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> graphics demo: the 16 colors of the <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> palette, then a star that flashes at a random spot at every key press. Every screen checked against the original code, with its settings to play with.</p>
+        </li>
+    </ul>
+    <h2>1995</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/Vm/vm.html">Varijacione metode [Variational Methods] (C)</a><span class="date">September</span></div>
+            <p>My seminar paper for the Numerical Methods class, during my undergraduate studies of Mathematics and Computer Science at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>, <a href="https://www.matf.bg.ac.rs/eng/">Faculty of Mathematics</a>: a boundary value problem solved approximately by Galerkin's method, collocation and least squares, drawn in <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics and compared with the exact solution. Runs as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian with an English translation, with fixes for a missing term that made every method solve the wrong equation, among others. The menu and the expression evaluator are <a href="https://www.gamesdatabase.org/developer-vuksan_pejovic">Vuksan Pejović</a>'s libraries.</p>
+        </li>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/KNJIGE/knjige.html">Knjige [Books] (C)</a><span class="date">August</span></div>
+            <p>A catalogue of my books for <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, “knjige” meaning books: page through them, sort and search by any field, and print one. It comes with my catalogue as I last saved it, in 1998, in Serbian with an English translation, and with fixes for a hang after a search and a sort that lost most of the books, among others.</p>
+        </li>
+        <li>
+            <div class="title"><a href="pre-usa-c-cpp/LOFT/loft.html">LOFT Eksperiment [The LOFT Experiment] (C)</a><span class="date">March</span></div>
+            <p>A simulation of the <a href="https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project">LOFT</a> (Loss of Fluid Test) L9-3 experiment of 1982 at the <a href="https://en.wikipedia.org/wiki/Idaho_National_Laboratory">Idaho National Laboratory</a>, where a model of a <a href="https://en.wikipedia.org/wiki/Pressurized_water_reactor">pressurized water reactor</a> lost its feedwater and was not shut down, made with <a href="https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/">Aleksandar Ćirilović</a> during my undergraduate studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>: the reactor's loop animated in <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics for the five minutes of the experiment, its power and temperatures plotted as they go, a click on any part explaining it, and a description in <a href="https://en.wikipedia.org/wiki/Hypertext">hypertext</a>. Runs as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian with an English translation, with fixes for graphs that say kelvins for degrees Celsius and a stray word in the description, among others. The hypertext engine is <a href="https://www.gamesdatabase.org/developer-vuksan_pejovic">Vuksan Pejović</a>'s.</p>
+        </li>
+    </ul>
+    <h2>1989</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="1989Apr/prsten.html">Prsten [The Ring] (Amiga BASIC, Motorola MC68000 assembly)</a><span class="date">March</span></div>
+            <p>A text adventure with still pictures for the <a href="https://en.wikipedia.org/wiki/Amiga">Commodore Amiga</a>, inspired by <i>The Lord of the Rings</i>, written in <a href="https://en.wikipedia.org/wiki/AmigaBASIC">Amiga BASIC</a> with some routines in <a href="https://en.wikipedia.org/wiki/Motorola_68000">MC68000</a> assembly. The game itself was sadly not preserved; what is left is my ad for it in the (then) Yugoslav computer magazine <i><a href="https://en.wikipedia.org/wiki/Moj_mikro">Moj Mikro</a></i>, here with its text in Serbian and English.</p>
+        </li>
+    </ul>
+    <h2>1986</h2>
+    <ul>
+        <li>
+            <div class="title"><a href="1986Jun/pirat.html">Pirat [Pirate] (ZX Spectrum BASIC, Zilog Z80 assembly)</a><span class="date">June</span></div>
+            <p>A text adventure with still pictures for the <a href="https://en.wikipedia.org/wiki/ZX_Spectrum">ZX Spectrum</a>, written over the summer school break in <a href="https://en.wikipedia.org/wiki/Sinclair_BASIC">ZX Spectrum BASIC</a>, with <a href="https://en.wikipedia.org/wiki/Zilog_Z80">Z80</a> assembly routines to draw and load the pictures. Nothing of it was preserved; here is its loading screen, recreated from memory, loading as if from tape.</p>
+        </li>
+    </ul>
+</body>
+</html>

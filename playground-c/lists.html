@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linked Lists and Binary Search Trees by Mihailo Despotovic, July 2005 and January 2011</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        h2 { font-size: 18px; margin: 26px 0 4px; }
+        h2 .when { font-weight: normal; color: #555; font-size: 15px; }
+        code { font: 13px ui-monospace, monospace; }
+        button { font-size: 14px; padding: 4px 10px; }
+        .settings { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; position: sticky; top: 0; background: #fff; padding: 8px 0; border-bottom: 1px solid #eee; z-index: 1; }
+        .settings label { display: inline-flex; align-items: center; gap: 5px; }
+        #version-note { color: #555; font-size: 13px; flex-basis: 100%; }
+        .ops { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin: 8px 0; }
+        .ops input[type=text] { font-size: 14px; padding: 3px 6px; width: 9em; }
+        .ops input[type=number] { font-size: 14px; padding: 3px 4px; width: 4em; }
+        .ops .sep { width: 1px; height: 22px; background: #ddd; }
+        .names { display: inline-flex; gap: 4px; }
+        .names button { font-size: 12px; padding: 2px 6px; }
+        .stage { border: 1px solid #ddd; border-radius: 6px; overflow-x: auto; background: #fcfcfc; }
+        svg { display: block; }
+        .doing { font: 13px ui-monospace, monospace; color: #1d3f86; min-height: 1.4em; margin: 6px 0 0; }
+        .msg { font: 13px/1.45 ui-monospace, monospace; min-height: 1.45em; margin: 2px 0 0; color: #222; }
+        .msg.warn { color: #9a5b00; }
+        .msg.crash { color: #b00; font-weight: 600; }
+        .vars { font: 12px ui-monospace, monospace; color: #555; min-height: 1.3em; }
+        .out { height: 120px; overflow: auto; margin: 8px 0 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd; font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
+        .out-head { font-size: 13px; color: #555; margin: 8px 0 0; }
+        #tree-leaks { color: #b00; font-size: 13px; margin: 6px 0 0; }
+        #tree-depth { color: #444; font-size: 13px; }
+        .node rect { fill: #fff; stroke: #333; stroke-width: 1.5; }
+        .node line { stroke: #333; }
+        .node .name { font: 13px system-ui, sans-serif; }
+        .node.freed rect { stroke: #999; stroke-dasharray: 4 3; fill: #f3f3f3; }
+        .node.freed .name { fill: #999; text-decoration: line-through; }
+        .node.leaked rect { fill: #fde2e2; stroke: #b00; }
+        .leak-label { font: 12px system-ui, sans-serif; fill: #b00; }
+        .tag { font: 12px ui-monospace, monospace; fill: #1d3f86; }
+        .freed-tag { fill: #999; }
+        .null { font: 13px ui-monospace, monospace; fill: #777; }
+        .arrow { fill: none; stroke: #333; stroke-width: 1.5; }
+        .arrow.stale { stroke: #aaa; stroke-dasharray: 4 3; }
+        .edge { stroke: #888; stroke-width: 1.5; }
+        .edge.on { stroke: #d9731f; stroke-width: 3; }
+        .tnode circle { fill: #fff; stroke: #333; stroke-width: 1.5; }
+        .tnode text { font: 13px system-ui, sans-serif; }
+        .tnode.on circle { fill: #ffe3b3; stroke: #d9731f; stroke-width: 2.5; }
+        .tnode.found circle { fill: #7ed38c; stroke: #1a7f37; stroke-width: 2.5; }
+        .tnode.fresh circle { fill: #b9cff5; stroke: #1d3f86; stroke-width: 2.5; }
+        .bugs { font-size: 14px; color: #333; margin: 10px 0 0; padding-left: 20px; }
+        .bugs li { margin: 3px 0; }
+        details { margin: 22px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Linked Lists and Binary Search Trees by Mihailo Despotovic, July 2005 and January 2011</h1>
+    <p class="intro">The two classic interview data structures, from my C practice files: a singly linked list of names (2005)
+        and a binary search tree of numbers (2011). Every function is animated step by step, with the pointers it uses.
+        C leaves memory to the programmer, and that is where my bugs were: the programs print the right thing, but
+        forget to free some memory, free the wrong thing, or crash on an empty list. Switch between my code and the fixed
+        version to see the difference.</p>
+
+    <div class="settings">
+        <label><input type="radio" name="version" id="original" checked> As I wrote it</label>
+        <label><input type="radio" name="version" id="fixed"> Fixed</label>
+        <label>Speed <select id="speed"><option value="slow">slow</option><option value="normal" selected>normal</option><option value="fast">fast</option><option value="instant">instant</option></select></label>
+        <label><input type="checkbox" id="step"> Step by step</label>
+        <span id="version-note">As I wrote it: the bugs are in memory handling, so the printed output looks right.</span>
+    </div>
+
+    <section id="list-section">
+        <h2>Linked list <span class="when">list.c, July 2005</span></h2>
+        <div class="ops">
+            <input type="text" id="list-name" value="Five" maxlength="16" aria-label="Name">
+            <span class="names"><button>One</button><button>Two</button><button>Initial element</button></span>
+            <button id="add-start">Add to start</button>
+            <button id="add-end">Add to end</button>
+            <button id="delete-element">Delete this name</button>
+            <span class="sep"></span>
+            <button id="delete-head">Delete head</button>
+            <button id="delete-tail">Delete tail</button>
+            <button id="delete-all">Delete all</button>
+            <span class="sep"></span>
+            <button id="reverse-r">Reverse recursively</button>
+            <button id="reverse-i">Reverse iteratively</button>
+            <button id="print-list">Print</button>
+            <span class="sep"></span>
+            <button id="list-test">Run the 2005 test</button>
+            <button id="list-reset">Reset</button>
+            <button id="list-empty">Empty</button>
+            <button id="list-next" disabled>Next step ▶</button>
+        </div>
+        <div class="stage"><svg id="list-svg"></svg></div>
+        <div class="doing" id="list-doing"></div>
+        <div class="msg" id="list-msg"></div>
+        <div class="vars" id="list-vars"></div>
+        <div class="out-head">Printed:</div>
+        <pre class="out" id="list-out"></pre>
+        <ul class="bugs">
+            <li><code>deleteTail</code> freed <code>temp->next->next</code>, which is always NULL there, instead of <code>temp->next</code>: the last element was never freed.</li>
+            <li><code>deleteElement</code> never set <code>prev</code> before the loop, so deleting the first element tested garbage; and with a name not in the list it ended without returning anything.</li>
+            <li><code>deleteAll</code> freed every element but the first, and read each one after freeing it.</li>
+            <li><code>addToEnd</code>, <code>deleteHead</code>, <code>deleteTail</code> and <code>reverseListRecursively</code> crashed on an empty list.</li>
+            <li>The 2005 test still printed the right lists, and a leak checker doesn't notice the lost elements, because <code>main</code>'s variables <code>one</code>…<code>four</code> still point to them.</li>
+        </ul>
+    </section>
+
+    <section id="tree-section">
+        <h2>Binary search tree <span class="when">tree.c, January 2011</span></h2>
+        <div class="ops">
+            <label>Value <input type="number" id="tree-value" value="6"></label>
+            <button id="insert">Insert</button>
+            <button id="find-r">Find (recursive)</button>
+            <button id="find-i">Find (iterative)</button>
+            <span class="sep"></span>
+            <label>Common ancestor of <input type="number" id="tree-a" value="4"></label>
+            <label>and <input type="number" id="tree-b" value="12"></label>
+            <button id="ancestor-r">recursive</button>
+            <button id="ancestor-i">iterative</button>
+            <span class="sep"></span>
+            <button id="print-tree">Print</button>
+            <button id="tree-test">Run the 2011 test</button>
+            <button id="tree-reset">Reset</button>
+            <button id="tree-random">Random tree</button>
+            <button id="tree-empty">Empty</button>
+            <button id="tree-next" disabled>Next step ▶</button>
+        </div>
+        <div class="stage"><svg id="tree-svg"></svg></div>
+        <div class="doing" id="tree-doing"></div>
+        <div class="msg" id="tree-msg"></div>
+        <div id="tree-depth"></div>
+        <div id="tree-leaks" hidden></div>
+        <div class="out-head">Printed:</div>
+        <pre class="out" id="tree-out"></pre>
+        <ul class="bugs">
+            <li><code>insertValue</code> created the new node first thing, at every level of the tree it passed, but used only the one made at the bottom: inserting 2 in the test leaked three nodes.</li>
+            <li>The common ancestor functions assume, as their comment says, that both values are in the tree; if not, they can walk off the tree into NULL and crash. That is left as it was.</li>
+            <li>A stray semicolon in <code>printTree</code>, <code>if(tree->left != NULL);</code>, made the check do nothing, which happened to be harmless.</li>
+        </ul>
+    </section>
+
+    <details id="sources">
+        <summary>The original C code</summary>
+    </details>
+
+    <script src="sources.js"></script>
+    <script src="lists.js"></script>
+</body>
+</html>

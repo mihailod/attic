@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>N Queens by Mihailo Despotovic, April / May 1997</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1180px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 900px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button, select { font-size: 14px; padding: 3px 10px; }
+        .keys button { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+        .dos {
+            margin: 0; background: #000; color: #aaa; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; white-space: pre; overflow-x: auto; outline: none;
+            max-width: 100%; box-sizing: border-box;
+        }
+        .dos:focus { box-shadow: 0 0 0 2px #5a8dee; }
+        .cursor { background: #aaa; color: #000; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { background: transparent; color: #aaa; } }
+        .english { margin: 0; color: #333; background: #f6f6f6; border: 1px solid #ddd; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.25 ui-monospace, monospace; white-space: pre; overflow-x: auto; max-width: 100%; box-sizing: border-box; }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        .board { display: grid; grid-template-columns: repeat(var(--n, 8), minmax(0, 1fr)); grid-template-rows: repeat(var(--n, 8), minmax(0, 1fr)); width: min(300px, 90vw); aspect-ratio: 1; border: 2px solid #333; }
+        .sq { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; overflow: hidden; font-size: calc(min(300px, 90vw) / var(--n, 8) * 0.7); line-height: 1; }
+        .sq.light { background: #f0d9b5; }
+        .sq.dark { background: #b58863; }
+        .sq.attacked { box-shadow: inset 0 0 0 3px #c00; }
+        .sq.place { box-shadow: inset 0 0 0 3px #1a7f37; }
+        .sq.remove { box-shadow: inset 0 0 0 3px #d9731f; }
+        .sq.solution { box-shadow: inset 0 0 0 3px #1d3f86; }
+        #board-caption, #step-msg, #step-counts { font-size: 13px; color: #444; margin: 4px 0 0; }
+        #step-msg { min-height: 1.45em; color: #000; }
+        .how { color: #555; font-size: 14px; max-width: 900px; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>N Queens by Mihailo Despotovic, April / May 1997</h1>
+    <p class="intro">Place n queens on an n × n chessboard so that no two attack each other: my term project for
+        <span lang="sr">“Primene veštačke inteligencije”</span> (Applications of Artificial Intelligence) class with professor
+        dr. Vladimir Srdanović, during my MSc studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>. It finds every solution by recursion and backtracking, and shows them one by one. It runs here
+        as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian, with the English translation of the screen beside it. Click the screen and type, or use
+        the buttons.</p>
+
+    <div class="row keys">
+        <span>Keys:</span>
+        <button data-keys="U">U</button>
+        <button data-keys="U8\n">U, 8, Enter</button>
+        <button data-keys="R">R</button>
+        <button data-keys="P">P</button>
+        <button data-keys="F">F</button>
+        <button data-keys=" ">any key</button>
+        <button data-keys="\e">Esc</button>
+        <button id="restart">Start again</button>
+        <label><input type="checkbox" id="mute"> Mute the beep</label>
+    </div>
+
+    <div class="layout">
+        <div>
+            <div class="label">The DOS screen</div>
+            <pre class="dos" id="screen" tabindex="0" aria-label="The program's text screen; click it and type"></pre>
+        </div>
+        <div>
+            <div class="label">In English</div>
+            <pre class="english" id="english"></pre>
+        </div>
+        <div>
+            <div class="label">The solution on the screen, as a chessboard</div>
+            <div class="board" id="board"></div>
+            <div id="board-caption"></div>
+        </div>
+    </div>
+
+    <h2>The backtracking, step by step</h2>
+    <p class="how">The same search, one square at a time, which the program itself only showed through its solutions:
+        column by column from the left, it tries each row from the top, puts a queen on the first square no queen attacks
+        (<span style="color:#1a7f37">green</span>), and when a column has no free square left, it goes back and moves the queen
+        before it (<span style="color:#d9731f">orange</span>). Attacked squares are <span style="color:#c00">red</span>,
+        solutions <span style="color:#1d3f86">blue</span>.</p>
+    <div class="row">
+        <label>Queens <select id="step-n"><option>4</option><option>5</option><option>6</option><option selected>8</option></select></label>
+        <button id="step-step">Step</button>
+        <button id="step-play">Play</button>
+        <button id="step-reset">Reset</button>
+        <label>Speed <select id="step-speed"><option value="600">slow</option><option value="150" selected>normal</option><option value="20">fast</option></select></label>
+    </div>
+    <div class="board" id="step-board"></div>
+    <div id="step-msg"></div>
+    <div id="step-counts"></div>
+
+    <p class="how">Notes: the program asks for <span lang="sr">“1 &lt; dama &lt; 15”</span> but takes 1 to 15, and 1 queen is a
+        solution too. With the pause off ([P] → <span lang="sr">Ne</span>), it counts the solutions as fast as it can, showing them
+        as it goes: 92 for 8 queens, 724 for 10, and 2,279,184 for 15, which takes a while here and took much longer in 1997.
+        While it pauses at each solution, there is no way out but to see them all, then as now. I checked the port by running the
+        original C++ with scripted keys: every screen is the same.</p>
+
+    <details>
+        <summary>The original C++ code</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="ndama.js"></script>
+</body>
+</html>

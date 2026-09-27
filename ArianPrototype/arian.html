@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arian Web Shop iOS App Prototype by Mihailo Despotovic, January 2014</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 24px 0 6px; }
+        .intro, .how { color: #555; max-width: 860px; }
+        .how { font-size: 14px; }
+        .how li { margin: 4px 0; }
+        code { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+        .side { flex: 1; min-width: 260px; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin: 8px 0; }
+        button { font-size: 14px; }
+
+        /* the iPhone 5 */
+        .phone { width: 344px; padding: 70px 12px; background: #1c1c1e; border-radius: 48px; box-shadow: inset 0 0 0 2px #444; position: relative; flex: none; }
+        .phone::before { content: ""; position: absolute; top: 32px; left: 50%; width: 56px; height: 6px; margin-left: -28px; background: #333; border-radius: 3px; }
+        .phone::after { content: ""; position: absolute; bottom: 14px; left: 50%; width: 44px; height: 44px; margin-left: -24px; border: 2px solid #444; border-radius: 50%; }
+        @media (max-width: 400px) { .phone { width: 320px; padding: 0; border-radius: 0; background: none; box-shadow: none; } .phone::before, .phone::after { display: none; } }
+
+        /* iOS 7 */
+        #screen {
+            position: relative; width: 320px; height: 568px; overflow: hidden; background: #fff; margin: 0 auto;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #000; -webkit-font-smoothing: antialiased;
+            --tint: #007aff;
+        }
+        #screen .statusbar { position: absolute; left: 0; top: 0; width: 320px; height: 20px; z-index: 30; display: flex; justify-content: space-between; align-items: center; padding: 0 6px; box-sizing: border-box; font-size: 12px; font-weight: 600; pointer-events: none; }
+        #screen .statusbar .battery { width: 22px; height: 10px; border: 1px solid #000; border-radius: 2px; position: relative; }
+        #screen .statusbar .battery::after { content: ""; position: absolute; inset: 1px; background: #000; }
+        .content { position: absolute; inset: 0; }
+        .page { position: absolute; inset: 0; background: #fff; overflow: hidden; }
+        .label, .textview, .uiimage, .uifield, .uibutton, .spinner, .segmented, .stepper, .picker, .table { position: absolute; box-sizing: border-box; }
+        .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .label[hidden], .uibutton[hidden], .uifield[hidden], .textview[hidden], .uiimage[hidden], .spinner[hidden] { display: none; }
+        .textview { white-space: pre-wrap; overflow-y: auto; padding: 8px 5px; line-height: 1.25; font-family: "Helvetica Neue", Helvetica, sans-serif; }
+        .textview .detected { text-decoration: underline; text-decoration-color: #aaa; }
+        .uiimage.fill { object-fit: fill; }
+        .uiimage.cover { object-fit: cover; }
+        .uiimage.contain { object-fit: contain; }
+        .uiimage.center { object-fit: none; }
+        .uiimage.flag { object-fit: fill; outline: 0.5px solid #000; }
+        .uibutton { background: none; border: 0; padding: 0; color: var(--tint); font-family: inherit; cursor: pointer; white-space: nowrap; }
+        .uibutton:disabled { color: #b0b0b5; cursor: default; }
+        .uibutton:active { opacity: 0.3; }
+        .uifield { border: 1px solid #ccc; border-radius: 5px; padding: 0 6px; font: 14px "Helvetica Neue", Helvetica, sans-serif; background: #fff; }
+        .uifield:focus { outline: none; border-color: #a0a0a5; }
+        .spinner { border: 2px solid #ccc; border-top-color: #666; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .segmented { display: flex; border: 1px solid var(--tint); border-radius: 4px; overflow: hidden; }
+        .segmented button { flex: 1; border: 0; border-left: 1px solid var(--tint); background: #fff; color: var(--tint); font: 13px "Helvetica Neue", Helvetica, sans-serif; padding: 0; cursor: pointer; }
+        .segmented button:first-child { border-left: 0; }
+        .segmented button.on { background: var(--tint); color: #fff; }
+        .stepper { display: flex; border: 1px solid var(--tint); border-radius: 4px; overflow: hidden; }
+        .stepper button { flex: 1; border: 0; background: #fff; color: var(--tint); font-size: 20px; line-height: 1; cursor: pointer; padding: 0; }
+        .stepper button + button { border-left: 1px solid var(--tint); }
+        .stepper button:disabled { color: #c8c8cc; cursor: default; }
+        .picker { overflow: hidden; }
+        .picker-list { position: absolute; inset: 0; overflow-y: scroll; scrollbar-width: none; scroll-snap-type: y mandatory; }
+        .picker-list::-webkit-scrollbar { display: none; }
+        .picker-row { text-align: center; font-size: 21px; scroll-snap-align: start; cursor: pointer; transition: none; white-space: nowrap; }
+        .picker-band { position: absolute; left: 0; right: 0; border-top: 0.5px solid #c8c7cc; border-bottom: 0.5px solid #c8c7cc; pointer-events: none; }
+        .navbar { position: absolute; left: 0; top: 0; width: 320px; height: 64px; background: rgba(248, 248, 248, 0.86); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 0.5px solid #b2b2b2; z-index: 10; }
+        .nav-title { position: absolute; left: 80px; right: 80px; top: 20px; height: 44px; line-height: 44px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nav-back { position: absolute; left: 4px; top: 20px; height: 44px; max-width: 110px; border: 0; background: none; color: var(--tint); font: 17px "Helvetica Neue", Helvetica, sans-serif; cursor: pointer; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+        .nav-back .chev { font-size: 32px; line-height: 0; vertical-align: -5px; margin-right: 3px; }
+        .table { overflow-y: auto; scrollbar-width: none; }
+        .table::-webkit-scrollbar { display: none; }
+        .cell { position: relative; overflow: hidden; }
+        .cell-content { position: absolute; inset: 0; background: #fff; cursor: pointer; transition: transform 0.2s; z-index: 1; }
+        .cell.sep .cell-content::after { content: ""; position: absolute; left: 15px; right: 0; bottom: 0; border-bottom: 0.5px solid #c8c7cc; }
+        .cell.selected .cell-content { background: #d9d9d9; }
+        .cell-content .label { top: auto; }
+        .disclosure { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #c7c7cc; font-size: 26px; line-height: 1; }
+        .cell-delete { position: absolute; right: 0; top: 0; bottom: 0; width: 82px; border: 0; background: #ff3b30; color: #fff; font: 15px "Helvetica Neue", Helvetica, sans-serif; cursor: pointer; }
+        .cell.swiped .cell-content { transform: translateX(-82px); }
+        .searchbar { position: absolute; background: #c9c9ce; padding: 8px; box-sizing: border-box; z-index: 5; }
+        .search-field { width: 100%; height: 28px; box-sizing: border-box; border: 0; border-radius: 5px; padding: 0 8px 0 26px; font: 14px "Helvetica Neue", Helvetica, sans-serif; background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="6" cy="6" r="4.5" fill="none" stroke="%238e8e93" stroke-width="1.5"/><path d="M9.5 9.5 L13 13" stroke="%238e8e93" stroke-width="1.5"/></svg>') no-repeat 8px center; }
+        .search-field:focus { outline: none; }
+        .tabbar { position: absolute; left: 0; bottom: 0; width: 320px; height: 49px; background: rgba(248, 248, 248, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 0.5px solid #b2b2b2; display: flex; z-index: 20; }
+        .tab { flex: 1; border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 0 0 3px; cursor: pointer; color: #929292; position: relative; font-family: inherit; }
+        .tab.on { color: var(--tint); }
+        .tab-icon { width: 25px; height: 25px; background: currentColor; -webkit-mask-size: 25px 25px; mask-size: 25px 25px; margin-bottom: 3px; }
+        .tab-name { font-size: 10px; }
+        .badge { position: absolute; top: 2px; left: 50%; margin-left: 6px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 9px; background: #ff3b30; color: #fff; font-size: 13px; line-height: 18px; text-align: center; }
+        .alert-shade { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 50; display: flex; align-items: center; justify-content: center; }
+        .alert { width: 270px; background: rgba(248, 248, 248, 0.97); border-radius: 8px; text-align: center; overflow: hidden; }
+        .alert-title { font-size: 17px; font-weight: 600; padding: 18px 16px 0; }
+        .alert-message { font-size: 13px; padding: 4px 16px 18px; white-space: pre-line; }
+        .alert-title + .alert-message { padding-top: 4px; }
+        .alert-title:last-child { padding-bottom: 18px; }
+        .alert-buttons { display: flex; border-top: 0.5px solid #c8c7cc; }
+        .alert-buttons button { flex: 1; height: 44px; border: 0; background: none; color: var(--tint); font: 17px "Helvetica Neue", Helvetica, sans-serif; cursor: pointer; }
+        .alert-buttons.two button + button { border-left: 0.5px solid #c8c7cc; }
+        .alert-buttons button.bold { font-weight: 600; }
+        .modal { position: absolute; inset: 0; background: #fff; z-index: 40; }
+        .curl { position: absolute; left: 0; top: 0; width: 320px; height: 76px; border: 0; cursor: pointer; background: linear-gradient(170deg, #f4f4f4 0%, #fff 55%, #d9d9d9 60%, rgba(0,0,0,0.12) 100%); }
+        .launch { position: absolute; inset: 0; width: 320px; height: 568px; z-index: 60; }
+
+        /* the screenshots */
+        .shots { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0 10px; }
+        .shots figure { margin: 0; flex: none; width: 180px; }
+        .shots img { width: 180px; height: auto; border: 1px solid #ddd; border-radius: 6px; display: block; }
+        .shots figcaption { font-size: 12px; color: #555; margin-top: 4px; }
+        details { margin: 12px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Arian Web Shop iOS App Prototype by Mihailo Despotovic, January 2014</h1>
+    <p class="intro">A web shop iPhone app prototype for <a href="https://www.arian.com/en/">Arian GmbH</a>, a printing company in
+        Gleisdorf, Austria, from the time of my startup, MiRteh. It was meant to lead to a big project for Arian, which was later
+        cancelled; my main contact there was <a href="https://www.linkedin.com/in/rok-planinsec-2106686/">Rok Planinšec</a>. The
+        prototype demoed product discovery, browsing and searching, a configurator that depends on the product, a shopping cart and
+        account management. It is written in Objective-C for iOS 7, with a storyboard, from December 2013 to February 2014.</p>
+
+    <div class="layout">
+        <div class="phone"><div id="screen">
+            <div class="statusbar"><span>Carrier ᯤ</span><span>9:41 AM</span><span class="battery"></span></div>
+        </div></div>
+        <div class="side">
+            <h2 style="margin-top:0">Try it</h2>
+            <p class="how">The app, rebuilt for the browser as it looked on an iPhone 5 with iOS 7: its screens as the storyboard lays them
+                out, its pictures and texts, and its logic from the Objective-C. Browse the products, or search them; the Panoramic Canvas,
+                under Marketing Ads, is the one with a configurator, of format, quantity and delivery. To shop, log in first under Account,
+                with any name and password: the login was only pretended, as was the order. In the cart, tap an item to change it, or swipe
+                it to the left to delete it.</p>
+            <div class="row">
+                <button id="restart">Start again</button>
+                <label><input type="checkbox" id="fixed"> Fixed: prices in exact cents</label>
+            </div>
+            <h2>The bugs</h2>
+            <ul class="how">
+                <li><b>Prices were a cent, or a few euros, off.</b> They were computed in 32-bit floats, which carry about 7 digits, so
+                    of the 396 prices a panoramic canvas can have, 100 were shown wrong: 1,000 of the smallest, at 4% off with standard
+                    delivery, cost €76.805,00, and the app said €76.804,99. The screenshot below shows it in the real app. Fixed computes in
+                    exact cents.</li>
+                <li><b>Every product was priced as a panoramic canvas</b>, the smallest one if it had no formats: 250 stickers cost
+                    €20.005,00. That was a prototype's shortcut, as are the same two pictures and the same text for every other product.</li>
+                <li><b>Add to Cart first asked for <code>file:///Users/mihailod/Documents/links.html</code></b>, a file on my Mac, the
+                    stand-in for the web shop's server; on a phone that fails, and the item went into the cart anyway.</li>
+                <li><b>On today's iOS the app crashes twice.</b> At launch, because the first screen calls <code>init</code> a second
+                    time on a table cell it got from the storyboard, which iOS 7 let pass; and while searching, because it swapped in the
+                    new results and only told the table to reload later, so the table asked for a row that no longer existed.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>The real app, today</h2>
+    <p class="how">The original project, built with today's Xcode and run in the iOS simulator, on an iPhone SE, the nearest to the
+        iPhone 5's screen. It needed only a newer minimum iOS version, and three small patches for the two crashes. Today's iOS draws it
+        with its own navigation and tab bars, and, as the app was laid out for the iPhone 5 alone, puts some things where they don't
+        belong: the cart's list doesn't show, and the storyboard's stray “Label” shows through the title. On the phone its name was
+        Coolprint.</p>
+    <div class="shots" id="shots"></div>
+
+    <details>
+        <summary>The Objective-C: the data and the product detail</summary>
+        <pre class="source" id="source-a"></pre>
+    </details>
+    <details>
+        <summary>The Objective-C: the cart and the account</summary>
+        <pre class="source" id="source-b"></pre>
+    </details>
+
+    <script src="arian-texts.js"></script>
+    <script src="arian-data.js"></script>
+    <script src="source.js"></script>
+    <script src="arian.js"></script>
+    <script>
+        const SHOTS = [
+            ["01-browse", "Browse"], ["02-marketing-ads", "Marketing Ads"], ["04-canvas", "The Panoramic Canvas"],
+            ["07-canvas-configured", "Configured: 36″ × 12″, 500, Express"], ["03-product", "Any other product"],
+            ["12-float-price", "€76.804,99, where €76.805,00 is right"], ["05-account", "Account"], ["06-account-in", "Logged in"],
+            ["08-cart", "The cart, with one item"], ["10-search-card", "Search"], ["11-about", "About"],
+        ];
+        const shots = document.getElementById("shots");
+        for (const [file, caption] of SHOTS) {
+            const f = document.createElement("figure");
+            f.innerHTML = `<a href="screenshots/${file}.jpg"><img src="screenshots/${file}.jpg" width="180" height="320" loading="lazy" alt=""></a><figcaption></figcaption>`;
+            f.querySelector("img").alt = caption;
+            f.querySelector("figcaption").textContent = caption;
+            shots.append(f);
+        }
+        document.getElementById("source-a").textContent = SOURCE_A;
+        document.getElementById("source-b").textContent = SOURCE_B;
+    </script>
+</body>
+</html>

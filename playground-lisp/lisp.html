@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lisp Notebook by Mihailo Despotovic, January 2012</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 820px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        h2 { font-size: 18px; margin: 28px 0 6px; }
+        h2 .when { font-weight: normal; color: #555; font-size: 15px; }
+        h3 { font-size: 14px; letter-spacing: 0.05em; margin: 22px 0 6px; color: #444; }
+        .section-intro { color: #555; margin: 0 0 8px; }
+        code { font: 13px ui-monospace, monospace; }
+        button { font-size: 14px; padding: 4px 12px; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; position: sticky; top: 0; background: #fff; padding: 6px 0; z-index: 1; border-bottom: 1px solid #eee; }
+        #busy { color: #7a4a00; font-size: 14px; }
+        .cell { border: 1px solid #ddd; border-radius: 6px; padding: 8px 10px; margin: 0 0 10px; }
+        .cell-head { font-size: 13px; color: #555; margin: 0 0 4px; }
+        .cell-head .label { font-weight: 600; color: #000; }
+        textarea {
+            display: block; box-sizing: border-box; width: 100%; resize: vertical; overflow: hidden;
+            font: 13px/1.45 ui-monospace, monospace; padding: 5px 7px; border: 1px solid #ccc; border-radius: 4px;
+            background: #fbfbf8; color: #000; tab-size: 4;
+        }
+        .try-row { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0 0; }
+        .try-row > span { font-size: 13px; color: #555; padding: 5px 0 0; }
+        .try-row textarea { flex: 1; background: #fff; }
+        .out { margin: 6px 0 0; padding: 5px 8px; background: #f4f6fa; border-radius: 4px; font: 13px/1.5 ui-monospace, monospace; overflow-x: auto; }
+        .item { white-space: pre-wrap; overflow-wrap: anywhere; }
+        .item .form { color: #777; }
+        .item.value .val { color: #1d3f86; font-weight: 600; }
+        .item.error .val { color: #b00; }
+        .item.output .val { color: #333; }
+        .note { margin: 6px 0 0; padding: 6px 9px; background: #fff6d9; border: 1px solid #ecd9a0; border-radius: 4px; font-size: 14px; }
+        .note button { font-size: 13px; padding: 2px 9px; margin-left: 4px; }
+        #repl-out { max-height: 360px; overflow: auto; margin: 0 0 8px; }
+        .repl-block { margin: 0 0 8px; }
+        .echo { font: 13px/1.45 ui-monospace, monospace; white-space: pre-wrap; color: #333; }
+        .echo::before { content: "> "; color: #999; }
+        .how { color: #555; font-size: 14px; }
+        details { margin: 20px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Lisp Notebook by Mihailo Despotovic, January 2012</h1>
+    <p class="intro">My exercises from learning Common Lisp over the 2011 holidays, from two text files, running in a small
+        Common Lisp interpreter written for this page. Every box can be edited. Run evaluates the code and the Try line under it,
+        and shows what each expression returns. All boxes share one Lisp, so a function defined in one box can be used in the next,
+        and a later definition replaces an earlier one, as in a real Lisp session. Notes point out my slips, with a fix to load.</p>
+
+    <div class="toolbar">
+        <button id="run-all">Run all, top to bottom</button>
+        <button id="restart">Restart Lisp</button>
+        <span id="busy" hidden>Running… <button id="stop">Stop</button></span>
+    </div>
+
+    <main id="notebook"></main>
+
+    <h2>Your own Lisp</h2>
+    <div id="repl-out" hidden></div>
+    <textarea id="repl-in" spellcheck="false" autocapitalize="off" autocorrect="off" rows="3">(defun fib (n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
+(mapcar #'fib '(0 1 2 3 4 5 6 7 8 9 10))</textarea>
+    <div class="try-row"><button id="repl-run">Run</button><span>Command-Return (Ctrl-Enter) runs any box.</span></div>
+
+    <p class="how">The interpreter follows Common Lisp where these exercises depend on it: functions and variables have separate
+        names (hence <code>funcall</code> and <code>#'</code>), <code>defun</code> always defines a global function, whole numbers have
+        no size limit, dividing them gives exact fractions, a number like <code>1.0</code> is a single-float and <code>pi</code> a
+        double-float (printed with <code>d0</code>), and only <code>NIL</code> is false. It is a subset, without macros, characters,
+        arrays, hash tables, structures, keyword arguments or multiple values. Stop ends a computation that runs too long, and keeps the
+        functions defined so far; Restart Lisp forgets everything.</p>
+
+    <details id="originals">
+        <summary>The original files</summary>
+    </details>
+
+    <script src="notebook.js"></script>
+    <script src="lisp.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LOFT Eksperiment by Mihailo Despotovic with Aleksandar Ćirilović, March 1995</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1440px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 900px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button { font-size: 14px; padding: 3px 8px; }
+        .keys button { font: 13px ui-monospace, monospace; }
+        .layout { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+        .layout > div { min-width: 0; max-width: 100%; }
+        .dos {
+            margin: 0; background: #000; padding: 6px; border-radius: 4px; outline: none;
+            font: 13px/16px ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; white-space: pre; overflow-x: auto;
+            max-width: 100%; box-sizing: border-box;
+        }
+        .dos .line { display: block; height: 16px; line-height: 16px; }
+        .dos .line span { display: inline-block; height: 16px; vertical-align: top; }
+        .dos:focus, #canvas:focus { box-shadow: 0 0 0 2px #5a8dee; }
+        .cursor { text-decoration: underline; text-decoration-thickness: 2px; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { text-decoration-color: transparent; } }
+        #canvas { display: block; width: 640px; max-width: 100%; height: auto; image-rendering: pixelated; border-radius: 4px; outline: none; background: #000; touch-action: none; }
+        #canvas[hidden], .dos[hidden], #english-box[hidden] { display: none; }
+        #english-box { width: 560px; max-width: 100%; }
+        .english { margin: 0; color: #333; background: #f6f6f6; border: 1px solid #ddd; padding: 8px 10px; border-radius: 4px;
+            font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; max-height: 460px; overflow-y: auto; box-sizing: border-box; }
+        .label { font-size: 13px; color: #555; margin: 0 0 3px; }
+        #status { font-size: 14px; color: #a00; margin: 6px 0 0; max-width: 900px; }
+        #status:empty { display: none; }
+        .how { color: #555; font-size: 14px; max-width: 900px; }
+        .steps { font-size: 14px; max-width: 900px; margin: 4px 0 12px; }
+        .steps ol { margin: 4px 0 6px; padding-left: 22px; }
+        .steps li { margin: 2px 0; }
+        .how li { margin: 4px 0; }
+        details { margin: 12px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 8; }
+    </style>
+</head>
+<body>
+    <h1>LOFT Eksperiment (The LOFT Experiment) by Mihailo Despotovic with Aleksandar Ćirilović, March 1995</h1>
+    <p class="intro">A simulation of the <a href="https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project">LOFT</a> (Loss of Fluid Test) L9-3 experiment, done on 7 April 1982 at the Idaho National Engineering Laboratory
+        (now the <a href="https://en.wikipedia.org/wiki/Idaho_National_Laboratory">Idaho National Laboratory</a>). The LOFT reactor
+        was a 50 MW model of a commercial
+        <a href="https://en.wikipedia.org/wiki/Pressurized_water_reactor">pressurized water reactor</a>. In L9-3, the pump feeding
+        water to its steam generator was switched off, and the reactor was left to cope without being shut down: an anticipated
+        transient without <a href="https://en.wikipedia.org/wiki/Scram">scram</a>, or ATWS. The program draws the reactor's loop
+        in <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> and runs the five minutes of the experiment: the
+        water flows, the <a href="https://en.wikipedia.org/wiki/Pressurizer">pressurizer</a> fills, its sprays and valves come on,
+        and the reactor's power and the temperatures of its fuel, cladding and coolant are plotted as they go. Before it starts, and
+        whenever it is paused, a click on any part of the drawing explains it. The description of the experiment is in
+        <a href="https://en.wikipedia.org/wiki/Hypertext">hypertext</a>. It runs here as it did in
+        <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian, with the English beside it.</p>
+    <p class="intro">I made it with <a href="https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/">Aleksandar Ćirilović</a>, of the Faculty of Mechanical Engineering, while I was an undergraduate at
+        the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>,
+        <a href="https://www.matf.bg.ac.rs/eng/">Faculty of Mathematics</a>. The hypertext engine, <code>HYPER.C</code>, is <a href="https://www.gamesdatabase.org/developer-vuksan_pejovic">Vuksan
+        Pejović</a>'s.</p>
+
+    <div class="row keys">
+        <span>Keys:</span>
+        <button data-keys="1">1 help</button>
+        <button data-keys="2">2 description</button>
+        <button data-keys="3">3 start</button>
+        <button data-keys="0">0 quit</button>
+        <button data-keys="Space">any key (Space)</button>
+        <button data-keys="@ArrowRight">→ faster</button>
+        <button data-keys="@ArrowLeft">← slower</button>
+        <button data-keys="Enter">Enter</button>
+        <button data-keys="Esc">Esc</button>
+        <button data-keys="@ArrowUp">↑</button>
+        <button data-keys="@ArrowDown">↓</button>
+        <button data-keys="@PageUp">PgUp</button>
+        <button data-keys="@PageDown">PgDn</button>
+        <button data-keys="@Home">Home</button>
+        <button data-keys="@End">End</button>
+        <button data-keys="Tab">Tab</button>
+        <button data-keys="@Delete">Del: back</button>
+    </div>
+    <div class="row">
+        <button id="restart">Start again</button>
+        <label><input type="checkbox" id="fixed"> Fixed</label>
+    </div>
+
+    <div class="steps">
+        <b>To run the simulation:</b>
+        <ol>
+            <li>Click or tap <b>Start again</b>.</li>
+            <li>Click the DOS screen and press 3, or click or tap <b>3 start</b>.</li>
+            <li>Click or tap <b>KRAJ PREGLEDA</b>, the box at the top left of the drawing. Before that, you can click the parts of the
+                drawing to read about them, and click again to close each one.</li>
+            <li>Press any key, or click or tap <b>any key (Space)</b>. The clock starts.</li>
+        </ol>
+        While it runs, → speeds it up, ← slows it down, Space pauses, Enter starts it again, and Esc goes back to the menu. For the
+        description, press 2: move with the arrow keys, and Enter on a highlighted word opens its explanation.
+    </div>
+
+    <div class="layout">
+        <div>
+            <div class="label">The DOS screen</div>
+            <pre class="dos" id="screen" tabindex="0" hidden aria-label="The program's text screen; click it and type"></pre>
+            <canvas id="canvas" width="640" height="480" tabindex="0" aria-label="The program's VGA graphics; click it, and type"></canvas>
+        </div>
+        <div id="english-box">
+            <div class="label" id="english-label">The screen, in English</div>
+            <pre class="english" id="english"></pre>
+        </div>
+    </div>
+    <div id="status" aria-live="polite"></div>
+
+    <h2>How it works</h2>
+    <p class="how">The description says that the curves come from three differential equations, for the temperatures of the fuel,
+        the cladding and the coolant, solved by the <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge–Kutta
+        method</a>. The program doesn't solve them: it has their solutions typed in, a value every ten seconds or so, and joins them
+        with straight lines. The reactor's power is the three straight lines of the description, and the pressurizer's level and
+        pressure go up and down by a fixed step each second. So the simulation shows what was measured, and what the equations gave,
+        on the clock of the experiment. The flow in the pipes is drawn with dashed lines whose pattern shifts each second. The pressure
+        figures for the valves and the sprays in the description are those of the
+        <a href="https://en.wikipedia.org/wiki/Kr%C5%A1ko_Nuclear_Power_Plant">Krško nuclear plant</a>.</p>
+    <p class="how">The hypertext is one file, <code>LOFT.HYP</code>: the texts one after another, each with the corners of its window,
+        and a link is a word between backslashes with the number of the text it opens. <code>HYPER.C</code> shows a text in its
+        window, lights up the link under the cursor, and keeps the windows it opens on a stack, so Del closes the last one and puts
+        back what was under it.</p>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how">
+        <li><b>The temperatures are in degrees Celsius, and the graphs say kelvins.</b> The fuel starts at 728 on the graph, which is
+            its initial temperature in the description, 1001 K, less 273, and so do the cladding, at 319 for 592.3 K, and the coolant,
+            at 293 for 566.07 K.</li>
+        <li><b>Three points are missing from the graphs.</b> The coolant's temperature at 164 and 235 seconds, and the cladding's at
+            286, fall between two ranges of the table, so they stay 0 and are drawn far below the screen, leaving a gap of a
+            pixel.</li>
+        <li><b>The description can open with a stray word in it.</b> Whether a link is lit is remembered from one visit to the next,
+            so if you leave with Esc while one is lit, the next visit starts by unlighting it where it was, printing that many
+            characters of the new text there. Press 2, PgDn, Esc and 2 again, and “sigurnosnih rasteretnih” sits in the first line,
+            which should be empty.</li>
+        <li>Smaller ones: at the start of each run, the flow of the second before, which doesn't exist, is erased with two dash
+            patterns that are never set, so it draws whatever was left on the stack; here, nothing. The clock's digits are strings of
+            one character, and the 0 that ends each is written one byte past it; Borland C probably gave each two bytes, so nothing
+            was hit. And the installer, <code>INSTALL.C</code>, reads the directory you type into a constant one byte long, and adds
+            it to the end of another constant, overwriting whatever came after them.</li>
+    </ul>
+    <p class="how">Fixed labels the temperatures (C), fills in the three points, and starts the description with nothing lit. The
+        typos, such as Engeenering, are as they were.</p>
+    <p class="how">One thing the page does differently: the mouse driver told the program only whether the button was down at the
+        moment it looked, every fifth of a second, so a quick click could be missed. Here, a click between two looks counts.</p>
+    <p class="how">The port was checked against the original C, compiled with a simulated DOS: a text screen, a BGI that lists
+        what it is asked to draw, and a keyboard and a mouse played from a script on a clock that <code>delay()</code> moves. In 600
+        sessions, 200 of the experiment, with clicks on every part of the drawing, pauses, restarts, changes of speed and runs to the
+        end, and 400 of the description, with moves, pages and links opened and closed, every line drawn, every wait, every look at
+        the mouse and every text screen are the same. Borland C computed in 80 bits and JavaScript computes in 64; that changes one
+        thing here, the fuel's point at exactly 400, 600, 800 and 1000 degrees, a pixel higher in 80 bits. The page computes that in
+        80 bits, and the C was compiled so too. The pixels are drawn by the page's own
+        <a href="https://en.wikipedia.org/wiki/Borland_Graphics_Interface">BGI</a>, with the letters from Borland's
+        <code>TRIP.CHR</code>. They couldn't be compared with the original's, so they may differ by a pixel here and there.</p>
+
+    <details>
+        <summary>The original C code: LOFT.C</summary>
+        <pre class="source" id="source-loft"></pre>
+    </details>
+    <details>
+        <summary>HYPER.C, by Vuksan Pejović</summary>
+        <pre class="source" id="source-hyper"></pre>
+    </details>
+    <details>
+        <summary>INSTALL.C</summary>
+        <pre class="source" id="source-install"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="data.js"></script>
+    <script src="loft.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+(defun pascal (r c)
+ (cond ((= c 0) 1)
+       ((= c r) 1)
+       (t (+ (pascal (- r 1) (- c 1))
+             (pascal (- r 1) c)))))
+
+ (defun sum (fun a b)
+         (if (> a b)
+         0
+         (+ (funcall fun a) (sum fun (+ a 1) b)))) 
+
+(defun square (x) (* x x))
+(sum #'square 4 6)
+(sum #'+ 4 6)
+
+(defun evens (nums)
+         (cond ((eq nums nil) nil)
+               ((= (rem (car nums) 2) 0) (cons (car nums) (evens (cdr nums))))
+               (T (evens (cdr nums))))) 
+
+(defun firstchar (string) (subseq string 0 1))
+(defun lastchar (s) (subseq s (- (length s) 1) (length s)))
+(remove-if (lambda (l) (not (equal (firstchar l) (lastchar l)))) '("california" "alaska" "arkanzas"))
+
+(defun multiplier (n) (lambda (x) (* x n)))
+(defun square (n) (funcall (multiplier n) n))
+
+(defun make-adder (num) (lambda (x) (+ x num)))
+(defun add3 (x) (funcall (make-adder 3) x))
+
+(defun compose (f g x) (funcall f (funcall g x)))
+(compose (function sqrt) (function sqrt) 81)
+(defun secundo (l) (compose (function car) (function cdr) l))
+
+(defun insertonce (x l)
+      (cond ((eq nil l) (list x))
+            ((> (car l) x) (cons x l))
+            (T (cons (car l) (insertonce x (cdr l)))))) 
+(defun insertionsort (l)
+         (if (eq nil l)
+           nil
+           (insertonce (car l) (insertionsort (cdr l)))))

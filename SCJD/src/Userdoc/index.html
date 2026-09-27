@@ -1,0 +1,147 @@
+<HTML>
+<HEAD>
+<TITLE>Fly by Night Application - User Documentation</TITLE>
+</HEAD>
+<BODY>
+<a name=top></a>
+<H2>Fly By Night Application - User Documentation</H2>
+
+<hr>
+<li><a href=#client>Client Application</a></li>
+<li><a href=#server>Database Server</a></li>
+<li><a href=#dctool>Data Conversion Tool</a></li>
+<hr>
+
+<br>
+
+<a name=client></a><a href=#top>Top</a>
+<H3>Client Application</h3>
+<p>
+The purpose of the client application is to provide easy
+user interface for booking the seats on desired flights.
+The client application has ability to connect both to
+local and to remote database.<br><br>
+
+In order to start the client application you have to do the
+following:<br><br>
+<li>change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)</li>
+<li>issue the following command:</li>
+<pre>
+java -Djava.security.policy=client.policy suncertify.client.Client
+</pre>
+
+The user interface is very simple, the menu consists of three
+menu items:<br><br>
+<li>File (Connect Remote, Connect Local, Disconnect, Exit)</li>
+<li>Look&amp;Feel (dynamic list of available look and feels)</li>
+<li>Help (Quick Help, About)</li>
+<br><br>
+
+There are two dropdown list boxes:
+<li>Departing From</li>
+<li>Arriving To</li>
+<br><br>
+
+And two buttons:
+<li>Search</li>
+<li>Book</li>
+<br><br>
+
+There is also combination of drop down list box and input field
+where you can type the number of seats
+you want to book on the particular flight or you can
+select 1, 2, 3 or 4 seats from the drop down list.<br><br>
+
+The suggested usage of the application is as follows:<br><br>
+
+<b>
+1. Connect to the database using File/Connect menu item<br>
+2. Use Origin/Destination boxes and Search button
+   to find desired flight(s)<br>
+3. Select the desired fligh<br>
+4. Select or enter the number of seats<br>
+5. Use Book button to book the seats<br>
+6. Repeat steps 2-5<br>
+6. When you are done, use File/Disconnect menu item to
+ disconnect from the database
+</b>
+
+</p>
+
+<a name=server></a><a href=#top>Top</a>
+<H3>Database Server</h3>
+<p>
+The purpose of database server is to provide remote access
+to the Fly by Night data. Database server always provides
+access to the specific database file.<br><br>
+
+Usage of database server is as follows:<br><br>
+<li>change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)</li>
+<li>issue the following command:</li>
+<pre>
+java -Djava.security.policy=server.policy suncertify.server.Server
+[&lt;serverName&gt; &lt;serverDNSname&gt; &lt;port&gt; &lt;java.rmi.server.codebase&gt;]
+</pre>
+
+If invoked with no arguments, the defaults are going to be used:
+<li>Server Name: fbnServer</li>
+<li>Server URL: localhost</li>
+<li>Server Port: 5015</li>
+<li>RMI Codebase: http://localhost/</li>
+</p>
+
+<a name=dctool></a><a href=#top>Top</a>
+<H3>Data Conversion Tool</h3>
+<p>
+The purpose of the conversion tool is to convert legacy
+data files (ASCII text files) into binary files readable
+by the Fly by Night Database Engine.<br><br>
+
+Usage of the conversion tool is simple:<br><br>
+<li>change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)</li>
+<li>Start the module witht the following command:
+<pre>java suncertify.dataconverter.Converter &lt;legacy file&gt; &lt;DB file&gt;</pre></li>
+
+The conversion tool will display it's progress.
+If DB file already exists, you will have chance to choose
+either to append new data or to create a brand new file (the later
+option will erase old data in the file). If anything goes wrong with
+the particular information in legacy file, that information is going
+to be skipped and you will be informed about the problematic line
+number in the legacy file.<br><br> Once the conversion is over, you can
+start using the converted file by connecting to it from the Client
+Application.
+<br><br>
+
+Example:
+
+<pre>
+>java suncertify.dataconverter.Converter testascii.txt a.db
+File a already exists.
+Append data (y) or make a new file (n - default) ?  > n
+Making a new a file...
+Processing ascii file...
+Line 1: OK
+Line 2: OK
+Line 3: OK
+.
+.
+.
+Line 20: OK
+Line 21: OK
+Line 22: OK
+Line 23: OK
+Line 24: OK
+
+>_
+
+</pre>
+</p>
+</BODY>
+</HTML>

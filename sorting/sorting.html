@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sorting Algorithms Visualized V1.0 by Mihailo Despotovic, Jan 2003</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 760px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 12px; }
+        .main { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-start; }
+        canvas { width: 500px; max-width: 100%; aspect-ratio: 1; display: block; }
+        .side { display: flex; flex-direction: column; gap: 4px; }
+        .side select { margin-bottom: 12px; align-self: flex-start; }
+        .side .gap { height: 20px; }
+        .side label { white-space: nowrap; }
+        .buttons { display: flex; gap: 8px; justify-content: center; width: 500px; max-width: 100%; margin-top: 12px; }
+        button { font-size: 14px; padding: 4px 14px; min-width: 5.5em; }
+    </style>
+</head>
+<body>
+    <h1>Sorting Algorithms Visualized V1.0 by Mihailo Despotovic, Jan 2003</h1>
+    <div class="main">
+        <canvas id="canvas"></canvas>
+        <div class="side">
+            <select id="points">
+                <option value="50">50 Numbers</option>
+                <option value="100">100 Numbers</option>
+                <option value="500">500 Numbers</option>
+            </select>
+            <label><input type="radio" name="sort" value="dist" checked> Distribution Count</label>
+            <label><input type="radio" name="sort" value="selection"> Selection Sort</label>
+            <label><input type="radio" name="sort" value="insertion"> Insertion Sort</label>
+            <label><input type="radio" name="sort" value="bubble"> Bubble Sort</label>
+            <label><input type="radio" name="sort" value="shell"> Shell Sort</label>
+            <label><input type="radio" name="sort" value="quick"> Quick Sort</label>
+            <label><input type="radio" name="sort" value="radixExchange"> Radix Exchange Sort</label>
+            <label><input type="radio" name="sort" value="radixStraight"> Straight Radix Sort</label>
+            <label><input type="radio" name="sort" value="heap"> Heap Sort</label>
+            <label><input type="radio" name="sort" value="merge"> Merge Sort</label>
+            <div class="gap"></div>
+            <label><input type="radio" name="delay" value="none"> No Delay</label>
+            <label><input type="radio" name="delay" value="outer" checked> Delay Outer Loop</label>
+            <label><input type="radio" name="delay" value="inner"> Delay Inner Loop</label>
+        </div>
+    </div>
+    <div class="buttons">
+        <button id="start">Start</button>
+        <button id="shuffle">Shuffle</button>
+    </div>
+    <script src="sorting.js"></script>
+</body>
+</html>

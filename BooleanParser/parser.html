@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Boolean Expression Parser by Mihailo Despotovic, January 2003</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        form { display: flex; gap: 8px; }
+        #input { flex: 1; min-width: 0; font: 15px ui-monospace, monospace; padding: 5px 7px; }
+        button { font-size: 14px; padding: 4px 12px; }
+        .examples { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; color: #555; }
+        .examples button { font: 12px ui-monospace, monospace; padding: 3px 8px; }
+        #error { color: #c00; margin: 10px 0 0; min-height: 1.2em; }
+        h2 { font-size: 14px; margin: 16px 0 4px; }
+        .tree-wrap { overflow-x: auto; }
+        #tree { display: block; height: auto; max-width: 100%; }
+        #tree .edge { stroke: #888; stroke-width: 1.5; }
+        #tree circle { stroke: #333; stroke-width: 1.5; }
+        #tree .term { fill: #fff; }
+        #tree .op.and { fill: #dbe7f7; }
+        #tree .op.or { fill: #ffe3b3; }
+        #tree .op.not { fill: #f3d0d0; }
+        #tree text { font: 600 11px system-ui, sans-serif; text-anchor: middle; dominant-baseline: middle; }
+        .mono { font: 14px ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 5px 8px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+        .label { color: #555; font-size: 13px; margin: 6px 0 2px; }
+        #verdict { margin: 8px 0 6px; font-weight: 600; }
+        #verdict.good { color: #1a7f37; }
+        #verdict.bad { color: #b35900; }
+        .table-wrap { max-height: 50vh; overflow: auto; border: 1px solid #ccc; display: inline-block; max-width: 100%; }
+        table { border-collapse: collapse; font: 13px ui-monospace, monospace; }
+        th { position: sticky; top: 0; background: #eee; font-weight: 600; }
+        th, td { padding: 2px 10px; text-align: center; border-bottom: 1px solid #eee; }
+        td.differs { background: #fde2e2; }
+        #old-verdict { color: #555; margin: 0 0 6px; }
+        #table-note { color: #555; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <h1>Boolean Expression Parser by Mihailo Despotovic, January 2003</h1>
+    <p class="intro">Type a boolean expression over numbered terms like <code>#1#</code>, with AND, OR, NOT and parentheses.
+        It is parsed by recursive descent, so NOT binds tightest, then AND, then OR. See its parse tree, its postfix
+        (reverse Polish) form and its truth table, and the postfix my <code>translate()</code> makes with an operator stack, now fixed, next to what it produced in 2003.</p>
+    <form id="form">
+        <input id="input" value="#0# AND ( #2# OR NOT #3# ) OR NOT #5# AND #6# AND NOT #7#" spellcheck="false" autocomplete="off">
+        <button>Parse</button>
+    </form>
+    <div class="examples">Try:
+        <button data-example="#0# AND ( #2# OR NOT #3# ) OR NOT #5# AND #6# AND NOT #7#">the 2003 example</button>
+        <button data-example="#1# AND #2# OR #3#">#1# AND #2# OR #3#</button>
+        <button data-example="NOT #1# AND #2#">NOT #1# AND #2#</button>
+        <button data-example="( #1# OR #2# ) AND #3#">( #1# OR #2# ) AND #3#</button>
+        <button data-example="NOT ( #1# AND #2# )">NOT ( #1# AND #2# )</button>
+    </div>
+    <div id="error"></div>
+    <div id="results">
+        <h2>Parse tree</h2>
+        <div class="tree-wrap"><svg id="tree"></svg></div>
+        <h2>Postfix</h2>
+        <pre class="mono" id="postfix"></pre>
+        <h2>My translate()</h2>
+        <div class="label">Input, in its format</div>
+        <pre class="mono" id="original-input"></pre>
+        <div class="label">Output</div>
+        <pre class="mono" id="original-output"></pre>
+        <div class="label">Output as written in 2003, before the fixes</div>
+        <pre class="mono" id="old-output"></pre>
+        <h2>Truth table</h2>
+        <div id="verdict"></div>
+        <div id="old-verdict"></div>
+        <div class="table-wrap"><table id="table"></table></div>
+        <div id="table-note"></div>
+    </div>
+    <script src="parser.js"></script>
+</body>
+</html>

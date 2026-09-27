@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CPU Cache Impact: Row vs Column Matrix Addition by Mihailo Despotovic, April 2007</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+        select, button { font-size: 15px; padding: 4px 10px; }
+        #machine, #bug { color: #444; margin: 8px 0 0; }
+        table { border-collapse: collapse; width: 100%; margin: 16px 0 0; }
+        th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #ddd; vertical-align: middle; }
+        th { background: #f3f3f3; font-weight: 600; }
+        td:nth-child(2) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+        td:nth-child(3) { width: 38%; font-size: 13px; color: #444; }
+        .bar { display: inline-block; height: 10px; background: #0645ad; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+        .ok { color: #1a7f37; white-space: nowrap; }
+        .wrong { color: #c00; font-weight: 600; white-space: nowrap; }
+        #summary { font-weight: 600; margin: 12px 0 0; }
+        #note { color: #444; margin: 6px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>CPU Cache Impact: Row vs Column Matrix Addition by Mihailo Despotovic, April 2007</h1>
+    <p class="intro">Add two big matrices of integers, element by element. Going row by row reads memory in order;
+        going column by column does exactly the same additions, but every step jumps a whole row ahead in memory,
+        so the processor's cache can't keep up. Then the rows are split across all the cores at once.</p>
+    <div class="controls">
+        <label>Matrix size
+            <select id="size">
+                <option value="2000">2000 × 2000 (48 MB)</option>
+                <option value="4000" selected>4000 × 4000 (192 MB)</option>
+                <option value="6000">6000 × 6000 (432 MB, the original)</option>
+                <option value="10000">10000 × 10000 (1.2 GB)</option>
+            </select>
+        </label>
+        <button id="run">Run</button>
+    </div>
+    <p id="machine"></p>
+    <p id="bug"></p>
+    <table id="results" hidden>
+        <thead><tr><th>Test</th><th>Best of 3</th><th>Compared with row by row</th><th>Result</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <p id="summary"></p>
+    <p id="note"></p>
+    <script src="bigmatrix.js"></script>
+</body>
+</html>

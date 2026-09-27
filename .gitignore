@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Java build output, in case the old code is ever compiled again
+*.class
+out/
+classes/
+
+# IDE project files (IntelliJ IDEA, JBuilder, VS Code)
+.idea/
+*.iml
+*.ipr
+*.iws
+*.jpx
+*.jpx.local
+.vscode/
+
+# Local tool settings
+.claude/settings.local.json
+
+# Node, if the build scripts ever gain dependencies
+node_modules/

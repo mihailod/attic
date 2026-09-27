@@ -1,0 +1,193 @@
+\Glavni tekst\ 1 1 80 25
+
+                             \"loft"LOFT\ L9-3 EKSPERIMENT
+
+                             ---------------------
+
+
+   L9-3 eksperiment je uradjen 7. aprila 1982. godine u National Engeenering
+Laboratory, Idaho, USA. Eksperiment
+je \"sim"simulirao gubitak\ dovoda vode na \"atws"ATWS\-u u komercijalnom
+\"pwr"PWR\ postrojenju.
+
+
+   Probni pocetni uslovi za L9-3 bili su : 49.1 MW reaktorska snaga, 556.7 K
+ulazna temperatura, 576.4 K izlazna temperatura, i 476.6 kg/s primarni
+kruzni protok. U prvih 60 sekundi od iniciranja eksperimenta, pojava
+\"deg"degradiranog transfera toplote\ iz primarnog u sekundarni krug uzrokovala je
+lagano povecanje reaktorske ulazne i izlazne temperature. Usled sirenja
+primarnog fluida dolazi do povecanja nivoa i pritiska u \"sop"SOP\-u. Zbog toga,
+oko 30. sekunde, dolazi do aktiviranja sistema rashladnih tuseva.
+   Posle 60. sekunde, sekundarni nivo vode je pao tako nisko da je generator
+pare izgubio toplotni ponor za odvodjenje primarne energije. Ovo je
+uzrokovalo rapidno povecanje reaktorskih temperatura. Zbog smanjenja gustine
+\"moderator"moderatora\, povratna sprega uzrokuje opadanje snage reaktora
+ (\"inh"INHERENTNA SIGURNOST\).
+Takodje, smanjuje se i gustina rashladjivaca u primarnom kruznom
+toku.
+
+   Usled povecanja pritiska u SOP-u dolazi do otvaranja \"rv"rasteretnih\ ventila
+koji se otvaraju na pritisku od 16.2 MPa. Na 17.3 MPa doslo je do otvaranja
+\"sv"sigurnosnih rasteretnih\ ventila i to se desilo u 96. sekundi. Skoro
+istovremeno sa otvaranjem sigurnosnih rasteretnih ventila, SOP se ispunio
+vodom. Do tog vremena, reaktorska snaga se smanjila na priblizno 15 MW i
+kombinovanje rasteretnih i sigurnosnih ventila protok je bio dovoljan da
+smanji primarni pritisak. Usledilo je zatvaranje sigurnosnih ventila u 107.
+sekundi i sami rasteretni ventili su bili dovoljni da kontrolisu pritisak
+povremenim ciklicnim otvaranjem.
+
+   Poslednjih 200 sekundi je proteklo u nastavku smanjivanja reaktorske
+snage. Temperature i pritisci su normalizovani i nije zabelezena pojava
+nikakvih problema sa sigurnoscu. LOFT postrojenje je uspesno izaslo na kraj
+sa ATWS testom.
+
+
+
+
+                               MATEMATICKI MODEL
+
+                               -----------------
+
+
+Matematicki model ove simulacije predstavljaju tri diferencijalne jednacine
+prvog reda. Njihovi rezultati (dobijeni metodom Runge-Kutta) graficki su
+interpretirani i animirani. Jednacine glase :
+
+
+
+               dTg(t)
+
+   Mg * Cpg * -------- = Q(t) - Agk * Kgk * ( Tg(t) - Tk(t) )
+
+                 dt
+
+
+
+
+               dTk(t)
+
+   Mk * Cpk * -------- = Agk * Kgk * ( Tg(t) - Tk(t) ) -
+
+                dt
+
+                         -  Aknt * Knt * ( Tk(t) - Tnt(t) )
+
+
+
+                  dTnt(t)
+
+   Mnt * Cpnt * ---------- = Aknt * Kknt * ( Tk(t) - Tnt(t) ) -
+
+                    dt
+
+                             - 2 * mnt(t) * Cpnt *( Tnt(t) - Tulnt(t) )
+
+
+Pri cemu su pocetni uslovi :
+
+
+                                                Tg(0)  = 1001    K
+
+                                                Tk(0)  =  592.3  K
+
+                                                Tnt(0) =  566.07 K
+
+
+
+Gde su :
+
+
+       Mg ..... masa goriva ......................... 1540.53 Kg
+
+       Mk ..... masa kosuljice ......................  233.57 Kg
+
+       Mnt .... masa nosioca toplote ................  190.5  Kg
+
+       Cpg .... specificna toplota goriva ...........  317    J/(Kg*K)
+
+       Cpk .... specificna toplota kosuljice ........  326    J/(Kg*K)
+
+       Cpnt ... specificna toplota nosioca toplote .. 5560.3  J/(Kg*K)
+
+
+
+Pri resavanju ovih jednacina, koriscene su jednacine dobijene linearnom
+aproksimacijom merenih rezultata za snagu, ulaznu temperaturu nosioca
+toplote, i protok nosioca toplote. One glase :
+
+
+                  = -0.051 * t + 50     ,   0   < t <= 63.9
+
+SNAGA (MW) : Q(t) = -0.966 * t + 108.39 ,  63.9 < t <= 106.1
+
+                  = -0.03  * t + 9.12   , 106.1 < t <= 300
+
+                  =         0           ,         t  > 300
+
+
+ULAZNA                 = 0.051  * t + 556.6 ,  0 < t <= 67
+
+TEMPERATURA : Tulnt(t) = 0.316  * t + 539   , 67 < t <= 162
+
+NOSIOCA                = 0.0126 * t + 588   ,      t >  162
+
+TOPLOTE (K)
+
+
+PROTOK                 = 475 - 0.0357 * t ,   0 < t <= 56
+
+NOSIOCA        : Mnt(t)= 507 - 0.607  * t ,  56 < t <= 112
+
+TOPLOTE (kg/s)         = 456 - 0.145  * t , 112 < t <= 167
+
+                       = 432                      t >  167
+\atws\ 4 10 34 16
+Skracenica od engleskog Anticipated Transient Without Scram.
+\loft\ 5 7 35 13
+Skracenica od engleskog Loss Of Fluid Test (testiranje reakcije na gubitak
+fluida).
+\moderator\ 10 10 30 16
+Moderator kod ovog tipa reaktora je voda.
+\deg\ 8 8 50 17
+Pod ovim pojmom se podrazumeva gubljenje toplotnog ponora u generatoru pare
+uzrokovano prekinutim dotokom napojne vode. Ovo je onemogucilo normalan
+prenos toplote izmedju primarnog i sekundarnog toka u generatoru pare.
+\sim\ 15 9 75 15
+To je uradjeno jednostavnim iskljucenjem pumpe za dovod napojne vode u
+generator pare na pocetku eksperimenta, cime je onemoguceno hladjenje
+primarnog cirkulacionog toka.
+\pwr\ 40 11 70 18
+Skracenica od engleskog Pressurize Water Reactor (oznaka za tip vrelovodenog
+reaktora).
+\sop\ 7 8 74 17
+SOP (akronim od Sistem Odrzavanja Pritiska) predstavlja sud sa faznim
+prelazom koji pomocu svojih komponenti omogucava smanjivanje, odnosno
+povecavanje pritiska u primarnom cirkulacionom krugu u slucaju
+poremecenog rada. Sastoji se od
+\"eg"elektricnog grejaca\, \"srt"sistema rashladnih tuseva\, \"rv"rasteretnih\
+i \"sv"sigurnosnih\ ventila.
+\eg\ 30 15 75 23
+On nije podrzan u simulaciji jer ne ucestvuje ni u jednoj fazi eksperimenta
+jer mu je uloga da u slucaju smanjenja pritiska greje vodu sto se u ovoj
+simulaciji nikada ne dogadja.
+\srt\ 31 14 76 23
+Oni se otvaraju sa povecanjem pritiska u SOP-u, hlade paru, dovode do
+kondenzacije, i smanjuju pritisak. Oni se otvaraju pri vrednosti pritiska
+od 155.8 Bara, a potpuno su otvoreni pri vrednosti pritiska od 159.3 Bara
+(podaci za NE Krsko, Slovenia - Croatia).
+\rv\ 25 15 70 22
+Oni se otvaraju sa povecanjem pritiska u SOP-u i ispustaju paru u rasteretni
+sud. Otvaraju se pri pritisku od 161 Bar (podatak za NE Krsko, Slovenia -
+Croatia).
+\sv\ 26 14 71 23
+Oni predstavljaju zadnju kariku u lancu sigurnosnih komponenti SOP-a.
+Aktiviraju se u slucaju da delovanjem rasteretnih ventila nije postignuto
+smanjenje pritiska. Otvaraju se pri pritisku od 171 Bar (podatak za NE
+Krsko, Slovenia - Croatia).
+\inh\ 5 3 67 13
+Ovu osobinu poseduju \"pwr"PWR\ reaktori. Ukratko : u slucaju povecanja
+temperature nosioca toplote (za ovaj tip reaktora on je i moderator)
+dolazi do povecanja udela pare u moderatoru. Kako para ima jako mali
+faktor moderacije u odnosu na vodu, smanjuje se verovatnoca izazivanja
+nuklearne fisije (neutroni se dovoljno ne termalizuju). Ovo uzrokuje
+smanjenje snage reaktora i njegovo lagano gasenje.

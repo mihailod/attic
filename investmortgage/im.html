@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mortgage or Invest? by Mihailo Despotovic, May 2008</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 720px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 16px; }
+        form { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: end; }
+        label { display: flex; flex-direction: column; gap: 4px; }
+        input { font-size: 15px; padding: 4px 6px; width: 7em; }
+        button { font-size: 15px; padding: 5px 16px; }
+        #summary { font-weight: 600; margin: 16px 0 4px; }
+        #details { color: #444; margin: 0 0 12px; }
+        .table-wrap { max-height: 60vh; overflow: auto; border: 1px solid #aaa; }
+        table { border-collapse: collapse; width: 100%; font: 13px/1.4 ui-monospace, monospace; }
+        th { position: sticky; top: 0; background: #eee; font: 600 13px system-ui, sans-serif; }
+        th, td { padding: 3px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid #eee; }
+        .negative { color: #c00; }
+    </style>
+</head>
+<body>
+    <h1>Mortgage or Invest? by Mihailo Despotovic, May 2008</h1>
+    <p class="intro">You have enough savings to buy a house outright. Is it better to pay cash, or to take a mortgage
+        for the same amount and invest the savings? With the mortgage, the portfolio makes the payments and gets back
+        the tax saved by deducting the interest; whatever is left once the mortgage is paid off is what investing gained.</p>
+    <p class="intro">Fixed from the 2008 version, which paid only the interest out of the portfolio, never the principal,
+        and with these defaults answered $533.</p>
+    <form id="form">
+        <label>Amount ($)
+            <input id="amount" type="number" value="100000" min="1" step="any">
+        </label>
+        <label>Mortgage rate (%)
+            <input id="rate" type="number" value="6" min="0" max="50" step="any">
+        </label>
+        <label>Term (years)
+            <input id="years" type="number" value="30" min="1" max="50" step="1">
+        </label>
+        <label>Portfolio return (%)
+            <input id="apr" type="number" value="7.6" min="-50" max="50" step="any">
+        </label>
+        <label>Tax rate (%)
+            <input id="tax" type="number" value="40" min="0" max="99" step="any">
+        </label>
+        <button>Calculate</button>
+    </form>
+    <p id="summary"></p>
+    <p id="details"></p>
+    <div class="table-wrap">
+        <table id="table">
+            <thead><tr><th>Year</th><th>Portfolio gain after tax</th><th>Mortgage interest</th><th>Tax saved</th><th>Portfolio balance</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script src="im.js"></script>
+</body>
+</html>

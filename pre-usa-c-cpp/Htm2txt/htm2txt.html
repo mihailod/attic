@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTM2TXT by Mihailo Despotovic, February 1997</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 0 0 8px; }
+        button, select { font-size: 14px; padding: 3px 10px; }
+        #file-name { color: #555; font-size: 13px; }
+        .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 680px) { .panes { grid-template-columns: 1fr; } }
+        .pane h2 { font-size: 14px; margin: 0 0 4px; }
+        textarea {
+            box-sizing: border-box; width: 100%; height: 330px; resize: vertical;
+            font: 13px/1.45 ui-monospace, monospace; padding: 6px 8px; border: 1px solid #bbb; border-radius: 4px;
+            background: #fff; color: #000;
+        }
+        #text { background: #f7f7f7; }
+        #stats { color: #555; font-size: 13px; margin: 6px 0 0; }
+        #stopped { color: #9a5b00; font-size: 14px; margin: 6px 0 0; }
+        .dos {
+            background: #000; color: #c0c0c0; font: 14px/1.3 ui-monospace, "Courier New", monospace;
+            padding: 10px 12px; border-radius: 4px; margin: 12px 0 0; white-space: pre-wrap; overflow-wrap: anywhere;
+        }
+        .how { color: #555; font-size: 14px; }
+        details { margin: 16px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>HTM2TXT by Mihailo Despotovic, February 1997</h1>
+    <p class="intro">A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> command-line tool that turns a web page into plain text by leaving out everything between
+        <code>&lt;</code> and <code>&gt;</code>. Paste HTML, open a file, or drop one on the page. Its messages were already
+        in English in 1997.</p>
+
+    <div class="row">
+        <button id="example">1997-style example</button>
+        <label>Open a file <input type="file" id="file" accept=".htm,.html,text/html,text/*"></label>
+        <span id="file-name"></span>
+    </div>
+    <div class="row">
+        <label><input type="checkbox" id="like1997"> Behave exactly like the 1997 program</label>
+        <label>Show text as <select id="encoding">
+            <option value="auto">UTF-8, else Windows-1250</option>
+            <option value="utf-8">UTF-8</option>
+            <option value="windows-1250">Windows-1250 (Central European)</option>
+            <option value="windows-1252">Windows-1252 (Western)</option>
+        </select></label>
+        <button id="save">Save the text</button>
+    </div>
+
+    <div class="panes">
+        <div class="pane">
+            <h2>HTML</h2>
+            <textarea id="html" spellcheck="false"></textarea>
+        </div>
+        <div class="pane">
+            <h2>Text</h2>
+            <textarea id="text" readonly spellcheck="false"></textarea>
+        </div>
+    </div>
+    <div id="stats"></div>
+    <div id="stopped" hidden></div>
+
+    <div class="dos" id="console"></div>
+
+    <p class="how">Like the original, it keeps everything else exactly as it was: line breaks and indentation,
+        entities such as <code>&amp;amp;</code> undecoded, and the contents of scripts and style sheets. One real bug is fixed:
+        the program read each byte into a <code>char</code> and compared it with <code>EOF</code>, and since Borland C's
+        <code>char</code> is signed, a byte 255 (ÿ in Latin-1, a no-break space in the DOS code page for Serbian) looked like the
+        end of the file, and the conversion quietly stopped there. Reading the file in DOS text mode also stopped at the first
+        Ctrl-Z. The checkbox brings both back.</p>
+
+    <details>
+        <summary>The original C++ code</summary>
+        <pre class="source" id="source"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="htm2txt.js"></script>
+    <script>document.getElementById("source").textContent = SOURCE;</script>
+</body>
+</html>

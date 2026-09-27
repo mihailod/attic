@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Davor's Trader by Mihailo Despotovic, December 2013</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 24px 0 6px; }
+        .intro { color: #555; margin: 0 0 12px; max-width: 860px; }
+        .how { color: #555; font-size: 14px; max-width: 860px; }
+        .how li { margin: 4px 0; }
+        code { font: 13px ui-monospace, monospace; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin: 0 0 8px; }
+        button, select, input { font-size: 14px; }
+        button { padding: 3px 10px; }
+
+        /* the Swing window, in Java's Metal look */
+        .jframe { position: relative; border: 1px solid #6382bf; background: #eeeeee; font: 12px "Lucida Grande", "Dialog", system-ui, sans-serif; max-width: 100%; }
+        .jframe[hidden] { display: none; }
+        .jframe .jwin-title { display: flex; align-items: center; background: linear-gradient(#b8cfe5, #a3bde0); padding: 3px 6px; font-weight: bold; color: #333; }
+        .jframe .jwin-title span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .jframe .jwin-title button { font-size: 11px; padding: 0 6px; }
+        .jbtn { font: 12px "Lucida Grande", "Dialog", system-ui, sans-serif; font-weight: bold; color: #333; padding: 3px 12px;
+            background: linear-gradient(#fff, #d8e2ef); border: 1px solid #7a8a99; border-radius: 2px; }
+        .jbtn:active { background: #b8cfe5; }
+        .north { display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; }
+        .north .gap { width: 40px; }
+        .center { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        @media (max-width: 640px) { .center { grid-template-columns: 1fr; } }
+        .pane { display: flex; flex-direction: column; min-width: 0; }
+        .pane label { font: bold 18px ui-monospace, "Courier New", monospace; padding: 2px 6px; color: #333; }
+        .pane textarea { height: 230px; resize: vertical; font: bold 18px ui-monospace, "Courier New", monospace; border: 1px solid #000; padding: 2px 4px; overflow-y: scroll; white-space: pre; box-sizing: border-box; width: 100%; }
+        #dst { background: rgb(204, 229, 255); }
+        #debugArea { display: block; width: 100%; box-sizing: border-box; height: 7.8em; font: 12px ui-monospace, "Courier New", monospace; background: rgb(210, 210, 210); border: 0; border-top: 1px solid #999; resize: vertical; overflow-y: scroll; }
+        .jshade { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.08); }
+        .jdialog { background: #eee; border: 1px solid #6382bf; min-width: 260px; max-width: 90%; box-shadow: 2px 3px 10px rgba(0,0,0,.3); }
+        .jdialog .jtitle { background: linear-gradient(#b8cfe5, #a3bde0); padding: 3px 8px; font-weight: bold; color: #333; }
+        .jdialog .jbody { display: flex; gap: 12px; padding: 14px; align-items: flex-start; }
+        .jdialog p { margin: 0; white-space: pre-line; }
+        .jicon { width: 30px; height: 30px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 4px; font: bold 18px system-ui, sans-serif; color: #fff; }
+        .jicon.e { background: #c33; }
+        .jicon.q { background: #37b; }
+        .jdialog .jbuttons { display: flex; gap: 6px; justify-content: flex-end; padding: 0 12px 12px; }
+        .jdialog .jbuttons button { font: bold 12px system-ui, sans-serif; padding: 3px 14px; }
+        #closed[hidden] { display: none; }
+
+        /* the plan */
+        .plan { max-width: 520px; }
+        .plan text { font: 13px system-ui, sans-serif; }
+
+        /* the tester */
+        .tester { border: 1px solid #ccc; border-radius: 4px; padding: 10px; }
+        #chart { display: block; width: 100%; max-width: 1060px; height: auto; background: #000; border-radius: 3px; }
+        #chart-day { font: 13px ui-monospace, monospace; color: #333; }
+        #ea-state { font-size: 13px; color: #555; margin: 4px 0 0; }
+        #summary { font-size: 14px; margin: 8px 0; font-weight: 600; }
+        table { border-collapse: collapse; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 3px 7px; text-align: left; }
+        #inputs input { width: 7em; font: 13px ui-monospace, monospace; }
+        .tabs { display: flex; gap: 2px; margin: 8px 0 0; }
+        .tabs button { border: 1px solid #ccc; border-bottom: none; background: #f2f2f2; padding: 3px 12px; border-radius: 3px 3px 0 0; }
+        .tabs button[aria-selected=true] { background: #fff; font-weight: 600; }
+        .tabpanel { border: 1px solid #ccc; padding: 6px; max-height: 260px; overflow: auto; }
+        .tabpanel[hidden] { display: none; }
+        #history tr { cursor: pointer; }
+        #history tr:hover { background: #f4f7ff; }
+        .none { color: #777; }
+        #journal { margin: 0; font: 12px/1.4 ui-monospace, monospace; white-space: pre; }
+        .scroll { overflow-x: auto; max-width: 100%; }
+        details { margin: 12px 0 0; }
+        summary { cursor: pointer; font-weight: 600; }
+        pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Davor's Trader by Mihailo Despotovic, December 2013</h1>
+    <p class="intro">A contract job from the time of my startup, MiRteh, for <a href="https://www.linkedin.com/in/davoru/">Davor Urošević</a>, a <a href="https://en.wikipedia.org/wiki/Foreign_exchange_market">FOREX</a> trader. His idea was a breakout:
+        watch EUR/USD from 11:00 to 13:30 and note its high and its low, then, from 13:31 to 17:00, buy if the price breaks out
+        above the high, sell if it breaks down below the low, and get out when it turns. It started, in November, as a Java
+        program to sit between his data and MetaTrader, and ended, in December, as an Expert Advisor for <a href="https://en.wikipedia.org/wiki/MetaTrader_4">MetaTrader 4</a> itself,
+        written in <a href="https://docs.mql4.com/">MQL4</a>, which I kept pasted under the Java code.</p>
+
+    <h2>The plan</h2>
+    <svg class="plan" viewBox="0 0 520 250" role="img" aria-label="The plan: an input file (Davor's part), the program I write (my part), an output file of commands for MetaTrader (Davor's part), and MetaTrader">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+        <g fill="none" stroke="#333">
+            <rect x="120" y="10" width="200" height="40" rx="3"/><rect x="120" y="75" width="200" height="40" rx="3" fill="#e8f0ff"/>
+            <rect x="120" y="140" width="200" height="40" rx="3"/><rect x="120" y="205" width="200" height="36" rx="18"/>
+            <path d="M220 50 V73" marker-end="url(#ar)"/><path d="M220 115 V138" marker-end="url(#ar)"/><path d="M220 180 V203" marker-end="url(#ar)"/>
+        </g>
+        <g text-anchor="middle" fill="#222">
+            <text x="220" y="27">Input file</text><text x="220" y="43" fill="#555">(data, parameters)</text>
+            <text x="220" y="99">The program I'm writing</text>
+            <text x="220" y="157">Output file</text><text x="220" y="173" fill="#555">(commands for MetaTrader)</text>
+            <text x="220" y="228">MetaTrader</text>
+        </g>
+        <g fill="#555"><text x="332" y="35">YOUR PART</text><text x="332" y="100">MY PART</text><text x="332" y="165">YOUR PART</text></g>
+    </svg>
+    <p class="how">Redrawn from my diagram of November 17, 2013, which was in Serbian: <span lang="sr">“TVOJ DEO”</span>, your part,
+        and <span lang="sr">“MOJ DEO”</span>, mine.</p>
+
+    <h2>The Java program</h2>
+    <p class="how">Davor's Trader 1.0, as <code>Trader.java</code> builds it: data on the white side, the program on the blue side, and a
+        log below. It reads a data file, and it clears, but its Process Data is still a <code>// todo</code>: it only checks that
+        there is something to process. The button below puts the Expert Advisor in the program pane, where it would have gone.</p>
+    <div class="row"><button id="paste-ea">Put the Expert Advisor in the Program pane</button></div>
+    <div class="jframe" id="swing">
+        <div class="jwin-title"><span>Davor's Trader 1.0 ©MiRteh 2013 mihailod@me.com</span><button id="close" aria-label="Close the window">✕</button></div>
+        <div class="north">
+            <button class="jbtn" id="load">Read Data File</button><button class="jbtn" id="process">Process Data</button>
+            <span class="gap"></span>
+            <button class="jbtn" id="clearData">Clear Data</button><button class="jbtn" id="clearProg">Clear Program</button><button class="jbtn" id="clearAll">Clear All</button>
+        </div>
+        <div class="center">
+            <div class="pane"><label for="src">Data</label><textarea id="src" spellcheck="false"></textarea></div>
+            <div class="pane"><label for="dst">Program</label><textarea id="dst" spellcheck="false"></textarea></div>
+        </div>
+        <textarea id="debugArea" readonly aria-label="The log"></textarea>
+        <input type="file" id="file" hidden>
+    </div>
+    <div id="closed" hidden><p class="how">The application is closed. <button id="reopen">Start it again</button></p></div>
+
+    <h2>The Expert Advisor, in a MetaTrader 4 tester</h2>
+    <p class="how">The MQL4, ported line by line and run in a small MetaTrader 4 strategy tester, tick by tick, as MT4's tester runs
+        it. The market is made up: EUR/USD ticks every few seconds, calmer at night, and on some afternoons with a trend, from
+        Monday, December 2, 2013. Or load real history exported from MetaTrader: 1-minute bars as <code>date,time,open,high,low,close,volume</code>.
+        The made-up market says nothing of how the strategy would do on a real one.</p>
+    <div class="tester">
+        <div class="row">
+            <label>Market seed <input type="number" id="seed" value="1" min="1" style="width:6em"></label>
+            <button id="new-market">Another market</button>
+            <label>Days <select id="days"><option>5</option><option selected>12</option><option>19</option><option>26</option></select></label>
+            <label>Bars <select id="period"><option value="5">M5</option><option value="15" selected>M15</option><option value="30">M30</option><option value="60">H1</option></select></label>
+            <label>Or real history <input type="file" id="csv" accept=".csv,.txt"></label>
+        </div>
+        <div id="market-note" class="how"></div>
+        <div class="row">
+            <button id="play">▶ Run</button>
+            <label>Speed <input type="range" id="speed" min="5" max="400" value="60"></label>
+            <button id="to-end">Run to the end</button>
+            <label><input type="checkbox" id="fixed"> Fixed</label>
+        </div>
+        <div class="row"><button id="prev-day" aria-label="The day before">◀</button><span id="chart-day"></span><button id="next-day" aria-label="The day after">▶</button></div>
+        <canvas id="chart" width="1060" height="380" aria-label="The price chart for one day, with the EA's hours, its high and low, and its trades"></canvas>
+        <div id="ea-state"></div>
+        <div id="summary" aria-live="polite"></div>
+        <div class="tabs" role="tablist">
+            <button data-tab="tab-history" aria-selected="true" role="tab">Account history</button>
+            <button data-tab="tab-journal" aria-selected="false" role="tab">Experts log, that day</button>
+            <button data-tab="tab-inputs" aria-selected="false" role="tab">Inputs</button>
+        </div>
+        <div class="tabpanel scroll" id="tab-history">
+            <table><thead><tr><th>Order</th><th>Opened</th><th>Type</th><th>Lots</th><th>Price</th><th>Closed</th><th>Price</th><th>Pips</th><th>Profit</th></tr></thead><tbody id="history"></tbody></table>
+        </div>
+        <div class="tabpanel" id="tab-journal" hidden><pre id="journal"></pre></div>
+        <div class="tabpanel scroll" id="tab-inputs" hidden><table><tbody id="inputs"></tbody></table></div>
+    </div>
+
+    <h2>The bugs, and the fixes</h2>
+    <ul class="how">
+        <li><b>It sold on no breakout at all.</b> The buy waits for the Ask to rise 4 pips above the high, but the sell's test is
+            <code>Bid - lo &lt; pipsEntry</code>: the price anywhere below 4 pips above the low, so a sell could open as soon as
+            trading began, with the price sitting just above the low. Fixed, it waits for the price to fall 4 pips below it.</li>
+        <li><b>A sell's stop loss was 4 pips away.</b> The buy's is <code>negativeStopSell</code>, 30 pips; the sell's used
+            <code>positiveStopSell</code>, 4.</li>
+        <li><b>A position still open at 17:00 was never closed, and the EA never traded again.</b> Positions are only looked after in
+            the trading hours, and the new day, which moves the hours on, waits until no position is open.</li>
+        <li><b>After a weekend, it never traded again either.</b> Each new day moves the hours on by one day, so on the Monday after a
+            Friday they point to Saturday.</li>
+        <li>Smaller ones: while sampling, the first price counts only as a high; the log shows the old high and low instead of the new
+            ones; <code>pipsProfit</code> isn't used; and a market order gets an expiration time, which is meant for pending orders.
+            In the Java program, Process Data looks at the blue program area while its message speaks of the white one.</li>
+    </ul>
+    <p class="how">There is no MetaTrader here to check the port against, so it was checked with eight made-up days that test its rules,
+        each run as written and fixed; breaking the port on purpose in eight ways, each was caught. As written, the EA traded once
+        or twice in the first days of a test and then stopped for good: in 12 made-up markets of two weeks, it traded on 1 to 4 days,
+        fixed on 6 to 10.</p>
+
+    <details>
+        <summary>The original Java code: Trader.java</summary>
+        <pre class="source" id="source-java"></pre>
+    </details>
+    <details>
+        <summary>The Expert Advisor, in MQL4, as it was pasted under the Java code</summary>
+        <pre class="source" id="source-mql"></pre>
+    </details>
+
+    <script src="source.js"></script>
+    <script src="ea.js"></script>
+    <script src="trader.js"></script>
+</body>
+</html>

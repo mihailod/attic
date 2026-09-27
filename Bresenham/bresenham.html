@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bresenham's Line Algorithm by Mihailo Despotovic, February 2011</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 790px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 12px; }
+        .controls { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; margin: 0 0 8px; }
+        .controls label { display: inline-flex; align-items: center; gap: 5px; }
+        .presets { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 10px; font-size: 14px; color: #555; }
+        button { font-size: 13px; padding: 3px 10px; }
+        canvas { display: block; border: 1px solid #aaa; touch-action: none; cursor: crosshair; }
+        .status { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 4px; }
+        #coords { font: 600 14px ui-monospace, monospace; }
+        #verdict.bad { color: #b35900; font-weight: 600; }
+        #verdict.good { color: #1a7f37; }
+        h2 { font-size: 14px; margin: 12px 0 4px; }
+        #pixels, #steps {
+            margin: 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd;
+            font: 12px/1.45 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
+        }
+        #steps { max-height: 240px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Bresenham's Line Algorithm by Mihailo Despotovic, February 2011</h1>
+    <p class="intro">Which pixels should light up to draw a straight line? Drag the ends of the line, or click to move
+        the nearer one. My 2011 version solves the basic case, lines going right and rising at most 45°, tracking the
+        error between the true line (red) and the pixels with a floating-point number. The other seven directions are
+        mirror images of it: swap the ends, flip it upside down, or swap x and y, draw it, and mirror the pixels back.
+        Compare it as written, with the mirroring, and as the integer-only version that needs no mirroring.</p>
+    <div class="controls">
+        <label><input type="radio" name="mode" id="original" checked> My 2011 version, as written</label>
+        <label><input type="radio" name="mode" id="mirrored"> Mirrored into all eight directions</label>
+        <label><input type="radio" name="mode" id="fixed"> Integers only, all directions</label>
+    </div>
+    <div class="presets">Try:
+        <button data-preset="example">The 2011 example</button>
+        <button data-preset="shallow">Shallow</button>
+        <button data-preset="steep">Steep</button>
+        <button data-preset="down">Going down</button>
+        <button data-preset="backwards">Right to left</button>
+        <button data-preset="vertical">Vertical</button>
+    </div>
+    <div><canvas id="grid"></canvas></div>
+    <div class="status"><span id="coords"></span><span id="verdict"></span></div>
+    <h2>Pixels plotted</h2>
+    <pre id="pixels"></pre>
+    <h2>Step by step</h2>
+    <pre id="steps"></pre>
+    <script src="bresenham.js"></script>
+</body>
+</html>

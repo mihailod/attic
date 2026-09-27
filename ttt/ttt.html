@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tic-Tac-Toe with Minimax and Alpha-Beta V1.0 by Mihailo Despotovic, Jan 2003</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 560px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 4px; }
+        .info { margin: 0 0 12px; color: #555; }
+        .main { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-start; }
+        #board {
+            display: grid;
+            /* minmax(0, 1fr): all rows and columns equal, whether or not a field has a piece in it */
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-rows: repeat(3, minmax(0, 1fr));
+            gap: 4px;
+            width: 350px;
+            max-width: 100%;
+            aspect-ratio: 1;
+        }
+        #board button {
+            font: bold 60px/1 ui-monospace, monospace;
+            background: #fff;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 0;
+            cursor: pointer;
+        }
+        #board button:disabled { cursor: default; }
+        #board button.x { color: blue; }
+        #board button.o { color: red; }
+        #board button:not(:disabled):hover { background: #f0f4ff; }
+        .side { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+        .side label { white-space: nowrap; }
+        button { font-size: 14px; }
+        #restart { padding: 4px 14px; align-self: flex-start; }
+        #log {
+            width: 100%;
+            box-sizing: border-box;
+            height: 9em;
+            margin-top: 16px;
+            font: 13px/1.4 ui-monospace, monospace;
+            resize: vertical;
+        }
+        dialog { border: 1px solid #999; border-radius: 6px; padding: 20px 28px; text-align: center; }
+        dialog p { margin: 0 0 16px; font-size: 15px; }
+        dialog button { padding: 4px 20px; }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe with Minimax and Alpha-Beta V1.0 by Mihailo Despotovic, Jan 2003</h1>
+    <p class="info">Tic-Tac-Toe V<span id="version"></span>. Click on the board buttons to play...</p>
+    <div class="main">
+        <div id="board">
+            <button aria-label="top left"></button>
+            <button aria-label="top middle"></button>
+            <button aria-label="top right"></button>
+            <button aria-label="middle left"></button>
+            <button aria-label="centre"></button>
+            <button aria-label="middle right"></button>
+            <button aria-label="bottom left"></button>
+            <button aria-label="bottom middle"></button>
+            <button aria-label="bottom right"></button>
+        </div>
+        <div class="side">
+            <label><input type="checkbox" id="alphabeta" checked> Alpha-Beta</label>
+            <label><input type="checkbox" id="first"> Computer Plays First</label>
+            <label><input type="checkbox" id="logging" checked> Logging</label>
+            <button id="restart">Restart Game</button>
+        </div>
+    </div>
+    <textarea id="log" readonly></textarea>
+    <dialog id="end">
+        <form method="dialog">
+            <p id="end-message"></p>
+            <button autofocus>OK</button>
+        </form>
+    </dialog>
+    <script src="ttt.js"></script>
+</body>
+</html>

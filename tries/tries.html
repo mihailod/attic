@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Odds of Success over Repeated Tries by Mihailo Despotovic, June 2008</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 640px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        .intro { color: #555; margin: 0 0 16px; }
+        form { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: end; }
+        label { display: flex; flex-direction: column; gap: 4px; }
+        input { font-size: 15px; padding: 4px 6px; width: 7em; }
+        button { font-size: 15px; padding: 5px 16px; }
+        #summary { font-weight: 600; margin: 16px 0 8px; }
+        pre {
+            border: 1px solid #aaa;
+            padding: 8px;
+            margin: 0;
+            max-height: 60vh;
+            overflow: auto;
+            font: 13px/1.4 ui-monospace, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Odds of Success over Repeated Tries by Mihailo Despotovic, June 2008</h1>
+    <p class="intro">If each try succeeds with some chance, how many tries does it take
+        to be fairly sure of at least one success?</p>
+    <form id="form">
+        <label>Chance per try (%)
+            <input id="p" type="number" value="1" min="0" max="100" step="any">
+        </label>
+        <label>Target (%)
+            <input id="cutoff" type="number" value="80" min="0" max="100" step="any">
+        </label>
+        <button>Calculate</button>
+    </form>
+    <p id="summary"></p>
+    <pre id="output"></pre>
+    <script src="tries.js"></script>
+</body>
+</html>

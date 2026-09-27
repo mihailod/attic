@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pirat (Pirate) by Mihailo Despotovic, June 1986</title>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 16px;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        h1 { font-size: 16px; font-weight: normal; margin: 0 0 8px; }
+        h2 { font-size: 16px; margin: 22px 0 6px; }
+        .intro, .how { color: #555; margin: 0 0 12px; max-width: 800px; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; }
+        button { font-size: 14px; padding: 3px 10px; }
+        canvas, figure img { display: block; width: 100%; max-width: 640px; height: auto; image-rendering: pixelated; }
+        figure { margin: 0; }
+        figcaption { font-size: 13px; color: #555; margin: 6px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>Pirat (Pirate) by Mihailo Despotovic, June 1986</h1>
+    <p class="intro">A text adventure with still pictures for the <a href="https://en.wikipedia.org/wiki/ZX_Spectrum">ZX Spectrum</a>, which I wrote over the summer school break in 1986.
+        Like many Spectrum adventures of the day, it was written in <a href="https://en.wikipedia.org/wiki/Sinclair_BASIC">ZX Spectrum BASIC</a>, with routines in <a href="https://en.wikipedia.org/wiki/Zilog_Z80">Z80</a> assembly to draw and
+        load the pictures. Nothing of it was preserved.</p>
+    <p class="intro">What I do remember is its loading screen, which I drew in Art Studio: a big PIRAT in square letters, with rays
+        from a dot in the middle of the screen, and my name under it, all in black on yellow. This is a recreation of it from memory,
+        256 by 192 pixels in the Spectrum's own colors and font, as it looked while the game went on loading from the cassette.</p>
+
+    <h2>The loading screen</h2>
+    <div class="row">
+        <button id="load">LOAD "" SCREEN$ (the real speed)</button>
+        <button id="fast">Load it eight times faster</button>
+        <label><input type="checkbox" id="mute" checked> Mute</label>
+    </div>
+    <canvas id="tv" width="320" height="256" aria-label="The loading screen, loading from tape"></canvas>
+    <p class="how">It loads as it did from tape, and sounds like it too when you untick Mute.</p>
+
+    <h2>The picture</h2>
+    <figure>
+        <a href="pirat-loading-screen.png"><img src="pirat-loading-screen.png" width="960" height="768"
+            alt="The Pirat loading screen: a big PIRAT in black square letters on yellow, rays from a dot below it, and © Mihailo Despotovic, June 1986, with blue and yellow loading stripes in the border"></a>
+        <figcaption>The recreated screen, with the border striped as the rest of the game loads.<br>It is also here as a Spectrum
+            screen file, <a href="PIRAT.SCR">PIRAT.SCR</a>, which an emulator can load with <code>LOAD "" SCREEN$</code>.</figcaption>
+    </figure>
+
+    <script>
+    "use strict";
+    const SCR = Uint8Array.from(atob("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAYIADBAAAAAABABAAAAAQAwAAAAAAQAAAAAABAAf/8AB+f//EAB//wAECAA//4AC/AAAAAABAAAAAAAEAB//wAH+AA+QAH//AAQ4AD//gAP///AAf/AAAAAAAAQAAAAAAf4AD7AAAAAABDgAAAAAA///8AB4AAAAAAAABAAAAAAB/gAPkAAAAAAEOAAAAAACAB/wAEAAAAAAAAAEAB/////+AA+wAH+AA/g4AD//gAIAH/AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAGCAAwQAAAAAAQAgAAAACAcAAAAAAEAAAAAAAQAH//AAfj//xAAf/8ABBgAP/+AA/wAAAAAAQAAAAAABAAf/8AB/gAPkAB//wAEOAA//4AD///wAH/gAAAAAAAEAAAAAAH+AA+QAAAAAAQ4AAAAAAIAH/AAQAAAAAAAAAQAH/////4AD5AAAAA//DgAP/+AAgAf8ABAAAAAAAAABAAf/////gAPsAB/wAP4OAA//4ACAB/wAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABwgAMEAAAAAAEAQAAAAAQHAAAAAABAAAAAAAEAB//wAH8//+QAH//AAQYAD//gAP8AAAAAAEAAAAAAAQAH/hAAf4ADpAAcAEABDgAP/+AA///8AB/wAAAAAAABAAAAAAB/gAPkAAAAAAEOAAAAAACAB/wAEAAAAAAAAAEAB/////+AA+QAAAAH/w4AD//gAIAH/AAQAAAAAAAAAQAH/////4AD5AAf8AB+DgAP/+AAgAf8ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAcIADhAAAAAABAIAAAAACDwAAAAAAQAAAAAABAAf/8AB/H//kAB//wAEGAA//4AD/AAAAAABAAAAAAAEAB//wAH+AA5QAH//AAQ4AD//gAP///AAf8AAAAAAAAQAAAAAAf4AD5AAAAAABDgAAAAAAgAf8ABAAAAAAAAABAAf/////gAPkAB+AB/8OAA//4ACAB/wAEAAAAAAAAAEAB/4AAACAA+QAH/gAQA4ACAfgAIAH/AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAHiAA4QAAAAAAQEAAAAAAQ8AAAAAAEAAAAAAAQAH//AAf///5AAf/8ABBgAP/+AA///8AB//wAAAAAABAAAAAAB/gAPUAAAAAAEOAA//4AD///wAH+AAAAAAAAEAAAAAAH+AA+QAAAAAAQ4AAAAAAIAH/AAQAAAAAAAAAQAH/////4AD5AAfgAP/DgAP/+AAgAf8ABAAAAAAAAABAAf+AAAAgAPkAB/4ACAOAAgH4ACAB/wAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAf/8AB4//+EAB//wAECAAAAAACfAAAAAABAAAAAAAEAB//wAH+AA+QAH//AAQYAD//gAP///AAf/4AAAAAAAQAAAAAAf4AD1AAAAAABDgAP/+AA///8AB/AAAAAAAABAAAAAAB/gAPkAAAAAAEOAAAAAACAB/wAEAAAAAAAAAEAB/////+AA/QAH8AD/w4AD//gAIAH/AAQAAAAAAAAAQAH/gAAAIAD5AAcPAAgDgAIB+AAgAf8ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH//////8D//gf//////wAH////wAH//////8AAAAAAAQAH//AAfP//hAAf/8ABAgAAAAAAnwAAAAAAQAAAAAABAAf/8AB/gAPkAB//wAEGAA//4AD///wAH/8AAAAAAAEAAAAAAH+AA8wAAAAAAQ4AAAAAAP///AAfgAAAAAAAAQAAAAAAf4AD5AAAAAABDgAAAAAAgAf8ABAAAAAAAAABAAf/////gAP0AB/AAf4OAA//4ACAB/wAEAAAAAAAAAEAB/4AAACAA+QAHBwAEA4ACAfgAIAH/AAQAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOf7YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmQBCEEREECBEAERABHhEEEQoECAIAEJEREAACAJCQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHg3ntY4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAz/sAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAQjhEPDgYOAB4PHhAOAw4EDgcCAA8OEQ8AD48PDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8H99ccAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAQAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw"), c => c.charCodeAt(0));
+    const T_LINE = 224, T_FRAME = 69888, CPU = 3500000;
+    const COLORS = [[0,0,0],[0,0,215],[215,0,0],[215,0,215],[0,215,0],[0,215,215],[215,215,0],[215,215,215]];
+    const BW = 32, BH = 32, W = 256, H = 192;
+    const tv = document.getElementById("tv"), ctx = tv.getContext("2d");
+    const frame = ctx.createImageData(320, 256);
+
+    // The tape, as the ROM saves it: for each block a pilot tone, two sync pulses, then the bytes, each bit two equal
+    // half pulses, 855 T-states for a 0 and 1710 for a 1. Each entry is [end time, border color, whether the signal flips].
+    function tape() {
+        const halves = [], events = [];
+        let t = CPU / 2;                                                  // a moment of quiet before PLAY
+        halves.push([t, 7, false]);
+        const pulse = (len, color) => { t += len; halves.push([t, color, true]); };
+        const pause = sec => { t += sec * CPU; halves.push([t, 7, false]); };
+        function block(bytes, pilots, onByte) {
+            for (let k = 0; k < pilots; k++) pulse(2168, k % 2 ? 5 : 2);  // pilot: red and cyan
+            pulse(667, 1); pulse(735, 6);                                  // sync
+            let check = 0;
+            const all = [...bytes];
+            for (const b of all) check ^= b;
+            all.push(check);
+            all.forEach((b, i) => {
+                for (let bit = 7; bit >= 0; bit--) { const len = b & (1 << bit) ? 1710 : 855; pulse(len, 1); pulse(len, 6); }
+                if (onByte) events.push([t, () => onByte(i)]);
+            });
+        }
+        // the header: flag 0, type 3 (bytes), the name in 10 characters, the length, the start address, and 32768
+        const name = [..."PIRAT     "].map(c => c.charCodeAt(0));
+        block([0, 3, ...name, 6912 & 255, 6912 >> 8, 0, 0x40, 0, 0x80], 8063, null);
+        events.push([t, printBytes]);
+        pause(1);
+        // the screen: flag 255, then its 6912 bytes straight into screen memory
+        block([0xff, ...SCR], 3223, i => { if (i >= 1 && i <= 6912) mem[i - 1] = SCR[i - 1]; });
+        pause(1);
+        // then the rest of the game, for a while
+        let seed = 1986;
+        const game = [0xff];
+        for (let k = 0; k < 2500; k++) { seed = (seed * 1103515245 + 12345) & 0x7fffffff; game.push((seed >> 16) & 255); }
+        block(game, 3223, null);
+        halves.push([t + 1, 7, false]);
+        return { halves, events, end: t };
+    }
+
+    // "Bytes: PIRAT" at the top of the screen, as the ROM printed it after the header
+    const GLYPHS = {
+        "B": [0,0x7C,0x42,0x7C,0x42,0x42,0x7C,0], "y": [0,0,0x44,0x44,0x44,0x3C,0x04,0x38], "t": [0,0x10,0x38,0x10,0x10,0x10,0x0C,0],
+        "e": [0,0,0x38,0x44,0x78,0x40,0x3C,0], "s": [0,0,0x38,0x40,0x38,0x04,0x78,0], ":": [0,0,0,0x10,0,0,0x10,0], " ": [0,0,0,0,0,0,0,0],
+        "P": [0,0x7C,0x42,0x42,0x7C,0x40,0x40,0], "I": [0,0x3E,0x08,0x08,0x08,0x08,0x3E,0], "R": [0,0x7C,0x42,0x42,0x7C,0x44,0x42,0],
+        "A": [0,0x3C,0x42,0x42,0x7E,0x42,0x42,0], "T": [0,0xFE,0x10,0x10,0x10,0x10,0x10,0],
+    };
+    function printBytes() {
+        [..."Bytes: PIRAT"].forEach((ch, x) => GLYPHS[ch].forEach((bits, row) => { mem[(row << 8) + x] = bits; }));
+    }
+
+    const mem = new Uint8Array(6912);
+    function reset() { mem.fill(0, 0, 6144); mem.fill(0x38, 6144); }           // blank, white paper and black ink
+    const TAPE = tape();
+
+    function draw(tStart, speed) {
+        const d = frame.data, hs = TAPE.halves;
+        let lo = 0, hi = hs.length;
+        while (lo < hi) { const mid = (lo + hi) >> 1; if (hs[mid][0] <= tStart) lo = mid + 1; else hi = mid; }
+        let h = lo, border = h < hs.length ? hs[h][1] : 7;
+        for (let y = 0; y < 256; y++) {
+            for (let x = 0; x < 320; x++) {
+                const t = tStart + (y * T_LINE + (x >> 1)) * speed;
+                while (h < hs.length && hs[h][0] <= t) h++;
+                border = h < hs.length ? hs[h][1] : 7;
+                let c;
+                const sx = x - BW, sy = y - BH;
+                if (sx >= 0 && sx < W && sy >= 0 && sy < H) {
+                    const addr = ((sy & 0xc0) << 5) | ((sy & 7) << 8) | ((sy & 0x38) << 2) | (sx >> 3);
+                    const attr = mem[6144 + (sy >> 3) * 32 + (sx >> 3)];
+                    c = COLORS[mem[addr] & (0x80 >> (sx & 7)) ? attr & 7 : (attr >> 3) & 7];
+                } else c = COLORS[border];
+                const o = (y * 320 + x) * 4;
+                d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255;
+            }
+        }
+        ctx.putImageData(frame, 0, 0);
+    }
+
+    // the sound: the signal from the tape, a square wave that flips at every pulse
+    let audio = null, source = null, soundBuffer = null;
+    function makeSound() {
+        const rate = audio.sampleRate, hs = TAPE.halves;
+        const buf = audio.createBuffer(1, Math.ceil(TAPE.end / CPU * rate) + rate, rate);
+        const data = buf.getChannelData(0);
+        let level = 0.12, start = 0;
+        for (const [end, , flips] of hs) {
+            const to = Math.min(data.length, Math.round(end / CPU * rate));
+            const v = flips ? level : 0;
+            for (let k = start; k < to; k++) data[k] = v;
+            if (flips) level = -level;
+            start = to;
+        }
+        return buf;
+    }
+    function stopSound() { if (source) { try { source.stop(); } catch {} source = null; } }
+    function startSound(fromT, speed) {
+        stopSound();
+        if (document.getElementById("mute").checked) return;
+        try {
+            audio = audio || new AudioContext();
+            audio.resume();
+            soundBuffer = soundBuffer || makeSound();
+            source = audio.createBufferSource();
+            source.buffer = soundBuffer;
+            source.playbackRate.value = speed;
+            source.connect(audio.destination);
+            source.start(0, fromT / CPU);
+        } catch { /* no sound */ }
+    }
+
+    let run = 0, now = { t: 0, speed: 1, running: false };
+    function load(speed) {
+        const me = ++run;
+        reset();
+        let e = 0;
+        const began = performance.now();
+        now = { t: 0, speed, running: true };
+        startSound(0, speed);
+        const step = () => {
+            if (me !== run) return;
+            const t = (performance.now() - began) / 1000 * CPU * speed;
+            now.t = t;
+            while (e < TAPE.events.length && TAPE.events[e][0] <= t) TAPE.events[e++][1]();
+            draw(t, speed);
+            if (t < TAPE.end) requestAnimationFrame(step);
+            else { now.running = false; stopSound(); draw(TAPE.end + CPU, 1); }
+        };
+        requestAnimationFrame(step);
+    }
+    document.getElementById("load").addEventListener("click", () => load(1));
+    document.getElementById("fast").addEventListener("click", () => load(8));
+    document.getElementById("mute").addEventListener("change", () => {
+        if (now.running) startSound(now.t, now.speed); else stopSound();
+    });
+
+    // until then, the screen as it ends up
+    mem.set(SCR);
+    draw(TAPE.end + CPU, 1);
+    </script>
+</body>
+</html>
