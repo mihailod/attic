@@ -57,6 +57,9 @@
         details { margin: 22px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         #table { font: 12px/1.4 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 6px 8px; max-height: 320px; overflow: auto; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -78,6 +81,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>The Birthday Paradox by Mihailo Despotovic, September 2005</h1>
     <p class="intro">How many people must be in a room before two of them probably <a href="https://en.wikipedia.org/wiki/Birthday_problem">share a birthday</a>? Surprisingly few:
         with 23 people the chance is already better than even. The chance that everyone's birthday differs is
@@ -105,5 +109,6 @@
         <pre id="table"></pre>
     </details>
     <script src="birthday.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

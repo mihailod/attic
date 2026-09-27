@@ -65,6 +65,9 @@
         dialog { border: 1px solid #999; border-radius: 6px; padding: 20px 28px; text-align: center; }
         dialog p { margin: 0 0 16px; font-size: 15px; }
         dialog button { padding: 4px 20px; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -76,6 +79,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Tic-Tac-Toe with Minimax and <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-Beta</a> V1.0 by Mihailo Despotovic, Jan 2003</h1>
     <p class="info">Tic-Tac-Toe V<span id="version"></span>. Click on the board buttons to play...</p>
     <div class="main">
@@ -105,5 +109,6 @@
         </form>
     </dialog>
     <script src="ttt.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

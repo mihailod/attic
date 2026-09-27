@@ -34,6 +34,9 @@
         .side label { white-space: nowrap; }
         .buttons { display: flex; gap: 8px; justify-content: center; width: 500px; max-width: 100%; margin-top: 12px; }
         button { font-size: 14px; padding: 4px 14px; min-width: 5.5em; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -41,6 +44,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Sorting Algorithms Visualized V1.0 by Mihailo Despotovic, Jan 2003</h1>
     <div class="main">
         <canvas id="canvas"></canvas>
@@ -71,5 +75,6 @@
         <button id="shuffle">Shuffle</button>
     </div>
     <script src="sorting.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

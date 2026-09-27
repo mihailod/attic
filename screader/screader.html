@@ -66,6 +66,9 @@
             white-space: pre-wrap;
             font: 13px/1.4 ui-monospace, monospace;
         }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -77,6 +80,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Serbian Cafe Forums Reader by Mihailo Despotovic, September 2001</h1>
     <p class="note">The Serbian Cafe forums closed permanently on December 3, 2024.
         Offline example: the forum list is the real one from 2001, but the topics, threads and usernames are made up.
@@ -91,5 +95,6 @@
     </div>
     <script src="sample-pages.js"></script>
     <script src="screader.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

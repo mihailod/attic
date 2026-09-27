@@ -63,6 +63,9 @@
         details { margin: 20px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -91,6 +94,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Lisp Notebook by Mihailo Despotovic, January 2012</h1>
     <p class="intro">My exercises from learning <a href="https://en.wikipedia.org/wiki/Common_Lisp">Common Lisp</a> over the 2011 holidays, from two text files, running in a small
         Common Lisp interpreter written for this page. Every box can be edited. Run evaluates the code and the Try line under it,
@@ -124,5 +128,6 @@
 
     <script src="notebook.js"></script>
     <script src="lisp.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

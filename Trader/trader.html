@@ -92,6 +92,9 @@
         details { margin: 12px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             .plan [fill="#333"] { fill: #bebebe; }
@@ -116,6 +119,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Davor's Trader by Mihailo Despotovic, December 2013</h1>
     <p class="intro">A contract job from the time of my startup, MiRteh, for <a href="https://www.linkedin.com/in/davoru/">Davor Urošević</a>, a <a href="https://en.wikipedia.org/wiki/Foreign_exchange_market">FOREX</a> trader. His idea was a <a href="https://en.wikipedia.org/wiki/Breakout_(technical_analysis)">breakout</a>:
         watch EUR/USD from 11:00 to 13:30 and note its high and its low, then, from 13:31 to 17:00, buy if the price breaks out
@@ -231,5 +235,6 @@
     <script src="source.js"></script>
     <script src="ea.js"></script>
     <script src="trader.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

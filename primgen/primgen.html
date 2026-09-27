@@ -54,6 +54,9 @@
         }
         .keys label, .rsa label { margin-top: 10px; }
         .note { font-size: 13px; color: #666; margin: 8px 0 0; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -64,6 +67,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Prime Number Generator and RSA Example by Mihailo Despotovic, May/June 2008</h1>
 
     <h2>Generate primes</h2>
@@ -126,5 +130,6 @@
         encrypts the same way. Don't use it to protect anything.</p>
 
     <script src="primgen.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

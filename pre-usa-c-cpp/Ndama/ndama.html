@@ -63,6 +63,9 @@
         .c-orange { color: #d9731f; }
         .c-red { color: #c00; }
         .c-blue { color: #1d3f86; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             .c-green { color: #60bc71; }
@@ -81,6 +84,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>N Queens by Mihailo Despotovic, April / May 1997</h1>
     <p class="intro">Place <a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">n queens</a> on an n × n chessboard so that no two attack each other: my term project for
         <span lang="sr">“Primene veštačke inteligencije”</span> (Applications of Artificial Intelligence) class with professor
@@ -147,5 +151,6 @@
 
     <script src="source.js"></script>
     <script src="ndama.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

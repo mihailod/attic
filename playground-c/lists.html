@@ -76,6 +76,9 @@
         details { margin: 22px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             marker path { fill: #bebebe; }
@@ -118,6 +121,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Linked Lists and Binary Search Trees by Mihailo Despotovic, July 2005 and January 2011</h1>
     <p class="intro">The two classic interview data structures, from my C practice files: a singly <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a> of names (2005)
         and a <a href="https://en.wikipedia.org/wiki/Binary_search_tree">binary search tree</a> of numbers (2011). Every function is animated step by step, with the pointers it uses.
@@ -210,5 +214,6 @@
 
     <script src="sources.js"></script>
     <script src="lists.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

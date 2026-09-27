@@ -63,6 +63,9 @@
         details { margin: 16px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -80,6 +83,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>GRAB by Mihailo Despotovic, March 1996</h1>
     <p class="intro">A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> utility that saved the <a href="https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter">EGA</a>/<a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics screen to a file and loaded it back, working directly with the
         video card. In the 16-color modes, the screen lives in four <a href="https://en.wikipedia.org/wiki/Bit_plane">bit planes</a>, each holding one bit of every pixel's color;
@@ -150,5 +154,6 @@
 
     <script src="source.js"></script>
     <script src="grab.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

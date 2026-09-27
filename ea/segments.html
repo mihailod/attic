@@ -43,6 +43,9 @@
         .axis { stroke: #999; stroke-width: 1; }
         .tick { font: 12px system-ui, sans-serif; fill: #555; text-anchor: middle; }
         .label { font: bold 15px system-ui, sans-serif; fill: #0645ad; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -60,6 +63,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Merging Line Segments by Mihailo Despotovic, August 2005</h1>
     <p class="intro">Line segments on the number line are sorted, and every group that overlaps or touches
         end to end is merged into one. My answer to <a href="https://en.wikipedia.org/wiki/Electronic_Arts">Electronic Arts</a>' 90-minute Java interview problem.</p>
@@ -77,5 +81,6 @@
     <p id="result"></p>
     <svg id="line" role="img" aria-label="The segments on a number line, with the merged result below them"></svg>
     <script src="segments.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

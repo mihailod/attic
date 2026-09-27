@@ -61,6 +61,9 @@
         details { margin: 12px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 8; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -74,6 +77,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>LOFT Eksperiment (The LOFT Experiment) by Mihailo Despotovic with Aleksandar Ćirilović, March 1995</h1>
     <p class="intro">A simulation of the <a href="https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project">LOFT</a> (Loss of Fluid Test) L9-3 experiment, done on 7 April 1982 at the Idaho National Engineering Laboratory
         (now the <a href="https://en.wikipedia.org/wiki/Idaho_National_Laboratory">Idaho National Laboratory</a>). The LOFT reactor
@@ -205,5 +209,6 @@
     <script src="source.js"></script>
     <script src="data.js"></script>
     <script src="loft.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

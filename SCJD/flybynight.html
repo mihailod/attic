@@ -69,6 +69,9 @@
             font: 12px/1.4 ui-monospace, monospace; border: 1px solid #ccc; padding: 4px 6px;
         }
         #convert-log { overflow: auto; background: #f6f6f6; white-space: pre; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -99,6 +102,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Fly by Night Airline Booking by Mihailo Despotovic, January 2001</h1>
     <p class="note">My <a href="https://en.wikipedia.org/wiki/Oracle_Certification_Program">Sun Certified Java Developer</a> assignment. Two clients share one flight database, as if connected to the same server.
         Search for flights, click one, enter the number of seats and click Book. Each booking locks the flight’s record, rereads it,
@@ -158,5 +162,6 @@
 
     <script src="db-data.js"></script>
     <script src="flybynight.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

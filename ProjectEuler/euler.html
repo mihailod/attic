@@ -44,6 +44,9 @@
             font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
             max-height: 260px; overflow: auto;
         }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -59,6 +62,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Project Euler Solutions by Mihailo Despotovic, March 2009</h1>
     <p class="intro">My solutions to 28 problems from <a href="https://projecteuler.net">Project Euler</a>, written over four days.
         Click Run to see a solution’s output and running time, or <button id="run-all">Run all</button>.
@@ -67,5 +71,6 @@
     <ol id="problems"></ol>
     <script src="names.js"></script>
     <script src="euler.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

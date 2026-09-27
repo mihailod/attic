@@ -47,6 +47,9 @@
             margin: 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd; max-height: 320px; overflow: auto;
             font: 13px/1.6 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
         }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -63,6 +66,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Permutations by Insertion by Mihailo Despotovic, May 2009</h1>
     <p class="intro">Every ordering of the letters of a word. Take the permutations of all but the last letter, and insert
         the last letter into every position of each one; the same step, one letter at a time, builds them all.
@@ -85,5 +89,6 @@
     <div id="list-head"></div>
     <pre id="list"></pre>
     <script src="permutations.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

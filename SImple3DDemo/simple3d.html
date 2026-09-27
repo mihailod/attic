@@ -43,6 +43,9 @@
             margin-top: 8px;
         }
         .controls label { white-space: nowrap; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -51,6 +54,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>3D Rendering from Scratch V1.0 by Mihailo Despotovic, Feb 2011</h1>
     <p class="help">Translate: arrows &nbsp; Rotate: Q A (around x) O P (y) W S (z) &nbsp; Zoom: PgUp PgDn</p>
     <canvas id="screen"></canvas>
@@ -80,5 +84,6 @@
         <label><input type="checkbox" id="diffuse"> Diffuse shading</label>
     </div>
     <script src="simple3d.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

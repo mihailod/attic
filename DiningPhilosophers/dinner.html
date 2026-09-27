@@ -65,6 +65,9 @@
             background: #f6f6f6; border: 1px solid #ddd; font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap;
         }
         .clock { color: #555; font-variant-numeric: tabular-nums; }
+        /* the way back to the attic, for when this page is opened on its own */
+        nav.attic { font-size: 14px; margin: 0 0 6px; }
+        nav.attic.end { margin: 32px 0 16px; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -94,6 +97,7 @@
     </style>
 </head>
 <body>
+    <nav class="attic"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
     <h1>Dining Philosophers by Mihailo Despotovic, August 2005</h1>
     <p class="intro"><a href="https://en.wikipedia.org/wiki/Dining_philosophers_problem">Dining philosophers</a> sit around a table with a fork between each pair of neighbours. Each one thinks,
         gets hungry, picks up the forks on both sides, eats and puts them back. If they all pick up the left fork
@@ -130,5 +134,6 @@
         </div>
     </div>
     <script src="dinner.js"></script>
+    <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>
