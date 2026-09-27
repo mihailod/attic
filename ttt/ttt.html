@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tic-Tac-Toe with Minimax and Alpha-Beta V1.0 by Mihailo Despotovic, Jan 2003</title>
     <style>
@@ -54,6 +55,14 @@
         dialog { border: 1px solid #999; border-radius: 6px; padding: 20px 28px; text-align: center; }
         dialog p { margin: 0 0 16px; font-size: 15px; }
         dialog button { padding: 4px 20px; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .info { color: #aeaeae; }
+            #board button { background: #121212; border: 1px solid #7c7c7c; }
+            #board button:not(:disabled):hover { background: #1a1c24; }
+            dialog { border: 1px solid #7c7c7c; }
+        }
     </style>
 </head>
 <body>

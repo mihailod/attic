@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ChuChu Cheese V1.0 by Mihailo Despotovic, October 2003</title>
     <style>
@@ -47,6 +48,19 @@
         .editor-main { flex: 1; min-width: 280px; max-width: 727px; }
         #editor-tray { width: 33.6%; height: auto; background: #000; cursor: pointer; }
         #editor-message { color: #c00; min-height: 1.3em; margin: 6px 0 0; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .tabs { border-bottom: 1px solid #6d6d6d; }
+            .tabs button { border: 1px solid #6d6d6d; background: #232323; }
+            .tabs button.selected { background: #121212; }
+            #message.won { color: #60bc71; }
+            #message.lost { color: #ff7160; }
+            .how { color: #aeaeae; }
+            .tools label { color: #b6b6b6; }
+            #editor-message { color: #ff7160; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Davor's Trader by Mihailo Despotovic, December 2013</title>
     <style>
@@ -81,6 +82,27 @@
         details { margin: 12px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            .plan [fill="#333"] { fill: #bebebe; }
+            .plan [stroke="#333"] { stroke: #bebebe; }
+            .plan [fill="#222"] { fill: #e0e0e0; }
+            .plan [fill="#555"] { fill: #aeaeae; }
+            .plan [fill="#e8f0ff"] { fill: #1d2433; }
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .how { color: #aeaeae; }
+            .tester { border: 1px solid #525252; }
+            #ea-state { color: #aeaeae; }
+            th, td { border: 1px solid #454545; }
+            .tabs button { border: 1px solid #525252; background: #1f1f1f; }
+            .tabs button[aria-selected=true] { background: #121212; }
+            .tabpanel { border: 1px solid #525252; }
+            #history tr:hover { background: #17191f; }
+            .none { color: #9f9f9f; }
+            pre.source { background: #1b1b1b; border: 1px solid #454545; }
+            .jframe, .jdialog { color-scheme: light; }
+        }
     </style>
 </head>
 <body>

@@ -4,32 +4,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mihailo Despotovic's Software Attic 1986-2015</title>
+    <meta name="color-scheme" content="light dark">
     <style>
+        /* the colors, light by default and dark when the system is */
+        :root { --bg: #fff; --text: #000; --muted: #555; --body: #333; --rule: #ddd; --link: #0645ad; }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #121212; --text: #e8e8e8; --muted: #a0a0a0; --body: #c8c8c8; --rule: #333; --link: #8ab4f8; }
+        }
         body {
             margin: 0 auto;
             max-width: 700px;
             padding: 24px 16px;
             font-family: system-ui, sans-serif;
-            background: #fff;
-            color: #000;
+            background: var(--bg);
+            color: var(--text);
             font-size: 17px;
             line-height: 1.5;
         }
         h1 { font-size: 32px; font-weight: 600; line-height: 1.2; margin: 0 0 8px; }
-        .intro { color: #555; margin: 0 0 24px; }
+        .intro { color: var(--muted); margin: 0 0 24px; }
         h2 { font-size: 32px; font-weight: 700; line-height: 1.2; margin: 32px 0 8px; }
         ul { list-style: none; padding: 0; margin: 0; }
-        li { padding: 12px 0; border-top: 1px solid #ddd; }
-        li:last-child { border-bottom: 1px solid #ddd; }
+        li { padding: 12px 0; border-top: 1px solid var(--rule); }
+        li:last-child { border-bottom: 1px solid var(--rule); }
         .title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-        a { color: #0645ad; text-decoration: none; }
+        a { color: var(--link); text-decoration: none; }
         .title a { font-size: 20px; font-weight: 600; }
         a:hover { text-decoration: underline; }
-        .date { color: #000; font-size: 15px; font-weight: 600; white-space: nowrap; }
-        p { margin: 2px 0 0; color: #333; }
-        blockquote { margin: 0 0 24px; padding: 4px 0 4px 16px; border-left: 3px solid #ddd; font-style: italic; }
+        .date { color: var(--text); font-size: 15px; font-weight: 600; white-space: nowrap; }
+        p { margin: 2px 0 0; color: var(--body); }
+        blockquote { margin: 0 0 24px; padding: 4px 0 4px 16px; border-left: 3px solid var(--rule); font-style: italic; }
         blockquote p { margin: 0; }
-        blockquote footer { color: #555; font-style: normal; margin: 4px 0 0; }
+        blockquote footer { color: var(--muted); font-style: normal; margin: 4px 0 0; }
     </style>
 </head>
 <body>

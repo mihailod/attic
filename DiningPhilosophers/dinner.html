@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dining Philosophers by Mihailo Despotovic, August 2005</title>
     <style>
@@ -54,6 +55,32 @@
             background: #f6f6f6; border: 1px solid #ddd; font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap;
         }
         .clock { color: #555; font-variant-numeric: tabular-nums; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .tabletop { fill: #332914; stroke: #846a39; }
+            .plate { fill: #121212; stroke: #616161; }
+            .fork line { stroke: #919191; }
+            .fork.held line { stroke: #bebebe; }
+            .seat circle { stroke: #bebebe; }
+            .seat.thinking circle { fill: #242d39; }
+            .seat.hungry circle { fill: #5c400d; }
+            .seat.eating circle { fill: #167331; }
+            .legend { color: #b6b6b6; }
+            .legend .thinking::before { background: #242d39; }
+            .legend .hungry::before { background: #5c400d; }
+            .legend .eating::before { background: #167331; }
+            #deadlock { background: #362223; border: 1px solid #8d5354; }
+            #deadlock strong { color: #ff7a69; }
+            th, td { border-bottom: 1px solid #393939; }
+            th { background: #1e1e1e; }
+            td.thinking { color: #70a5ef; }
+            td.hungry { color: #d38934; }
+            td.eating { color: #60bc71; }
+            #log { background: #1b1b1b; border: 1px solid #454545; }
+            .clock { color: #aeaeae; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Serbian Cafe Forums Reader by Mihailo Despotovic, September 2001</title>
     <style>
@@ -54,6 +55,14 @@
             padding: 5px 20px 5px 5px;
             white-space: pre-wrap;
             font: 13px/1.4 ui-monospace, monospace;
+        }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .note { color: #aeaeae; }
+            .pane { border: 1px solid #6d6d6d; }
+            #tree .forum:hover { background: #20202c; }
+            #topics-title { border-bottom: 1px solid #454545; }
         }
     </style>
 </head>

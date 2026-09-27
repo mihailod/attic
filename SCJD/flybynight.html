@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fly by Night Airline Booking by Mihailo Despotovic, January 2001</title>
     <style>
@@ -58,6 +59,33 @@
             font: 12px/1.4 ui-monospace, monospace; border: 1px solid #ccc; padding: 4px 6px;
         }
         #convert-log { overflow: auto; background: #f6f6f6; white-space: pre; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .note { color: #b6b6b6; }
+            .client { border: 1px solid #6d6d6d; }
+            .client-a h2 { color: #87b1fa; }
+            .client-b h2 { color: #b688f9; }
+            .row label { color: #b6b6b6; }
+            .flights-label { color: #b6b6b6; }
+            .table-wrap { border: 1px solid #525252; }
+            th { background: #232323; }
+            th, td { border-bottom: 1px solid #393939; }
+            tbody tr:hover { background: #1c1c24; }
+            tbody tr.locked-other { background: #362223; }
+            .status.ok { color: #60bc71; }
+            .status.error { color: #ff7160; }
+            .status.warning { color: #e38541; }
+            .status.waiting { color: #e38541; }
+            .shared { border: 1px solid #6d6d6d; }
+            #log { background: #1b1b1b; border: 1px solid #454545; }
+            #log .client-a { color: #87b1fa; }
+            #log .client-b { color: #b688f9; }
+            #log .converter { color: #b6b6b6; }
+            .converter { border: 1px solid #6d6d6d; }
+            #ascii, #convert-log { border: 1px solid #525252; }
+            #convert-log { background: #1b1b1b; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CPU Cache Impact: Row vs Column Matrix Addition by Mihailo Despotovic, April 2007</title>
     <style>
@@ -30,6 +31,18 @@
         .wrong { color: #c00; font-weight: 600; white-space: nowrap; }
         #summary { font-weight: 600; margin: 12px 0 0; }
         #note { color: #444; margin: 6px 0 0; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            #machine, #bug { color: #b6b6b6; }
+            th, td { border-bottom: 1px solid #454545; }
+            th { background: #1e1e1e; }
+            td:nth-child(3) { color: #b6b6b6; }
+            .ok { color: #60bc71; }
+            .wrong { color: #ff7160; }
+            #note { color: #b6b6b6; }
+        }
     </style>
 </head>
 <body>

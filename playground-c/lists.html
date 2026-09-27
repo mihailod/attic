@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Linked Lists and Binary Search Trees by Mihailo Despotovic, July 2005 and January 2011</title>
     <style>
@@ -65,6 +66,45 @@
         details { margin: 22px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            marker path { fill: #bebebe; }
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            h2 .when { color: #aeaeae; }
+            .settings { background: #121212; border-bottom: 1px solid #393939; }
+            #version-note { color: #aeaeae; }
+            .ops .sep { background: #363636; }
+            .stage { border: 1px solid #454545; background: #141414; }
+            .doing { color: #8fb6ff; }
+            .msg { color: #c7c7c7; }
+            .msg.warn { color: #d7934d; }
+            .msg.crash { color: #ff7a69; }
+            .vars { color: #aeaeae; }
+            .out { background: #1b1b1b; border: 1px solid #454545; }
+            .out-head { color: #aeaeae; }
+            #tree-leaks { color: #ff7a69; }
+            #tree-depth { color: #b6b6b6; }
+            .node rect { fill: #121212; stroke: #bebebe; }
+            .node line { stroke: #bebebe; }
+            .node.freed rect { stroke: #919191; fill: #1e1e1e; }
+            .node.freed .name { fill: #919191; }
+            .node.leaked rect { fill: #362223; stroke: #ff7a69; }
+            .leak-label { fill: #ff7a69; }
+            .tag { fill: #8fb6ff; }
+            .freed-tag { fill: #919191; }
+            .null { fill: #9f9f9f; }
+            .arrow { stroke: #bebebe; }
+            .arrow.stale { stroke: #787878; }
+            .edge { stroke: #ababab; }
+            .edge.on { stroke: #e37c2c; }
+            .tnode circle { fill: #121212; stroke: #bebebe; }
+            .tnode.on circle { fill: #392804; stroke: #e37c2c; }
+            .tnode.found circle { fill: #167331; stroke: #60bc71; }
+            .tnode.fresh circle { fill: #374968; stroke: #8fb6ff; }
+            .bugs { color: #bebebe; }
+            pre.source { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Parallel Sum Benchmark by Mihailo Despotovic, June 2007</title>
     <style>
@@ -28,6 +29,15 @@
         th { font-weight: 600; border-bottom-color: #999; }
         th:first-child, td:first-child { text-align: left; }
         td.wrong { color: #c00; font-weight: 600; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            #cores { color: #aeaeae; }
+            th, td { border-bottom: 1px solid #454545; }
+            th { border-bottom-color: #7c7c7c; }
+            td.wrong { color: #ff7160; }
+        }
     </style>
 </head>
 <body>

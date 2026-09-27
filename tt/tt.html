@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TeekoTeacher V1.0 by Mihailo Despotovic, June 2003</title>
     <style>
@@ -64,6 +65,15 @@
         dialog form { text-align: center; margin-top: 16px; }
         dialog form button { padding: 4px 20px; font-size: 14px; }
         #instructions { max-height: 80vh; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            nav button { color: #87b1fa; }
+            #board .label { color: #aeaeae; }
+            #board button { background: #121212; border: 1px solid #7c7c7c; }
+            #to-move { color: #bebebe; }
+            dialog { border: 1px solid #7c7c7c; }
+        }
     </style>
 </head>
 <body>

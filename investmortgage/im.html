@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mortgage or Invest? by Mihailo Despotovic, May 2008</title>
     <style>
@@ -28,6 +29,16 @@
         th { position: sticky; top: 0; background: #eee; font: 600 13px system-ui, sans-serif; }
         th, td { padding: 3px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid #eee; }
         .negative { color: #c00; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            #details { color: #b6b6b6; }
+            .table-wrap { border: 1px solid #6d6d6d; }
+            th { background: #232323; }
+            th, td { border-bottom: 1px solid #393939; }
+            .negative { color: #ff7160; }
+        }
     </style>
 </head>
 <body>

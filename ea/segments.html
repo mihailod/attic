@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Merging Line Segments by Mihailo Despotovic, August 2005</title>
     <style>
@@ -32,6 +33,20 @@
         .axis { stroke: #999; stroke-width: 1; }
         .tick { font: 12px system-ui, sans-serif; fill: #555; text-anchor: middle; }
         .label { font: bold 15px system-ui, sans-serif; fill: #0645ad; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .examples { color: #aeaeae; }
+            #result.error { color: #ff7160; }
+            .seg { stroke: #ababab; }
+            .seg-end { fill: #ababab; }
+            .merged { stroke: #87b1fa; }
+            .merged-end { fill: #87b1fa; }
+            .axis { stroke: #919191; }
+            .tick { fill: #aeaeae; }
+            .label { fill: #87b1fa; }
+        }
     </style>
 </head>
 <body>

@@ -277,20 +277,27 @@ if (typeof document !== "undefined") {
     };
 
     // the vectors of the last number, drawn as rows of cells
+    // its colors, light or dark as the system is
+    const darkMode = window.matchMedia ? matchMedia("(prefers-color-scheme: dark)") : { matches: false };
+    let lastVectors = [];
+    if (darkMode.addEventListener) darkMode.addEventListener("change", () => drawVectors(lastVectors));
+
     function drawVectors(vectors) {
+        lastVectors = vectors;
+        const dark = darkMode.matches;
         const c = $("vectors"), ctx = c.getContext("2d");
         const shown = vectors.slice(0, 40), cell = 12, gap = 1;
         c.width = 16 * cell + 60;
         c.height = Math.max(1, shown.length) * cell + 4;
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = dark ? "#121212" : "#fff";
         ctx.fillRect(0, 0, c.width, c.height);
         ctx.font = "10px ui-monospace, monospace";
         shown.forEach((v, r) => {
             for (let j = 0; j < 16; j++) {
-                ctx.fillStyle = ((v << j) & 0xffff) >> 15 ? "#1d3f86" : "#e3e8f2";
+                ctx.fillStyle = ((v << j) & 0xffff) >> 15 ? (dark ? "#6f9cf0" : "#1d3f86") : (dark ? "#262b36" : "#e3e8f2");
                 ctx.fillRect(j * cell, r * cell + 2, cell - gap, cell - gap);
             }
-            ctx.fillStyle = "#555";
+            ctx.fillStyle = dark ? "#aeaeae" : "#555";
             ctx.fillText(String(v), 16 * cell + 6, r * cell + 11);
         });
         $("vectors-caption").textContent = vectors.length > 40 ? `The first 40 of ${vectors.length} vectors.` : "";

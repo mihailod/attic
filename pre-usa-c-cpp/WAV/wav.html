@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WAV by Mihailo Despotovic, May 1998</title>
     <style>
@@ -118,6 +119,15 @@
         .open .file:focus { outline: 1px dotted #000; }
         .open .fname { display: flex; gap: 6px; align-items: center; margin: 8px 0; }
         .open .field { flex: 1; min-width: 0; font: inherit; border: 2px solid; border-color: #808080 #fff #fff #808080; padding: 2px 4px; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .how { color: #aeaeae; }
+            #explain { color: #bebebe; background: #1b1b1b; border: 1px solid #454545; }
+            pre.source { background: #1b1b1b; border: 1px solid #454545; }
+            #desktop { color-scheme: light; }
+        }
     </style>
 </head>
 <body>

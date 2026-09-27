@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Project Euler Solutions by Mihailo Despotovic, March 2009</title>
     <style>
@@ -32,6 +33,18 @@
             margin: 6px 0 0; padding: 6px 8px; background: #f6f6f6; border: 1px solid #ddd;
             font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
             max-height: 260px; overflow: auto;
+        }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #b6b6b6; }
+            a { color: #87b1fa; }
+            li { border-top: 1px solid #454545; }
+            li:last-child { border-bottom: 1px solid #454545; }
+            .file { color: #9f9f9f; }
+            .text { color: #bebebe; }
+            .note { color: #d09c55; }
+            .output { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>

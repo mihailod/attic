@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <title>Conway's Game of Life V1.0 by Mihailo Despotovic, Feb 2011</title>
     <style>
         body {
@@ -27,6 +28,11 @@
         }
         .buttons { display: flex; gap: 8px; }
         button { font-size: 14px; padding: 4px 14px; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            canvas { border: 1px solid #6d6d6d; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lisp Notebook by Mihailo Despotovic, January 2012</title>
     <style>
@@ -52,6 +53,31 @@
         details { margin: 20px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            h2 .when { color: #aeaeae; }
+            h3 { color: #b6b6b6; }
+            .section-intro { color: #aeaeae; }
+            .toolbar { background: #121212; border-bottom: 1px solid #393939; }
+            #busy { color: #d7a166; }
+            .cell { border: 1px solid #454545; }
+            .cell-head { color: #aeaeae; }
+            .cell-head .label { color: #e8e8e8; }
+            textarea { border: 1px solid #525252; background: #161614; color: #e8e8e8; }
+            .try-row > span { color: #aeaeae; }
+            .try-row textarea { background: #121212; }
+            .out { background: #191b1e; }
+            .item .form { color: #9f9f9f; }
+            .item.value .val { color: #8fb6ff; }
+            .item.error .val { color: #ff7a69; }
+            .item.output .val { color: #bebebe; }
+            .note { background: #211a04; border: 1px solid #57460b; }
+            .echo { color: #bebebe; }
+            .how { color: #aeaeae; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>

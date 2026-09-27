@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N Queens by Mihailo Despotovic, April / May 1997</title>
     <style>
@@ -48,6 +49,25 @@
         details { margin: 16px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; }
+        .c-green { color: #1a7f37; }
+        .c-orange { color: #d9731f; }
+        .c-red { color: #c00; }
+        .c-blue { color: #1d3f86; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            .c-green { color: #60bc71; }
+            .c-orange { color: #f09a55; }
+            .c-red { color: #fe8272; }
+            .c-blue { color: #87a9ef; }
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .english { color: #bebebe; background: #1b1b1b; border: 1px solid #454545; }
+            .label { color: #aeaeae; }
+            #board-caption, #step-msg, #step-counts { color: #b6b6b6; }
+            #step-msg { color: #e8e8e8; }
+            .how { color: #aeaeae; }
+            pre.source { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>
@@ -90,9 +110,9 @@
     <h2>The backtracking, step by step</h2>
     <p class="how">The same search, one square at a time, which the program itself only showed through its solutions:
         column by column from the left, it tries each row from the top, puts a queen on the first square no queen attacks
-        (<span style="color:#1a7f37">green</span>), and when a column has no free square left, it goes back and moves the queen
-        before it (<span style="color:#d9731f">orange</span>). Attacked squares are <span style="color:#c00">red</span>,
-        solutions <span style="color:#1d3f86">blue</span>.</p>
+        (<span class="c-green">green</span>), and when a column has no free square left, it goes back and moves the queen
+        before it (<span class="c-orange">orange</span>). Attacked squares are <span class="c-red">red</span>,
+        solutions <span class="c-blue">blue</span>.</p>
     <div class="row">
         <label>Queens <select id="step-n"><option>4</option><option>5</option><option>6</option><option selected>8</option></select></label>
         <button id="step-step">Step</button>

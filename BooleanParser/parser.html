@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Boolean Expression Parser by Mihailo Despotovic, January 2003</title>
     <style>
@@ -45,6 +46,29 @@
         td.differs { background: #fde2e2; }
         #old-verdict { color: #555; margin: 0 0 6px; }
         #table-note { color: #555; font-size: 13px; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .examples { color: #aeaeae; }
+            #error { color: #ff7160; }
+            #tree .edge { stroke: #ababab; }
+            #tree circle { stroke: #bebebe; }
+            #tree .term { fill: #121212; }
+            #tree .op.and { fill: #242d39; }
+            #tree .op.or { fill: #392804; }
+            #tree .op.not { fill: #4d3233; }
+            .mono { background: #1b1b1b; border: 1px solid #454545; }
+            .label { color: #aeaeae; }
+            #verdict.good { color: #60bc71; }
+            #verdict.bad { color: #e38541; }
+            .table-wrap { border: 1px solid #525252; }
+            th { background: #232323; }
+            th, td { border-bottom: 1px solid #393939; }
+            td.differs { background: #362223; }
+            #old-verdict { color: #aeaeae; }
+            #table-note { color: #aeaeae; }
+        }
     </style>
 </head>
 <body>

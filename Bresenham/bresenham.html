@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bresenham's Line Algorithm by Mihailo Despotovic, February 2011</title>
     <style>
@@ -32,6 +33,16 @@
             font: 12px/1.45 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
         }
         #steps { max-height: 240px; overflow: auto; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .presets { color: #aeaeae; }
+            canvas { border: 1px solid #6d6d6d; }
+            #verdict.bad { color: #e38541; }
+            #verdict.good { color: #60bc71; }
+            #pixels, #steps { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>

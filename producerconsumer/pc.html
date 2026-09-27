@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Producers and Consumers by Mihailo Despotovic, December 2015</title>
     <style>
@@ -58,6 +59,31 @@
             font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
         }
         .clock { color: #555; font-variant-numeric: tabular-nums; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .switches { background: #1a1a1a; border: 1px solid #454545; }
+            .switches .hint { color: #aeaeae; }
+            #problem { background: #362223; border: 1px solid #8d5354; }
+            #problem strong { color: #ff7a69; }
+            .chip { background: #2c2c2c; color: #aeaeae; }
+            .chip.blocked { background: #392804; color: #d7a166; }
+            .chip.holding { background: #167331; color: #e8e8e8; }
+            .chip.full, .chip.empty { background: #374968; color: #8fb6ff; }
+            .slot { border: 1px solid #7c7c7c; background: #121212; }
+            .slot.filled { background: #e37c2c; }
+            .slot.extra { border-color: #454545; }
+            #lock { color: #bebebe; }
+            .legend { color: #b6b6b6; }
+            .legend .l-sleeping::before { background: #2c2c2c; }
+            .legend .l-blocked::before { background: #392804; }
+            .legend .l-holding::before { background: #167331; }
+            .legend .l-waiting::before { background: #374968; }
+            #states, #rates { color: #b6b6b6; }
+            #output { background: #1b1b1b; border: 1px solid #454545; }
+            .clock { color: #aeaeae; }
+        }
     </style>
 </head>
 <body>

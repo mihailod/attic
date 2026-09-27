@@ -148,18 +148,25 @@ if (typeof document !== "undefined") {
     // grid coordinates have y going up, with (0, 0) in the bottom-left corner
     const toScreen = (x, y) => [x * cell + cell / 2, (ROWS - 1 - y) * cell + cell / 2];
 
+    // the diagram's colors, light or dark as the system is
+    const darkMode = window.matchMedia ? matchMedia("(prefers-color-scheme: dark)") : { matches: false };
+    const colors = () => darkMode.matches
+        ? { paper: "#121212", fixed: "#4d8ff0", lit: "#d9731f", grid: "#3a3a3a", line: "#ff6b5b", ink: "#e8e8e8" }
+        : { paper: "#fff", fixed: "#0645ad", lit: "#d9731f", grid: "#ddd", line: "#c00", ink: "#000" };
+
     function draw() {
+        const c = colors();
         const mode = document.querySelector('input[name="mode"]:checked').id;
         const asWritten = mode === "original";
         const { pixels, steps } = { original: line2011, mirrored: line2011Mirrored, fixed: lineFixed }[mode](a[0], a[1], b[0], b[1]);
         const W = cell * COLS, H = cell * ROWS;
 
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = c.paper;
         ctx.fillRect(0, 0, W, H);
 
         // lit pixels
         let offGrid = 0;
-        ctx.fillStyle = mode === "fixed" ? "#0645ad" : "#d9731f";
+        ctx.fillStyle = mode === "fixed" ? c.fixed : c.lit;
         for (const [x, y] of pixels) {
             if (x < 0 || x >= COLS || y < 0 || y >= ROWS) { offGrid++; continue; }
             const [sx, sy] = toScreen(x, y);
@@ -167,7 +174,7 @@ if (typeof document !== "undefined") {
         }
 
         // grid lines
-        ctx.strokeStyle = "#ddd";
+        ctx.strokeStyle = c.grid;
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let i = 0; i <= COLS; i++) { ctx.moveTo(i * cell + 0.5, 0); ctx.lineTo(i * cell + 0.5, H); }
@@ -176,7 +183,7 @@ if (typeof document !== "undefined") {
 
         // the true line
         const [ax, ay] = toScreen(...a), [bx, by] = toScreen(...b);
-        ctx.strokeStyle = "#c00";
+        ctx.strokeStyle = c.line;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(ax, ay);
@@ -185,14 +192,14 @@ if (typeof document !== "undefined") {
 
         // the endpoints
         for (const [[px, py], label] of [[[ax, ay], "A"], [[bx, by], "B"]]) {
-            ctx.fillStyle = "#fff";
-            ctx.strokeStyle = "#000";
+            ctx.fillStyle = c.paper;
+            ctx.strokeStyle = c.ink;
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.arc(px, py, cell * 0.38, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = c.ink;
             ctx.font = `600 ${Math.round(cell * 0.45)}px system-ui, sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -226,6 +233,8 @@ if (typeof document !== "undefined") {
     const dist2 = (p, q) => (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2;
 
     // press anywhere: the nearer endpoint jumps there and follows the pointer
+    if (darkMode.addEventListener) darkMode.addEventListener("change", draw);
+
     canvas.addEventListener("pointerdown", e => {
         const c = cellAt(e);
         dragging = dist2(c, a) <= dist2(c, b) ? "a" : "b";

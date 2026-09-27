@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Word Finder for Letter Puzzles V1.0 by Mihailo Despotovic, Oct 2003</title>
     <style>
@@ -23,6 +24,11 @@
             min-height: 30em;
             white-space: pre-wrap;
             font: 13px/1.4 ui-monospace, monospace;
+        }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            pre { border: 1px solid #6d6d6d; }
         }
     </style>
 </head>

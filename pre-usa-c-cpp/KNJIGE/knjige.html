@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KNJIGE by Mihailo Despotovic, August 1995</title>
     <style>
@@ -48,6 +49,17 @@
         details { margin: 16px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         pre.source { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 8; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            .english { color: #bebebe; background: #1b1b1b; border: 1px solid #454545; }
+            .label { color: #aeaeae; }
+            #status { color: #fe8272; }
+            .how { color: #aeaeae; }
+            #printer-empty { color: #9f9f9f; }
+            pre.source { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>The Birthday Paradox by Mihailo Despotovic, September 2005</title>
     <style>
@@ -46,6 +47,24 @@
         details { margin: 22px 0 0; }
         summary { cursor: pointer; font-weight: 600; }
         #table { font: 12px/1.4 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 6px 8px; max-height: 320px; overflow: auto; }
+        /* dark mode: made from the colors above, for when the system is dark */
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e8e8e8; }
+            .intro { color: #aeaeae; }
+            #chart .grid { stroke: #2f2f2f; }
+            #chart .ylabel { fill: #a6a6a6; }
+            #chart .xlabel { fill: #a6a6a6; }
+            #chart .curve { stroke: #87b1fa; }
+            #chart .mark { stroke: #919191; }
+            #chart .marklabel { fill: #b6b6b6; }
+            #chart .current { fill: #e37c2c; stroke: #121212; }
+            #room-result.match { color: #ff7160; }
+            .month-name { color: #a6a6a6; }
+            .day { background: #212121; }
+            .day.one { background: #3b5d85; }
+            #tally { color: #b6b6b6; }
+            #table { background: #1b1b1b; border: 1px solid #454545; }
+        }
     </style>
 </head>
 <body>
