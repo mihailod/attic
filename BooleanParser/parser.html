@@ -50,8 +50,8 @@
 <body>
     <h1>Boolean Expression Parser by Mihailo Despotovic, January 2003</h1>
     <p class="intro">Type a boolean expression over numbered terms like <code>#1#</code>, with AND, OR, NOT and parentheses.
-        It is parsed by recursive descent, so NOT binds tightest, then AND, then OR. See its parse tree, its postfix
-        (reverse Polish) form and its truth table, and the postfix my <code>translate()</code> makes with an operator stack, now fixed, next to what it produced in 2003.</p>
+        It is parsed by <a href="https://en.wikipedia.org/wiki/Recursive_descent_parser">recursive descent</a>, so NOT binds tightest, then AND, then OR. See its <a href="https://en.wikipedia.org/wiki/Parse_tree">parse tree</a>, its <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">postfix</a>
+        (reverse Polish) form and its <a href="https://en.wikipedia.org/wiki/Truth_table">truth table</a>, and the postfix my <code>translate()</code> makes with an operator stack, now fixed, next to what it produced in 2003.</p>
     <form id="form">
         <input id="input" value="#0# AND ( #2# OR NOT #3# ) OR NOT #5# AND #6# AND NOT #7#" spellcheck="false" autocomplete="off">
         <button>Parse</button>

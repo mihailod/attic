@@ -81,7 +81,7 @@ const NOTEBOOK = [
     },
 
     { file: "budimac.txt", date: "January 22, 2012",
-      intro: `The numbered exercises follow a Lisp textbook by Budimac et al.; the others follow Henderson's <i>Functional Programming</i> and Abelson and Sussman's <i>Structure and Interpretation of Computer Programs</i>.` },
+      intro: `The numbered exercises follow a Lisp textbook by <a href="https://plus.cobiss.net/cobiss/cg/cnr_latn/data/cobib/50749959">Budimac et al.</a>; the others follow Henderson's <i>Functional Programming</i> and Abelson and Sussman's <i>Structure and Interpretation of Computer Programs</i>.` },
     { label: "1.1.1", code: `(defun add1 (x) (+ 1 x))`, tryit: `(add1 41)` },
     { label: "1.1.2", code: `(defun odd (n) (eq (mod n '2) '1))`, tryit: `(odd 7)\n(odd 10)` },
     {

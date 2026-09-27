@@ -36,7 +36,7 @@
     <h1>CPU Cache Impact: Row vs Column Matrix Addition by Mihailo Despotovic, April 2007</h1>
     <p class="intro">Add two big matrices of integers, element by element. Going row by row reads memory in order;
         going column by column does exactly the same additions, but every step jumps a whole row ahead in memory,
-        so the processor's cache can't keep up. Then the rows are split across all the cores at once.</p>
+        so the processor's <a href="https://en.wikipedia.org/wiki/CPU_cache">cache</a> can't keep up. Then the rows are split across all the cores at once.</p>
     <div class="controls">
         <label>Matrix size
             <select id="size">

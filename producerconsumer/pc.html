@@ -62,7 +62,7 @@
 </head>
 <body>
     <h1>Producers and Consumers by Mihailo Despotovic, December 2015</h1>
-    <p class="intro">Producer threads put items into a shared buffer and consumer threads take them out, one lock guarding the count.
+    <p class="intro"><a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">Producer threads</a> put items into a shared buffer and consumer threads take them out, one lock guarding the count.
         A producer that finds the buffer full calls <code>wait()</code>, and so does a consumer that finds it empty; whoever changes
         the count calls <code>notifyAll()</code> to wake them. The count and the " F " and " E " (full, empty) printed as in the original
         scroll at the bottom. The original also sleeps while holding the lock, so the threads mostly take turns: nearly all of
