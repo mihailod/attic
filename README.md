@@ -191,6 +191,8 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 1988
 
+- ★ *[Moj Mikro](https://en.wikipedia.org/wiki/Moj_mikro) publishes [my review](https://archive.org/details/ports-of-call-for-amiga-review) of the Amiga game [Ports of Call](https://en.wikipedia.org/wiki/Ports_of_Call_(video_game)). I rate it 8 of 10 🙂 Officially my first published article.* · **November**
+
 - ★ *Got a [Commodore Amiga 500](https://en.wikipedia.org/wiki/Amiga_500), and the journey levels up.* · **July 5**
 
 ## 1985
