@@ -165,6 +165,11 @@ All programs originally written in **Java** unless stated otherwise.
 - **[LOFT Eksperiment [The LOFT Experiment] (C)](https://mihailod.github.io/attic/pre-usa-c-cpp/LOFT/loft.html)** · **March**  
   A simulation of the [LOFT](https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project) (Loss of Fluid Test) L9-3 experiment of 1982 at the [Idaho National Laboratory](https://en.wikipedia.org/wiki/Idaho_National_Laboratory), where a model of a [pressurized water reactor](https://en.wikipedia.org/wiki/Pressurized_water_reactor) lost its feedwater and was not shut down, made with [Aleksandar Ćirilović](https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/) during my undergraduate studies at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade): the reactor's loop animated in [VGA](https://en.wikipedia.org/wiki/Video_Graphics_Array) graphics for the five minutes of the experiment, its power and temperatures plotted as they go, a click on any part explaining it, and a description in [hypertext](https://en.wikipedia.org/wiki/Hypertext). Runs as it did in [DOS](https://en.wikipedia.org/wiki/MS-DOS), in Serbian with an English translation, with fixes for graphs that say kelvins for degrees Celsius and a stray word in the description, among others. The hypertext engine is [Vuksan Pejović](https://www.gamesdatabase.org/developer-vuksan_pejovic)'s.
 
+## 1990
+
+- **[A-Profy Amiga Fanzine](https://archive.org/details/a-profy-yugoslav-amiga-fanzine-1-july-1990)** · **July**  
+  The first [Amiga](https://en.wikipedia.org/wiki/Amiga) [fanzine](https://en.wikipedia.org/wiki/Fanzine) in the region, which I produced, edited and published in Yugoslavia, in Serbian. Two issues came out, in July and August 1990, both now on the Internet Archive: [issue 1](https://archive.org/details/a-profy-yugoslav-amiga-fanzine-1-july-1990) and [issue 2](https://archive.org/details/a-profy-yugoslav-amiga-fanzine-2-august-1990). Not a program, but it took many of the same skills.
+
 ## 1989
 
 - **[Prsten [The Ring] (Amiga BASIC, Motorola MC68000 assembly)](https://mihailod.github.io/attic/1989Apr/prsten.html)** · **March**  
