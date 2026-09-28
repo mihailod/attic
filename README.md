@@ -191,6 +191,8 @@ All programs originally written in **Java** unless stated otherwise.
 - **[LOFT Eksperiment [The LOFT Experiment] (C)](https://mihailod.github.io/attic/pre-usa-c-cpp/LOFT/loft.html)** · **March**  
   A simulation of the [LOFT](https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project) (Loss of Fluid Test) L9-3 experiment of 1982 at the [Idaho National Laboratory](https://en.wikipedia.org/wiki/Idaho_National_Laboratory), where a model of a [pressurized water reactor](https://en.wikipedia.org/wiki/Pressurized_water_reactor) lost its feedwater and was not shut down, made with [Aleksandar Ćirilović](https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/) during my undergraduate studies at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade): the reactor's loop animated in [VGA](https://en.wikipedia.org/wiki/Video_Graphics_Array) graphics for the five minutes of the experiment, its power and temperatures plotted as they go, a click on any part explaining it, and a description in [hypertext](https://en.wikipedia.org/wiki/Hypertext). Runs as it did in [DOS](https://en.wikipedia.org/wiki/MS-DOS), in Serbian with an English translation, with fixes for graphs that say kelvins for degrees Celsius and a stray word in the description, among others. The hypertext engine is [Vuksan Pejović](https://www.gamesdatabase.org/developer-vuksan_pejovic)'s.
 
+- ★ *After my eye-opening time with [Sun Solaris](https://en.wikipedia.org/wiki/Oracle_Solaris) at UNICAMP, installed [Linux](https://en.wikipedia.org/wiki/Linux) on my PC: one of the earliest [Slackware](https://en.wikipedia.org/wiki/Slackware) releases, on 30 diskettes. It took hours to install and days to set up properly.* · **January**
+
 ## 1994
 
 - ★ *Three months in [Campinas](https://en.wikipedia.org/wiki/Campinas), Brazil, on an internship at [IMECC](https://www.ime.unicamp.br/en), [UNICAMP](https://en.wikipedia.org/wiki/State_University_of_Campinas): mathematical modeling of problems in coastal biology, on [Sun SPARCstations](https://en.wikipedia.org/wiki/SPARCstation) under Unix and in [Mathematica 2.0](https://en.wikipedia.org/wiki/Wolfram_Mathematica). The work is published as [“Interpolation of Surfaces: A Problem of Coastal Dynamics”](https://www.ime.unicamp.br/~biomat/inicia.htm), by IMECC and Labomar, UNICAMP.* · **October to December**
@@ -198,6 +200,8 @@ All programs originally written in **Java** unless stated otherwise.
 - ★ *Awarded the CIP Academic Scholarship by the [Institute of Transportation CIP](https://sicip.rs/en/), given to the very top students of the University of Belgrade.* · **January**
 
 ## 1991
+
+- ★ *Got a cheap, used [Sinclair QL](https://en.wikipedia.org/wiki/Sinclair_QL) for my studies: programmed my [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) and [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) assignments on it, and experimented with its [SuperBASIC](https://en.wikipedia.org/wiki/SuperBASIC) and [MC68008](https://en.wikipedia.org/wiki/Motorola_68008) assembly, among other things.* · **October**
 
 - ★ *Began my undergraduate studies of Mathematics and Computer Science at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade), [Faculty of Mathematics](https://www.matf.bg.ac.rs/eng/).* · **September**
 
@@ -215,14 +219,14 @@ All programs originally written in **Java** unless stated otherwise.
 
 - ★ *[Moj Mikro](https://en.wikipedia.org/wiki/Moj_mikro) publishes [my review](https://archive.org/details/ports-of-call-for-amiga-review) of the Amiga game [Ports of Call](https://en.wikipedia.org/wiki/Ports_of_Call_(video_game)). I rate it 8 of 10 🙂 Officially my first published article.* · **November**
 
-- ★ *Got a [Commodore Amiga 500](https://en.wikipedia.org/wiki/Amiga_500), and the journey levels up.* · **July 5**
+- ★ *Got a [Commodore Amiga 500](https://en.wikipedia.org/wiki/Amiga_500), and the journey levels up. I dug into [Amiga BASIC](https://en.wikipedia.org/wiki/AmigaBASIC), [MC68000](https://en.wikipedia.org/wiki/Motorola_68000) assembly, [(Absoft) FORTRAN](https://en.wikipedia.org/wiki/Absoft) and [Lisp](https://aminet.net/package/dev/lang/AMXLISP.lha).* · **July 5**
 
 ## 1985
 
 - **[Pirat [Pirate] (ZX Spectrum BASIC, Zilog Z80 assembly)](https://mihailod.github.io/attic/1985Jun/pirat.html)** · **June**  
   A [text adventure](https://en.wikipedia.org/wiki/Interactive_fiction) with still pictures for the [ZX Spectrum](https://en.wikipedia.org/wiki/ZX_Spectrum), written over the summer school break in [ZX Spectrum BASIC](https://en.wikipedia.org/wiki/Sinclair_BASIC), with [Z80](https://en.wikipedia.org/wiki/Zilog_Z80) assembly routines to draw and load the pictures. Nothing of it was preserved; here is its loading screen, recreated from memory, loading as if from tape.
 
-- ★ *Got a [Sinclair ZX Spectrum 48K](https://en.wikipedia.org/wiki/ZX_Spectrum), and the journey begins…* · **April 15**
+- ★ *Got a [Sinclair ZX Spectrum 48K](https://en.wikipedia.org/wiki/ZX_Spectrum), and the journey begins… I took my first steps in [BASIC](https://en.wikipedia.org/wiki/Sinclair_BASIC) and [Z80](https://en.wikipedia.org/wiki/Zilog_Z80) assembly, and also dabbled with [(Sinclair) LOGO](https://spectrumcomputing.co.uk/entry/8677), [(HiSoft) Pascal](https://worldofspectrum.org/archive/software/utilities/hisoft-pascal-4-hisoft), and even [(HiSoft) C](https://worldofspectrum.net/item/0008252/)!* · **April 15**
 
 ## Running them
 
