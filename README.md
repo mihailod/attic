@@ -78,6 +78,8 @@ All programs originally written in **Java** unless stated otherwise.
 - **[CPU Cache Impact: Row vs Column Matrix Addition](https://mihailod.github.io/attic/BigMatrix/bigmatrix.html)** · **April**  
   Add two big matrices row by row, then column by column: the same additions, several times slower, because of the processor’s [cache](https://en.wikipedia.org/wiki/CPU_cache). Then split the rows across all cores.
 
+- ★ *Published [my paper](https://archive.org/details/atc-outsourcing-computations-genespring) “Outsourcing Computations to Remote Servers using [GeneSpring](https://www.agilent.com/en/p/ngs-microarrays/microarrays/software/genespring-gx) Platform” at the First [Agilent](https://en.wikipedia.org/wiki/Agilent_Technologies) Technical Conference, San Francisco.* · **January**
+
 ## 2005
 
 - **[The Birthday Paradox](https://mihailod.github.io/attic/birthdayparadox/birthday.html)** · **September**  
