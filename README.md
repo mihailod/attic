@@ -179,7 +179,7 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 1994
 
-- ★ *Three months in [Campinas](https://en.wikipedia.org/wiki/Campinas), Brazil, on an internship at [IMECC](https://www.ime.unicamp.br/en), [UNICAMP](https://en.wikipedia.org/wiki/State_University_of_Campinas): mathematical modeling of [problems in coastal biology](https://www.ime.unicamp.br/~biomat/inicia.htm), on [Sun SPARCstations](https://en.wikipedia.org/wiki/SPARCstation) under Unix and in [Mathematica 2.0](https://en.wikipedia.org/wiki/Wolfram_Mathematica).* · **October to December**
+- ★ *Three months in [Campinas](https://en.wikipedia.org/wiki/Campinas), Brazil, on an internship at [IMECC](https://www.ime.unicamp.br/en), [UNICAMP](https://en.wikipedia.org/wiki/State_University_of_Campinas): mathematical modeling of problems in coastal biology, on [Sun SPARCstations](https://en.wikipedia.org/wiki/SPARCstation) under Unix and in [Mathematica 2.0](https://en.wikipedia.org/wiki/Wolfram_Mathematica). The work is published as [“Interpolation of Surfaces: A Problem of Coastal Dynamics”](https://www.ime.unicamp.br/~biomat/inicia.htm), by IMECC and Labomar, UNICAMP.* · **October to December**
 
 ## 1991
 
