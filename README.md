@@ -137,6 +137,8 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 2001
 
+- ★ *Around this time, I switch from a Windows PC to the [PowerPC](https://en.wikipedia.org/wiki/PowerPC) Macintosh, starting with [Mac OS X 10.1 Puma](https://en.wikipedia.org/wiki/Mac_OS_X_10.1): a [Power Mac](https://en.wikipedia.org/wiki/Power_Macintosh) at work, and an [eMac](https://en.wikipedia.org/wiki/EMac) as my first personal Mac. I have been a Mac user, inside the Apple ecosystem, ever since.* · **October**
+
 - **[Serbian Cafe Forums Reader](https://mihailod.github.io/attic/screader/screader.html)** · **September**  
   A desktop reader for the Serbian Cafe forums that [screen-scraped](https://en.wikipedia.org/wiki/Web_scraping) the site’s pages. The forums closed permanently on December 3, 2024.
 
