@@ -80,6 +80,10 @@ All programs originally written in **Java** unless stated otherwise.
 
 - ★ *Published [my paper](https://archive.org/details/atc-outsourcing-computations-genespring) “Outsourcing Computations to Remote Servers using [GeneSpring](https://www.agilent.com/en/p/ngs-microarrays/microarrays/software/genespring-gx) Platform” at the First [Agilent](https://en.wikipedia.org/wiki/Agilent_Technologies) Technical Conference, San Francisco.* · **January**
 
+## 2006
+
+- ★ *With [Peter Eastman](https://www.linkedin.com/in/peter-eastman-47bb653/), I present [“64-bit Apple JVM: A GeneSpring case study”](https://archive.org/details/gene-spring-java-64bit-application) during Session 502, Java on Mac OS X Overview, at Apple’s [WWDC 2006](https://en.wikipedia.org/wiki/Apple_Worldwide_Developers_Conference), San Francisco. We share the stage with [James Gosling](https://en.wikipedia.org/wiki/James_Gosling)!* · **August**
+
 ## 2005
 
 - **[The Birthday Paradox](https://mihailod.github.io/attic/birthdayparadox/birthday.html)** · **September**  
