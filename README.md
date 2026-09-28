@@ -22,6 +22,8 @@ All programs originally written in **Java** unless stated otherwise.
 - **[CloudWatch Log4j Appender](https://github.com/mihailod/cloudwatch-log4j-appender)** · **June**  
   A [Log4j 2](https://logging.apache.org/log4j/2.12.x/) appender that sends an application's log events to [AWS CloudWatch](https://en.wikipedia.org/wiki/Amazon_CloudWatch) Logs, in batches flushed every few seconds, to a new log stream each time the application starts. Configured in the Log4j configuration like any other appender. Made during my tenure at Virtual Instruments (now [Virtana](https://www.virtana.com)), and open-sourced per company policy.
 
+- ★ *Became an [O’Reilly](https://en.wikipedia.org/wiki/O%27Reilly_Media) Certified Developer on [Apache Spark](https://en.wikipedia.org/wiki/Apache_Spark) and Certified Architect on [Apache Cassandra](https://en.wikipedia.org/wiki/Apache_Cassandra).* · **January**
+
 ## 2014
 
 - **[YU SciFi iPhone App (Objective-C)](https://github.com/mihailod/yu-scifi)** · **February**  
@@ -29,6 +31,8 @@ All programs originally written in **Java** unless stated otherwise.
 
 - **[Arian Web Shop iOS App Prototype (Objective-C)](https://mihailod.github.io/attic/ArianPrototype/arian.html)** · **January**  
   A web shop iPhone app prototype for [Arian GmbH](https://www.arian.com/en/) (Austria), from the time of my startup, MiRteh, meant to lead to a big project that was later cancelled. It demoed product discovery (browse and search), a product-dependent configurator, a shopping cart and account management. Here it runs in the browser as it looked on iOS 7, with screenshots of the real app running today, and fixes for prices computed in floats, a cent or a few euros off.
+
+- ★ *Became a [Cloudera](https://en.wikipedia.org/wiki/Cloudera) Certified Developer for [Apache Hadoop](https://en.wikipedia.org/wiki/Apache_Hadoop).* · **January**
 
 ## 2013
 
@@ -133,10 +137,14 @@ All programs originally written in **Java** unless stated otherwise.
 - **[Fly by Night Airline Booking](https://mihailod.github.io/attic/SCJD/flybynight.html)** · **January**  
   Search flights and book seats from two clients sharing one database, with [record locking](https://en.wikipedia.org/wiki/Record_locking) so they can’t double-book. My [Sun Certified Java Developer](https://en.wikipedia.org/wiki/Oracle_Certification_Program) assignment.
 
+- ★ *Became a [Sun Certified Java Developer](https://en.wikipedia.org/wiki/Oracle_Certification_Program), with [Fly by Night](https://mihailod.github.io/attic/SCJD/flybynight.html) as my assignment.* · **January**
+
 ## 1999
 
 - **[Teeko (C)](https://mihailod.github.io/attic/mscthesis/teeko.html)** · **March**  
   Play [Teeko](https://en.wikipedia.org/wiki/Teeko) against the program of my master thesis [“Machine Learning in Strategic Games”](https://archive.org/details/ucenje-u-strateskim-igrama), which picks its moves with [heuristics](https://en.wikipedia.org/wiki/Heuristic), a [minimax](https://en.wikipedia.org/wiki/Minimax) search and a memory of the positions that won, and learns from every game. Runs here as it did in a Windows console, keeping what it learns in your browser, with the memories of the thesis experiments to load, and fixes for a search that seldom played its best move, a player O that read the memory backwards, a draw offered on every turn, and an opening that could hang. I finished it in California, after moving to the USA in 1998.
+
+- ★ *Became a [Sun Certified Java Programmer](https://en.wikipedia.org/wiki/Oracle_Certification_Program).* · **January**
 
 ## 1998
 
