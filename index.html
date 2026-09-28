@@ -17,9 +17,9 @@
     <meta name="twitter:card" content="summary_large_image">
     <style>
         /* the colors, light by default and dark when the system is */
-        :root { --bg: #fff; --text: #000; --muted: #555; --body: #333; --rule: #ddd; --link: #0645ad; }
+        :root { --bg: #fff; --text: #000; --muted: #555; --body: #333; --rule: #ddd; --link: #0645ad; --mile: #b86e00; --mile-bg: #fff6e5; }
         @media (prefers-color-scheme: dark) {
-            :root { --bg: #121212; --text: #e8e8e8; --muted: #a0a0a0; --body: #c8c8c8; --rule: #333; --link: #8ab4f8; }
+            :root { --bg: #121212; --text: #e8e8e8; --muted: #a0a0a0; --body: #c8c8c8; --rule: #333; --link: #8ab4f8; --mile: #f0b453; --mile-bg: #251d10; }
         }
         body {
             margin: 0 auto;
@@ -44,6 +44,12 @@
         a:hover { text-decoration: underline; }
         .date { color: var(--text); font-size: 15px; font-weight: 600; white-space: nowrap; }
         p { margin: 2px 0 0; color: var(--body); }
+        /* milestones: moments of the journey rather than programs, set apart in amber */
+        li.milestone { border-left: 3px solid var(--mile); background: var(--mile-bg); padding: 10px 12px; }
+        li.milestone .what { color: var(--body); font-style: italic; }
+        li.milestone .what a { font-size: inherit; font-weight: inherit; }
+        li.milestone .what::before { content: "★ "; color: var(--mile); font-style: normal; }
+        li.milestone .date { color: var(--mile); }
         blockquote { margin: 0 0 24px; padding: 4px 0 4px 16px; border-left: 3px solid var(--rule); font-style: italic; }
         blockquote p { margin: 0; }
         blockquote footer { color: var(--muted); font-style: normal; margin: 4px 0 0; }
@@ -220,6 +226,9 @@
     </ul>
     <h2>1998</h2>
     <ul>
+        <li class="milestone">
+            <div class="title"><span class="what">Moved to California. For the rest of the journey, see <a href="https://www.linkedin.com/in/mihailod/">my LinkedIn</a>.</span><span class="date">June</span></div>
+        </li>
         <li>
             <div class="title"><a href="pre-usa-c-cpp/WAV/wav.html">WAV (C++)</a><span class="date">May</span></div>
             <p>A Windows program that shows any file as a wave, drawn from 100 of its bytes. Runs here as it did, menus, toolbar and dialogs included, with fixes for sampling the wrong bytes, writing past the end of an array, and crashing on the smallest files. I wrote it while learning <a href="https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library">MFC</a> and <a href="https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B">Visual C++</a> 5.0 in haste, before emigrating to the USA for my first job there.</p>
@@ -242,6 +251,9 @@
     </ul>
     <h2>1996</h2>
     <ul>
+        <li class="milestone">
+            <div class="title"><span class="what">Graduated, and began my master's studies in <a href="https://en.wikipedia.org/wiki/Artificial_intelligence">Artificial Intelligence</a> at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>.</span><span class="date">May</span></div>
+        </li>
         <li>
             <div class="title"><a href="pre-usa-c-cpp/Grab/grab.html">GRAB (C++)</a><span class="date">March</span></div>
             <p>A <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a> utility that saved the <a href="https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter">EGA</a>/<a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics screen to a file and loaded it back by copying its four <a href="https://en.wikipedia.org/wiki/Bit_plane">bit planes</a> straight from video memory. Here the video card is simulated: paint, save, load, and see the planes.</p>
@@ -266,6 +278,18 @@
             <p>A simulation of the <a href="https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project">LOFT</a> (Loss of Fluid Test) L9-3 experiment of 1982 at the <a href="https://en.wikipedia.org/wiki/Idaho_National_Laboratory">Idaho National Laboratory</a>, where a model of a <a href="https://en.wikipedia.org/wiki/Pressurized_water_reactor">pressurized water reactor</a> lost its feedwater and was not shut down, made with <a href="https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/">Aleksandar Ćirilović</a> during my undergraduate studies at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>: the reactor's loop animated in <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">VGA</a> graphics for the five minutes of the experiment, its power and temperatures plotted as they go, a click on any part explaining it, and a description in <a href="https://en.wikipedia.org/wiki/Hypertext">hypertext</a>. Runs as it did in <a href="https://en.wikipedia.org/wiki/MS-DOS">DOS</a>, in Serbian with an English translation, with fixes for graphs that say kelvins for degrees Celsius and a stray word in the description, among others. The hypertext engine is <a href="https://www.gamesdatabase.org/developer-vuksan_pejovic">Vuksan Pejović</a>'s.</p>
         </li>
     </ul>
+    <h2>1994</h2>
+    <ul>
+        <li class="milestone">
+            <div class="title"><span class="what">Three months in <a href="https://en.wikipedia.org/wiki/Campinas">Campinas</a>, Brazil, on an internship at <a href="https://www.ime.unicamp.br/en">IMECC</a>, <a href="https://en.wikipedia.org/wiki/State_University_of_Campinas">UNICAMP</a>: mathematical modeling of <a href="https://www.ime.unicamp.br/~biomat/inicia.htm">problems in coastal biology</a>, on <a href="https://en.wikipedia.org/wiki/SPARCstation">Sun SPARCstations</a> under Unix and in <a href="https://en.wikipedia.org/wiki/Wolfram_Mathematica">Mathematica 2.0</a>.</span><span class="date">October to December</span></div>
+        </li>
+    </ul>
+    <h2>1991</h2>
+    <ul>
+        <li class="milestone">
+            <div class="title"><span class="what">Began my undergraduate studies of Mathematics and Computer Science at the <a href="https://en.wikipedia.org/wiki/University_of_Belgrade">University of Belgrade</a>, <a href="https://www.matf.bg.ac.rs/eng/">Faculty of Mathematics</a>.</span><span class="date">September</span></div>
+        </li>
+    </ul>
     <h2>1990</h2>
     <ul>
         <li>
@@ -280,11 +304,20 @@
             <p>A <a href="https://en.wikipedia.org/wiki/Interactive_fiction">text adventure</a> with still pictures for the <a href="https://en.wikipedia.org/wiki/Amiga">Commodore Amiga</a>, inspired by <i><a href="https://en.wikipedia.org/wiki/The_Lord_of_the_Rings">The Lord of the Rings</a></i>, written in <a href="https://en.wikipedia.org/wiki/AmigaBASIC">Amiga BASIC</a> with some routines in <a href="https://en.wikipedia.org/wiki/Motorola_68000">MC68000</a> assembly. The game itself was sadly not preserved; what is left is my ad for it in the (then) Yugoslav computer magazine <i><a href="https://en.wikipedia.org/wiki/Moj_mikro">Moj Mikro</a></i>, here with its text in Serbian and English.</p>
         </li>
     </ul>
+    <h2>1988</h2>
+    <ul>
+        <li class="milestone">
+            <div class="title"><span class="what">Got a <a href="https://en.wikipedia.org/wiki/Amiga_500">Commodore Amiga 500</a>, and the journey levels up.</span><span class="date">July 5</span></div>
+        </li>
+    </ul>
     <h2>1985</h2>
     <ul>
         <li>
             <div class="title"><a href="1985Jun/pirat.html">Pirat [Pirate] (ZX Spectrum BASIC, Zilog Z80 assembly)</a><span class="date">June</span></div>
             <p>A <a href="https://en.wikipedia.org/wiki/Interactive_fiction">text adventure</a> with still pictures for the <a href="https://en.wikipedia.org/wiki/ZX_Spectrum">ZX Spectrum</a>, written over the summer school break in <a href="https://en.wikipedia.org/wiki/Sinclair_BASIC">ZX Spectrum BASIC</a>, with <a href="https://en.wikipedia.org/wiki/Zilog_Z80">Z80</a> assembly routines to draw and load the pictures. Nothing of it was preserved; here is its loading screen, recreated from memory, loading as if from tape.</p>
+        </li>
+        <li class="milestone">
+            <div class="title"><span class="what">Got a <a href="https://en.wikipedia.org/wiki/ZX_Spectrum">Sinclair ZX Spectrum 48K</a>, and the journey begins…</span><span class="date">April 15</span></div>
         </li>
     </ul>
 </body>

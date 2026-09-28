@@ -132,6 +132,8 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 1998
 
+- ★ *Moved to California. For the rest of the journey, see [my LinkedIn](https://www.linkedin.com/in/mihailod/).* · **June**
+
 - **[WAV (C++)](https://mihailod.github.io/attic/pre-usa-c-cpp/WAV/wav.html)** · **May**  
   A Windows program that shows any file as a wave, drawn from 100 of its bytes. Runs here as it did, menus, toolbar and dialogs included, with fixes for sampling the wrong bytes, writing past the end of an array, and crashing on the smallest files. I wrote it while learning [MFC](https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library) and [Visual C++](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B) 5.0 in haste, before emigrating to the USA for my first job there.
 
@@ -147,6 +149,8 @@ All programs originally written in **Java** unless stated otherwise.
   A [DOS](https://en.wikipedia.org/wiki/MS-DOS) command-line tool that turns a web page into plain text by leaving out everything between < and >. With a fix for a byte that made it stop early.
 
 ## 1996
+
+- ★ *Graduated, and began my master's studies in [Artificial Intelligence](https://en.wikipedia.org/wiki/Artificial_intelligence) at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade).* · **May**
 
 - **[GRAB (C++)](https://mihailod.github.io/attic/pre-usa-c-cpp/Grab/grab.html)** · **March**  
   A [DOS](https://en.wikipedia.org/wiki/MS-DOS) utility that saved the [EGA](https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter)/[VGA](https://en.wikipedia.org/wiki/Video_Graphics_Array) graphics screen to a file and loaded it back by copying its four [bit planes](https://en.wikipedia.org/wiki/Bit_plane) straight from video memory. Here the video card is simulated: paint, save, load, and see the planes.
@@ -165,6 +169,14 @@ All programs originally written in **Java** unless stated otherwise.
 - **[LOFT Eksperiment [The LOFT Experiment] (C)](https://mihailod.github.io/attic/pre-usa-c-cpp/LOFT/loft.html)** · **March**  
   A simulation of the [LOFT](https://www.oecd-nea.org/jcms/pl_25963/loss-of-fluid-test-loft-project) (Loss of Fluid Test) L9-3 experiment of 1982 at the [Idaho National Laboratory](https://en.wikipedia.org/wiki/Idaho_National_Laboratory), where a model of a [pressurized water reactor](https://en.wikipedia.org/wiki/Pressurized_water_reactor) lost its feedwater and was not shut down, made with [Aleksandar Ćirilović](https://www.linkedin.com/in/aleksandar-cirilovic-0a59b659/) during my undergraduate studies at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade): the reactor's loop animated in [VGA](https://en.wikipedia.org/wiki/Video_Graphics_Array) graphics for the five minutes of the experiment, its power and temperatures plotted as they go, a click on any part explaining it, and a description in [hypertext](https://en.wikipedia.org/wiki/Hypertext). Runs as it did in [DOS](https://en.wikipedia.org/wiki/MS-DOS), in Serbian with an English translation, with fixes for graphs that say kelvins for degrees Celsius and a stray word in the description, among others. The hypertext engine is [Vuksan Pejović](https://www.gamesdatabase.org/developer-vuksan_pejovic)'s.
 
+## 1994
+
+- ★ *Three months in [Campinas](https://en.wikipedia.org/wiki/Campinas), Brazil, on an internship at [IMECC](https://www.ime.unicamp.br/en), [UNICAMP](https://en.wikipedia.org/wiki/State_University_of_Campinas): mathematical modeling of [problems in coastal biology](https://www.ime.unicamp.br/~biomat/inicia.htm), on [Sun SPARCstations](https://en.wikipedia.org/wiki/SPARCstation) under Unix and in [Mathematica 2.0](https://en.wikipedia.org/wiki/Wolfram_Mathematica).* · **October to December**
+
+## 1991
+
+- ★ *Began my undergraduate studies of Mathematics and Computer Science at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade), [Faculty of Mathematics](https://www.matf.bg.ac.rs/eng/).* · **September**
+
 ## 1990
 
 - **[A-Profy Amiga Fanzine](https://archive.org/details/a-profy-yugoslav-amiga-fanzine-1-july-1990)** · **July**  
@@ -175,10 +187,16 @@ All programs originally written in **Java** unless stated otherwise.
 - **[Prsten [The Ring] (Amiga BASIC, Motorola MC68000 assembly)](https://mihailod.github.io/attic/1989Apr/prsten.html)** · **March**  
   A [text adventure](https://en.wikipedia.org/wiki/Interactive_fiction) with still pictures for the [Commodore Amiga](https://en.wikipedia.org/wiki/Amiga), inspired by *[The Lord of the Rings](https://en.wikipedia.org/wiki/The_Lord_of_the_Rings)*, written in [Amiga BASIC](https://en.wikipedia.org/wiki/AmigaBASIC) with some routines in [MC68000](https://en.wikipedia.org/wiki/Motorola_68000) assembly. The game itself was sadly not preserved; what is left is my ad for it in the (then) Yugoslav computer magazine *[Moj Mikro](https://en.wikipedia.org/wiki/Moj_mikro)*, here with its text in Serbian and English.
 
+## 1988
+
+- ★ *Got a [Commodore Amiga 500](https://en.wikipedia.org/wiki/Amiga_500), and the journey levels up.* · **July 5**
+
 ## 1985
 
 - **[Pirat [Pirate] (ZX Spectrum BASIC, Zilog Z80 assembly)](https://mihailod.github.io/attic/1985Jun/pirat.html)** · **June**  
   A [text adventure](https://en.wikipedia.org/wiki/Interactive_fiction) with still pictures for the [ZX Spectrum](https://en.wikipedia.org/wiki/ZX_Spectrum), written over the summer school break in [ZX Spectrum BASIC](https://en.wikipedia.org/wiki/Sinclair_BASIC), with [Z80](https://en.wikipedia.org/wiki/Zilog_Z80) assembly routines to draw and load the pictures. Nothing of it was preserved; here is its loading screen, recreated from memory, loading as if from tape.
+
+- ★ *Got a [Sinclair ZX Spectrum 48K](https://en.wikipedia.org/wiki/ZX_Spectrum), and the journey begins…* · **April 15**
 
 ## Running them
 
