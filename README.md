@@ -39,7 +39,11 @@ All programs originally written in **Java** unless stated otherwise.
 - **[Davor's Trader (Java, MQL4)](https://mihailod.github.io/attic/Trader/trader.html)** · **December**  
   A contract job from the time of my startup, MiRteh, for [Davor Urošević](https://www.linkedin.com/in/davoru/), a [FOREX](https://en.wikipedia.org/wiki/Foreign_exchange_market) trader: a [breakout strategy](https://en.wikipedia.org/wiki/Breakout_(technical_analysis)) for EUR/USD, begun as a Java program and finished as an Expert Advisor for [MetaTrader 4](https://en.wikipedia.org/wiki/MetaTrader_4) in [MQL4](https://docs.mql4.com/). Here the Expert Advisor runs in a small simulated MetaTrader 4 tester, with fixes for a sell with no breakout and for stopping for good after a weekend, among others.
 
+- ★ *My patent application [“Application Products with In-Application Subsequent Feature Access Using Network-Based Distribution System”](https://patents.google.com/patent/US20130124696A1/en) is published, with [Michael Kuohao Chu](https://www.linkedin.com/in/micchu/), [Sean B. Kelly](https://www.linkedin.com/in/sean-kelly-1739141/) and [Thomas Alsina](https://www.linkedin.com/in/thomasalsina/) at [Apple](https://en.wikipedia.org/wiki/Apple_Inc.).* · **May 16**
+
 ## 2012
+
+- ★ *My US patent [“Content Rental System”](https://patents.google.com/patent/US8166508B2/en) (8,166,508) is granted, with [Hiro Mitsuji](https://www.linkedin.com/in/hiromitsuji/), [Alan Ward](https://www.linkedin.com/in/alanward/) and [Sam Gharabally](https://www.linkedin.com/in/samgharabally/) at Apple.* · **April 24**
 
 - **[Lisp Notebook (Lisp)](https://mihailod.github.io/attic/playground-lisp/lisp.html)** · **January**  
   My notes from learning [Common Lisp](https://en.wikipedia.org/wiki/Common_Lisp): exercises from [Budimac et al.](https://plus.cobiss.net/cobiss/cg/cnr_latn/data/cobib/50749959), [Henderson’s *Functional Programming*](https://www.goodreads.com/book/show/5838062-functional-programming-application-and-implementation) and *[SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)*, runnable and editable in a small Lisp interpreter written for the page, with notes on my slips.
@@ -56,6 +60,8 @@ All programs originally written in **Java** unless stated otherwise.
   Which pixels to light up to [draw a straight line](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm). Drag the ends and watch it work step by step. My version solves the basic direction and gets the other seven by mirroring it.
 
 ## 2009
+
+- ★ *My first patent application, [“Method and Apparatus for On Demand Video and Other Content Rental”](https://patents.google.com/patent/US20090182670A1/en), is published, with [Augustin J. Farrugia](https://www.linkedin.com/in/augustin-farrugia-39ba9ba4/), [Jeffrey Robbin](https://www.linkedin.com/in/jeffrobbin/), [Hiro Mitsuji](https://www.linkedin.com/in/hiromitsuji/) and Colin Meldrum at Apple.* · **July 16**
 
 - **[Permutations by Insertion](https://mihailod.github.io/attic/permutations/permutations.html)** · **May**  
   Every ordering of the letters of a word, built by inserting one letter at a time into every position. Watch it step by step.
