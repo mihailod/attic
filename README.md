@@ -114,6 +114,8 @@ All programs originally written in **Java** unless stated otherwise.
 
 ## 2002
 
+- ★ *Successfully defended my master thesis [“Machine Learning in Strategic Games”](https://archive.org/details/ucenje-u-strateskim-igrama) at the [University of Belgrade](https://en.wikipedia.org/wiki/University_of_Belgrade). My advisors were [Đorđe Dugošija](https://poincare.matf.bg.ac.rs/~dugosija/) and [Vladimir Srdanović](https://www.linkedin.com/in/vladimir-srdanovic-8670184/), and the commission Đorđe Dugošija, [Srđan Stanković](https://automatika.etf.bg.ac.rs/sr/nastavnici/92-nastavnici/171-prof-dr-srđan-stanković) and [Vera Vujičić-Kovačević](https://nds.edu.rs/clanovi/prof-dr-vera-v-vujicic/?lang=lat).* · **May 13**
+
 - **[JT (Java Tetris)](https://mihailod.github.io/jt/)** · **April**  
   The classic [falling-blocks game](https://en.wikipedia.org/wiki/Tetris), written as a [Java applet](https://en.wikipedia.org/wiki/Java_applet). Modernized separately in its own repository, [mihailod/jt](https://github.com/mihailod/jt). [▶ Play it in your browser](https://mihailod.github.io/jt/).
 
