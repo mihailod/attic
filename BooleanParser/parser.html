@@ -59,6 +59,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -81,6 +86,7 @@
             td.differs { background: #362223; }
             #old-verdict { color: #aeaeae; }
             #table-note { color: #aeaeae; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -121,6 +127,211 @@
         <div id="table-note"></div>
     </div>
     <script src="parser.js"></script>
+    <details class="original">
+        <summary>The original Java code: booleanparser/Parser.java</summary>
+        <pre class="original">package booleanparser;
+
+/*
+ * @author Mihailo Despotovic
+ * @since 01/09/2003
+ * @version 1.0
+ *
+ * E -&gt; F { OR F }
+ * F -&gt; P { AND P }
+ * P -&gt; ( E ) | NOT E | #1# | #2# | ...
+ */
+
+public class Parser {
+
+  private String s = "#0# AND ( #2# OR NOT #3# ) OR NOT #5# AND #6# AND NOT #7#";
+
+  private Node root = new Node();
+
+  public static void main(String[] a)
+  {
+    Parser p = new Parser();
+    System.out.println(p.s);
+    p.translate();
+    //p.matchE(p.root);
+    //p.dump(p.root, 0);
+  }
+
+  private void matchE(Node n)
+  {
+    n.l = new Node();
+    matchF(n.l);
+    while(true)
+    {
+      if(nextToken().equals("OR"))
+      {
+        matchOR();
+        n.content = "or";
+
+        n.r = new Node();
+        matchF(n.r);
+      }
+      else return;
+    }
+  }
+
+  private void matchF(Node n)
+  {
+    n.l = new Node();
+    matchP(n.l);
+    while(true)
+    {
+      if(nextToken().equals("AND"))
+      {
+        matchAND();
+        n.content = "and";
+
+        n.r = new Node();
+        matchP(n.r);
+      }
+      else return;
+    }
+  }
+
+  private void matchP(Node n)
+  {
+    if(nextToken().equals("("))
+    {
+      matchLP();
+      matchE(n);
+      matchRP();
+    }
+    else if(nextToken().equals("NOT"))
+    {
+      matchNOT();
+      matchE(n);
+    }
+    else
+    {
+      matchNumber(n);
+    }
+  }
+
+  private void matchAND()
+  {
+    s = s.substring("AND ".length(), s.length());
+  }
+
+  private void matchOR()
+  {
+    s = s.substring("OR ".length(), s.length());
+  }
+
+  private void matchNOT()
+  {
+    s = s.substring("NOT ".length(), s.length());
+  }
+
+  private void matchLP()
+  {
+    s = s.substring("( ".length(), s.length());
+  }
+
+  private void matchRP()
+  {
+    if(s.length() == 1) s = "";
+    else s = s.substring(") ".length(), s.length());
+  }
+
+  private void matchNumber(Node n)
+  {
+    s = s.substring(1, s.length());
+    int end = s.indexOf("#");
+    String num = s.substring(0, end);
+    System.out.println("LEAF: " + num);
+    //n.content = num;
+    //dump(root, 0);
+    if(s.length() &gt; 2) s = s.substring(end + 2, s.length());
+  }
+
+  private String nextToken()
+  {
+    int space = s.indexOf(" ");
+    if(space &lt; 0) return s;
+    String token = s.substring(0, space);
+    System.out.println("Next token: |" + token + "|");
+    return token;
+  }
+
+  private void dump(Node n, int depth)
+  {
+    if(n == null) return;
+    dump(n.l, depth + 1);
+    for(int i=0; i&lt;depth; i++) System.out.print(" ");
+    System.out.println( n.content);
+    dump(n.r, depth + 1);
+  }
+
+
+  private void translate()
+  {
+    String res = "";
+
+    while(true)
+    {
+      String nt = nextToken();
+
+      if(nt.startsWith("#") &amp;&amp; nt.endsWith("#"))
+      {
+        nt = nt.substring(1, nt.length() -1);
+        res += (nt + " ");
+        matchNumber(null);
+      }
+      else if(nt.equals("OR"))
+      {
+        stack.push(" or");
+        matchOR();
+      }
+      else if(nt.equals("AND"))
+      {
+        stack.push(" and");
+        matchAND();
+      }
+      else if(nt.equals("("))
+      {
+        matchLP();
+      }
+      else if(nt.equals(")"))
+      {
+        res += (String)stack.pop();
+        matchRP();
+      }
+      else if(nt.equals("NOT"))
+      {
+        stack.push(" not");
+        matchNOT();
+      }
+      else break;
+    }
+
+    while(!stack.isEmpty())
+    {
+      res += ((String)stack.pop());
+    }
+
+    System.out.println("RESULT:");
+    System.out.println(res);
+  }
+
+  private static java.util.Stack stack = new java.util.Stack();
+
+}
+
+
+class Node
+{
+  public Node() { content = "n/a"; }
+
+  String content = null;
+  Node l = null;
+  Node r = null;
+}
+</pre>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

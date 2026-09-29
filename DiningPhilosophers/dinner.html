@@ -68,6 +68,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -93,6 +98,7 @@
             td.eating { color: #60bc71; }
             #log { background: #1b1b1b; border: 1px solid #454545; }
             .clock { color: #aeaeae; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -134,6 +140,149 @@
         </div>
     </div>
     <script src="dinner.js"></script>
+    <details class="original">
+        <summary>The original Java code, 3 files</summary>
+        <details>
+            <summary>Dinner.java</summary>
+            <pre class="original">
+/**
+ * @author Mihailo Despotovic
+ * @since Aug 24, 2005 4:37:44 PM
+ */
+public class Dinner
+{
+  public static void main(String[] args)
+  {
+    // the dimension of the problem
+    int numForks = 5;
+
+    // create forks
+    Fork[] forks = new Fork[numForks];
+    for(int i=0; i&lt;numForks; i++)
+      forks[i] = new Fork();
+
+    // create philosophers and start them
+    for(int i=0; i&lt;numForks; i++)
+    {
+      // decide which forks go to this one
+      Fork left = forks[i];
+      Fork right = forks[(i+1)%numForks];
+
+      // create him
+      Philosopher p;
+      if(i % 2 == 0)
+        p = new Philosopher("" + i, left, right);
+      else
+        p = new Philosopher("" + i, right, left);
+
+      // let him start
+      new Thread(p).start();
+    }
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>Fork.java</summary>
+            <pre class="original">
+/**
+ * @author Mihailo Despotovic
+ * @since Aug 24, 2005 4:28:36 PM
+ */
+public class Fork
+{
+  private boolean free = true;
+
+  public synchronized void pickUp()
+  {
+    // spinwait
+    while(!free)
+    {
+      try
+      {
+        wait();
+      }
+      catch(InterruptedException ie)
+      {
+        ie.printStackTrace();
+      }
+    }
+
+    // execute
+    free = false;
+  }
+
+  public synchronized void putDown()
+  {
+    free = true;
+    notify();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>Philosopher.java</summary>
+            <pre class="original">
+/**
+ * @author Mihailo Despotovic
+ * @since Aug 24, 2005 4:30:38 PM
+ */
+public class Philosopher implements Runnable
+{
+  private String name;
+  private Fork left, right;
+
+  public Philosopher(String name, Fork left, Fork right)
+  {
+    this.name = name;
+    this.left = left;
+    this.right = right;
+  }
+
+  public void run()
+  {
+    // forever...
+    while(true)
+    {
+      // think a bit...
+      System.out.println(name + " is thinking...");
+      try
+      {
+        Thread.sleep((int)(Math.random() * 5000));
+      }
+      catch(InterruptedException ie)
+      {
+        ie.printStackTrace();
+      }
+
+      // pick up
+      System.out.println(name + " is picking up his left fork...");
+      left.pickUp();
+      System.out.println(name + " is picking up his right fork...");
+      right.pickUp();
+
+      // eating...
+      System.out.println(name + " is eating...");
+      try
+      {
+        Thread.sleep((int)(Math.random() * 5000));
+      }
+      catch(InterruptedException ie)
+      {
+        ie.printStackTrace();
+      }
+
+      // put down
+      System.out.println(name + " is putting down his left fork...");
+      left.putDown();
+      System.out.println(name + " is picking up his right fork...");
+      right.putDown();
+    }
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

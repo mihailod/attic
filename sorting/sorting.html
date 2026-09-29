@@ -37,9 +37,15 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -75,6 +81,700 @@
         <button id="shuffle">Shuffle</button>
     </div>
     <script src="sorting.js"></script>
+    <details class="original">
+        <summary>The original Java code, 5 files</summary>
+        <details>
+            <summary>sorting/SortApplet.java</summary>
+            <pre class="original">package sorting;
+
+import java.applet.*;
+
+/**
+ * @author Mihailo Despotovic
+ * @version 1.0
+ * @since 18/01/2003
+ */
+public class SortApplet extends Applet
+{
+  public void init() { new SortFrame(); }
+  public static void main(String[] aa) { new SortFrame(); }
+}
+</pre>
+        </details>
+        <details>
+            <summary>sorting/SortCanvas.java</summary>
+            <pre class="original">package sorting;
+
+import java.applet.*;
+import java.awt.*;
+import java.awt.image.*;
+
+public class SortCanvas extends Canvas {
+
+  private static Image buffer = null;
+  private static Graphics bg = null;
+
+  public Dimension getPreferredSize() { return new Dimension(500, 500); }
+
+  public void paint(Graphics g) { update(g); }
+
+  public void update(Graphics g)
+  {
+    int pw = getPreferredSize().width;
+    int ph = getPreferredSize().height;
+
+    buffer = createImage(pw, ph);
+    bg = buffer.getGraphics();
+
+    int dx = (int)(pw / SortFrame.N);
+    int dy = (int)(ph / SortFrame.N);
+
+    bg.clearRect(0, 0, pw-1, ph-1);
+    bg.drawRect(0, 0, pw-1, ph-1);
+
+    for(int i=0; i&lt;SortFrame.N; i++)
+      bg.fillRect(dx*i, dy*SortFrame.array[i], dx, dy);
+
+    g.drawImage(buffer, 0, 0, null);
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>sorting/Sorter.java</summary>
+            <pre class="original">package sorting;
+
+import java.awt.Canvas;
+
+public class Sorter extends Canvas
+{
+ private static final int DELAY = 15;
+
+ private static int temp = 0;
+ private static Canvas c = null;
+ private static boolean INNER = false;
+ private static boolean OUTER = true;
+
+ public static void setInnerDelay() { INNER = true; OUTER = false; }
+ public static void setOuterDelay() { INNER = false; OUTER = true; }
+ public static void setNoDelay() { INNER = false; OUTER = false; }
+
+ public static void shuffle(int[] array, int N)
+ {
+   for(int i=0; i&lt;N; i++)
+   {
+     int val = 0;
+     while(true)
+     {
+       val = (int)(N * Math.random());
+       if(!alreadyThere(array, val, i))
+       {
+         array[i] = val;
+         break;
+       }
+     }
+   }
+
+   for(int i=0; i&lt;array.length; i++)
+   {
+     if(array[i] == N-1)
+     {
+       array[i] = array[0];
+       array[0] = N-1;
+       break;
+     }
+   }
+ }
+
+ private static boolean alreadyThere(int[] array, int num, int bound)
+ {
+   for(int i=0; i&lt;bound; i++) if(array[i] == num) return true;
+   return false;
+ }
+
+ public static void dist(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   int[] counter = new int[N];
+   for(int i=0; i&lt;N; i++) counter[N-1- array[i]] = array[i];
+   for(int i=0; i&lt;N; i++)
+   {
+     array[i] = counter[i];
+     if(INNER || OUTER) { Thread.sleep(DELAY); c.repaint(); }
+   }
+   c.repaint();
+ }
+
+ public static void selection(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   int maxElem = 0;
+   for(int i=0; i&lt;N-1; i++)
+   {
+     maxElem = i;
+     for(int j=i+1; j&lt;N; j++)
+     {
+       if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+       if(array[j] &gt; array[maxElem]) maxElem = j;
+     }
+     temp = array[maxElem];
+     array[maxElem] = array[i];
+     array[i] = temp;
+     if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+   }
+   c.repaint();
+ }
+
+ public static void bubble(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   for(int i=0; i&lt;N; i++)
+   {
+     if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+     for(int j=N-1; j&gt;i; j--)
+     {
+       if(array[j-1] &lt; array[j])
+       {
+         temp = array[j-1];
+         array[j-1] = array[j];
+         array[j] = temp;
+         if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+       }
+     }
+   }
+   c.repaint();
+ }
+
+ public static void insertion(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   int v, j = 0;
+   for(int i=1; i&lt;N; i++)
+   {
+     if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+     v = array[i];
+     j = i;
+     while(j &gt; 0 &amp;&amp; array[j-1] &lt; v)
+     {
+       array[j] = array[j-1];
+       j--;
+       if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+     }
+     array[j] = v;
+   }
+   c.repaint();
+ }
+
+ /**
+  * Fix the bug
+  */
+ public static void shell(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   int j = 0, h = 1, v = 0;
+
+   while(true)
+   {
+     h = 3*h + 1;
+     if(h&gt;N) break;
+   }
+
+   do
+   {
+     h = h / 3;
+     for(int i=h; i&lt;N; i++)
+     {
+       if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+       v = array[i];
+       j = i;
+       while(j &gt;= h &amp;&amp; array[j-h] &lt; v)
+       {
+         array[j] = array[j-h];
+         j = j - h;
+         if(j &lt;= h) break;
+         if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+       }
+       array[j] = v;
+     }
+   }
+   while(h != 0);
+   c.repaint();
+ }
+
+ public static void quick(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   Sorter.c = c;
+   quicksort(array, 0, N-1);
+   c.repaint();
+ }
+
+ private static void quicksort(int[] array, int left, int right) throws InterruptedException
+ {
+   if(right &gt; left)
+   {
+     int p = partition(array, left, right);
+     quicksort(array, left, p-1);
+     quicksort(array, p+1, right);
+   }
+ }
+
+ private static int partition(int[] array, int start, int end) throws InterruptedException
+ {
+   int left = start - 1;
+   int right = end;
+   int p = array[end];
+   while(true)
+   {
+     while(p &lt; array[++left]) { if(left == end) break; }
+     while(p &gt; array[--right]) { if(right == start) break; }
+
+     if(left &gt;= right) break;
+     temp = array[left];
+     array[left] = array[right];
+     array[right] = temp;
+
+     if(INNER || OUTER) { Thread.sleep(DELAY); c.repaint(); }
+   }
+   temp = array[left];
+   array[left] = array[end];
+   array[end] = temp;
+
+   return left;
+ }
+
+ public static void radixExchange(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   Sorter.c = c;
+   radixExchangeDo(0, N-1, 9, array); // 2^9 = 512 &gt; 500 (maximum N)
+   c.repaint();
+ }
+
+ private static void radixExchangeDo(int left, int right, int b, int[] array) throws InterruptedException
+ {
+   int i, j;
+   if(right &gt; left &amp;&amp; b &gt;= 0)
+   {
+     i = left;
+     j = right;
+     while(true)
+     {
+       while(bits(array[i], b, 1) == 1 &amp;&amp; i &lt; j) i++;
+       while(bits(array[j], b, 1) == 0 &amp;&amp; i &lt; j) j--;
+       temp = array[i];
+       array[i] = array[j];
+       array[j] = temp;
+       if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+       if(j == i) break;
+     }
+     if(bits(array[right], b, 1) == 1) j++;
+     if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+     radixExchangeDo(left, j-1, b-1, array);
+     radixExchangeDo(j, right, b-1, array);
+   }
+ }
+
+ /**
+  *todo: fix the bug
+  */
+ public static void radixStraight(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   int[] array2 = new int[array.length];
+   System.arraycopy(array, 0, array2, 0, array.length);
+
+   int m = 5;
+   int M = 32; // 2^m
+   int w = 20; // a multiple of m
+
+   int pass;
+   int[] count = new int[N];
+   int[] b = new int[N];
+
+   for(pass=0; pass &lt; (w / m) - 1; pass++)
+   {
+     for(int j=0; j&lt;M-1; j++) count[j] = 0;
+     for(int i=0; i&lt;N-1; i++) count[bits(array2[i], pass*m, m)] = count[bits(array2[i], pass*m, m)] + 1;
+     for(int j=1; j&lt;M; j++) count[j] = count[j-1] + count[j];
+     for(int i=N-1; i&gt;=0; i--)
+     {
+       b[count[bits(array2[i], pass*m, m)]] = array2[i];
+       count[bits(array2[i], pass*m, m)] = count[bits(array2[i], pass*m, m)] - 1;
+       if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+     }
+     for(int i=0; i&lt;N; i++) array2[i] = b[i];
+
+     for(int i=0; i&lt;array.length; i++) array[i] = N - array2[i];
+
+     if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+   }
+ }
+
+ private static final int bits(int i, int position, int howMany)
+ {
+   int mask = (1 &lt;&lt; howMany) - 1;
+   return (i &gt;&gt; position) &amp; mask;
+ }
+
+ public static void merge(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   Sorter.c = c;
+   mergesort(array, 0, N, N);
+   c.repaint();
+ }
+
+ /**
+  * Fix the big bug
+  */
+ private static void mergesort(int[] array, int left, int right, int total) throws InterruptedException
+ {
+   if(right &lt;= left) return;
+
+   int middle = (right + left) / 2;
+   mergesort(array, left, middle, total);
+   mergesort(array, middle + 1, right, total);
+
+   int[] temp = new int[total];
+   int i, k, j;
+   for(i = middle; i&gt;left; i--)
+   {
+     temp[i]  = array[i];
+     System.out.print(array[i] + ", ");
+   }
+   for(j = middle+1; j&lt;right; j++)
+   {
+     temp[right + middle + 1 - j] = array[j];
+      System.out.print(array[j] + ", ");
+   }
+   System.out.println("\n---\n");
+
+   if(OUTER) { Thread.sleep(DELAY); c.repaint(); }
+
+   for(k = left; k&lt;right; k++)
+   {
+     if(temp[i] &lt; temp[j]) { array[k] = temp[i]; i++; }
+     else { array[k] = temp[j]; j--; }
+
+     if(INNER) { Thread.sleep(DELAY); c.repaint(); }
+
+   }
+ }
+
+ /*public static void highSchool(int[] array, int N, Canvas c) throws InterruptedException
+ {
+   for(int i=0; i&lt;N-1; i++)
+   {
+     for(int j=i; j&lt;N; j++)
+     {
+       if(array[i] &lt; array[j])
+       {
+         temp = array[i];
+         array[i] = array[j];
+         array[j] = temp;
+         Thread.sleep(DELAY);
+         c.repaint();
+       }
+     }
+   }
+ }*/
+}
+</pre>
+        </details>
+        <details>
+            <summary>sorting/SortFrame.java</summary>
+            <pre class="original">package sorting;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class SortFrame extends Frame implements ActionListener, ItemListener
+{
+  private static final int W = 620;
+  private static final int H = 600;
+
+  public static int N = 50; // size of the array
+  public static int array[] = new int[500]; // allocate memory
+
+  private static int oldIndex = 0;
+
+  private Choice points = new Choice();
+
+  private CheckboxGroup cbg = new CheckboxGroup();
+  private Checkbox dist = new Checkbox("Distribution Count", true, cbg);
+  private Checkbox selection = new Checkbox("Selection Sort", false, cbg);
+  private Checkbox insertion = new Checkbox("Insertion Sort", false, cbg);
+  private Checkbox bubble = new Checkbox("Bubble Sort", false, cbg);
+  private Checkbox shell = new Checkbox("Shell Sort", false, cbg);
+  private Checkbox quick = new Checkbox("Quick Sort", false, cbg);
+  private Checkbox radixExchange = new Checkbox("Radix Exchange Sort", false, cbg);
+  private Checkbox radixStraight = new Checkbox("Straight Radix Sort", false, cbg);
+  private Checkbox heap = new Checkbox("Heap Sort", false, cbg);
+  private Checkbox merge = new Checkbox("Merge Sort", false, cbg);
+
+  private CheckboxGroup cbg2 = new CheckboxGroup();
+  private Checkbox noDelay = new Checkbox("No Delay", false, cbg2);
+  private Checkbox outerLoop = new Checkbox("Delay Outer Loop", true, cbg2);
+  private Checkbox innerLoop = new Checkbox("Delay Inner Loop", false, cbg2);
+
+  private Button start = new Button("Start");
+  private Button shuffle = new Button("Shuffle");
+
+  private static SortCanvas c = null;
+
+  Thread t = null;
+
+  public SortFrame()
+  {
+    super("Sorting Examples");
+    int x = (Toolkit.getDefaultToolkit().getScreenSize().width - W) / 2;
+    int y = (Toolkit.getDefaultToolkit().getScreenSize().height - H) / 2;
+    setBounds(x, y, W, H);
+    setLayout(new BorderLayout());
+
+    Panel buttons = new Panel(new FlowLayout(FlowLayout.CENTER));
+    buttons.add(start);
+    buttons.add(shuffle);
+    start.addActionListener(this);
+    shuffle.addActionListener(this);
+
+    points = new Choice();
+    points.add("50 Numbers");
+    points.add("100 Numbers");
+    points.add("500 Numbers");
+    points.addItemListener(this);
+
+    Panel radios = new Panel(new GridLayout(0, 1));
+    radios.add(points);
+    radios.add(new Panel());
+    radios.add(dist);
+    radios.add(selection);
+    radios.add(insertion);
+    radios.add(bubble);
+    radios.add(shell);
+    radios.add(quick);
+    radios.add(radixExchange);
+    //radios.add(radixStraight);
+    //radios.add(heap);
+    //radios.add(merge);
+    radios.add(new Panel());
+    radios.add(new Panel());
+    radios.add(new Panel());
+    radios.add(new Panel());
+    radios.add(noDelay);
+    radios.add(outerLoop);
+    radios.add(innerLoop);
+    noDelay.addItemListener(this);
+    outerLoop.addItemListener(this);
+    innerLoop.addItemListener(this);
+    Panel radiosWrap = new Panel(new BorderLayout());
+    radiosWrap.add(new Panel(), BorderLayout.WEST);
+    radiosWrap.add(new Panel(), BorderLayout.EAST);
+    radiosWrap.add(new Panel(), BorderLayout.NORTH);
+    radiosWrap.add(radios);
+
+    addWindowListener(
+     new WindowAdapter()
+     {
+       public void windowClosing(WindowEvent we)
+       {
+         SortFrame.this.dispose();
+         System.exit(0);
+       }
+     }
+   );
+
+   c = new SortCanvas();
+
+   add(c, BorderLayout.CENTER);
+   add(radiosWrap, BorderLayout.EAST);
+   add(buttons, BorderLayout.SOUTH);
+
+   heap.setEnabled(false);
+
+   Sorter.shuffle(array, N);
+   pack();
+   show();
+ }
+
+ public void actionPerformed(ActionEvent ae)
+ {
+   if(ae.getSource() == shuffle) { Sorter.shuffle(array, N); c.repaint(); }
+   else if(ae.getSource() == start)
+   {
+     if(start.getLabel().equals("Stop"))
+     {
+       new Thread()
+       {
+         public void run()
+         {
+           t.interrupt();
+           setGUI(true);
+         }
+       }.start();
+       return;
+     }
+
+     if(selection.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.selection(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+        }};
+       t.start();
+     }
+     else if(insertion.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.insertion(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+        }};
+       t.start();
+     }
+     else if(bubble.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.bubble(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     else if(shell.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.shell(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     else if(dist.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.dist(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     else if(quick.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.quick(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     else if(radixExchange.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.radixExchange(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     else if(radixStraight.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.radixStraight(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+       }};
+       t.start();
+     }
+     if(merge.getState())
+     {
+       t = new Thread() { public void run()
+       {
+         setGUI(false);
+         try { Sorter.merge(array, N, c); }
+         catch(InterruptedException ie) { ; }
+         setGUI(true);
+        }};
+       t.start();
+     }
+   }
+ }
+
+ public void itemStateChanged(ItemEvent ie)
+ {
+   if(ie.getSource() == noDelay) Sorter.setNoDelay();
+   else if(ie.getSource() == outerLoop) Sorter.setOuterDelay();
+   else if(ie.getSource() == innerLoop) Sorter.setInnerDelay();
+   else if(ie.getSource() == points)
+   {
+     int newIndex = points.getSelectedIndex();
+     if(newIndex == oldIndex) return;
+     oldIndex = newIndex;
+     if(points.getSelectedIndex() == 0) { N = 50; }
+     else if(points.getSelectedIndex() == 1) { N = 100; }
+     else { N = 500; }
+     Sorter.shuffle(array, N);
+     c.repaint();
+   }
+ }
+
+ private void setGUI(boolean enabled)
+ {
+   dist.setEnabled(enabled);
+   points.setEnabled(enabled);
+   selection.setEnabled(enabled);
+   insertion.setEnabled(enabled);
+   bubble.setEnabled(enabled);
+   shell.setEnabled(enabled);
+   quick.setEnabled(enabled);
+   radixExchange.setEnabled(enabled);
+   radixStraight.setEnabled(enabled);
+   //heap.setEnabled(enabled);
+   //merge.setEnabled(enabled);
+   shuffle.setEnabled(enabled);
+   start.setLabel(enabled ? "Start" : "Stop");
+ }
+}
+</pre>
+        </details>
+        <details>
+            <summary>sorting/test.java</summary>
+            <pre class="original">package sorting;
+
+import java.io.*;
+
+public class test
+{
+  public static void main (String[] args)
+  {
+    int age = 0;
+    System.out.print ("Enter your age: " );
+    int chr = -1;
+    String read = "";
+    while(true)
+    {
+      try { chr = System.in.read(); }
+      catch(IOException ioe) { ioe.printStackTrace(); }
+      if(chr == 13) break; // wait for ENTER
+      read += (char)chr;
+    }
+    try { age = Integer.parseInt(read); }
+    catch(NumberFormatException nfe) { System.out.println("Bad age! Try again..."); return; }
+    System.out.println ("Next year you will be " + (age+1));
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

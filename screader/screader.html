@@ -69,6 +69,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -76,6 +81,7 @@
             .pane { border: 1px solid #6d6d6d; }
             #tree .forum:hover { background: #20202c; }
             #topics-title { border-bottom: 1px solid #454545; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -95,6 +101,597 @@
     </div>
     <script src="sample-pages.js"></script>
     <script src="screader.js"></script>
+    <details class="original">
+        <summary>The original Java code, 8 files</summary>
+        <details>
+            <summary>screader/Constants.java</summary>
+            <pre class="original">package screader;
+
+public class Constants
+{
+  public static final String MAIN_TITLE = "Serbian Cafe Forums Reader";
+
+  public static final String SC_URL = "http://www.serbiancafe.com";
+  public static final String SC_ROOT = SC_URL + "/diskusije/";
+  public static final String KOSARKA_POSTFIX = "/diskusije/mesg/55/?1";
+  public static final String MSG_HEADER = "&lt;a href=\"/diskusije/mesg";
+  public static final int MSG_OFFSET = "&lt;a href=\"".length();
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/ContentGetter.java</summary>
+            <pre class="original">package screader;
+
+import java.io.*;
+import java.net.*;
+
+public class ContentGetter
+{
+  public static final int TREE = 0;
+  public static final int TOPICS = 1;
+  public static final int SINGLE_TOPIC = 2;
+
+  public static String getContent(String url, int what)
+  {
+    try
+    {
+      BufferedReader br = null;
+      try
+      {
+        URL u = new URL(url);
+        URLConnection c = u.openConnection();
+        InputStreamReader sr = new InputStreamReader(c.getInputStream());
+        br = new BufferedReader(sr);
+      }
+      catch(UnknownHostException uhe)
+      {
+        String fname = null;
+        switch(what)
+        {
+          case(TOPICS) :
+          {
+            fname = "c:\\mihailo\\screader\\screader\\kosarkatopics.txt";
+            break;
+          }
+          case(SINGLE_TOPIC) :
+          {
+            fname = "c:\\mihailo\\screader\\screader\\singletopic.txt";
+            break;
+          }
+          case(TREE) :
+          {
+            fname = "c:\\mihailo\\screader\\screader\\tree.txt";
+            break;
+          }
+          default : throw new IllegalArgumentException("Unknown type");
+        }
+
+        br = new BufferedReader(new FileReader(new File(fname)));
+      }
+
+      StringBuffer sb = new StringBuffer("");
+      String line = null;
+      while((line = br.readLine()) != null) sb.append(line);
+      return sb.toString();
+    }
+    catch(Exception e)
+    {
+      return "ERROR: " + e.toString();
+    }
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/ContentParser.java</summary>
+            <pre class="original">package screader;
+
+import java.util.*;
+
+public class ContentParser
+{
+  public Vector topics = null;
+
+  public void parseTopics(String all)
+  {
+    topics = new Vector();
+    Topic t = null;
+    if(all.startsWith("ERROR"))
+    {
+      t = new Topic();
+      t.title = all;
+      topics.addElement(t);
+      return;
+    }
+    StringBuffer sb = new StringBuffer();
+    int start, end = 0;
+    String token = null;
+    while(all.indexOf(Constants.MSG_HEADER) &gt; 0)
+    {
+      t = new Topic();
+
+      start = all.indexOf(Constants.MSG_HEADER) + Constants.MSG_OFFSET;
+      all = all.substring(start, all.length());
+      end = all.indexOf("&gt;") - 1;
+      t.url = all.substring(0, end);
+      t.url = Constants.SC_URL + t.url;
+
+      start = all.indexOf("/diskusije/mesg/");
+      all = all.substring(start, all.length());
+      start = all.indexOf("&gt;") + 1;
+      all = all.substring(start, all.length());
+      end = all.indexOf("&lt;/a&gt;");
+      token = all.substring(0, end);
+      t.title = token;
+
+      start = all.indexOf("&lt;b&gt;") + "&lt;b&gt;".length();
+      end = all.indexOf("&lt;/b&gt;");
+      token = all.substring(start, end);
+      t.author = token;
+
+      start = all.indexOf("&lt;font size=-1&gt;") + "&lt;font size=-1&gt;".length() + 1;
+      end = all.indexOf("&lt;/font&gt;") - 1;
+      int newLine = all.indexOf("&lt;br");
+      if(newLine &gt; 0 &amp;&amp; newLine &gt; start &amp;&amp; newLine &gt; end)
+      {
+        token = all.substring(start, end);
+        t.replies = Integer.parseInt(token);
+      }
+      else
+      {
+        t.replies = 0;
+      }
+
+      topics.addElement(t);
+    }
+
+    // next?
+    if(all.indexOf("NEXT") &gt; 0)
+    {
+      start = all.indexOf("&lt;a href");
+      end = all.indexOf("\"&gt;");
+      t = new Topic();
+      t.title = "";
+      t.author = "";
+      t.replies = -1;
+      t.url = all.substring(start + Constants.MSG_OFFSET, end);
+      topics.addElement(t);
+    }
+  }
+
+  public String parseSingleTopic(String all)
+  {
+    //System.out.println("all=" + all);
+    if(all.indexOf("&lt;blockquote&gt;") &lt; 0)
+      return "Sorry.  Cannot parse the topic..."; // something is wrong
+
+    StringBuffer resb = new StringBuffer("");
+    String temp = "";
+    boolean first = true;
+
+    while(all.indexOf("&lt;blockquote&gt;") &gt;= 0)
+    {
+      int start = all.indexOf("&lt;blockquote&gt;") + "&lt;blockquote&gt;".length();
+      if(first) start += "&lt;b&gt;&lt;font color=green&gt;".length();
+      else start += "&lt;br&gt;&lt;b&gt;".length();
+      all = all.substring(start, all.length());
+      int end = all.indexOf("&lt;/blockquote&gt;");
+      temp = all.substring(0, end);
+
+      // get rid of email
+      if(temp.startsWith("&lt;a href"))
+      {
+        start = temp.indexOf("&gt;") + 1;
+        end = temp.indexOf("&lt;/a&gt;");
+        temp = temp.substring(start, end) +
+               temp.substring(end + "&lt;/a&gt;".length(), temp.length());
+      }
+
+      start = temp.indexOf("&lt;p&gt;");
+      temp = temp.substring(0, start) + "\n" +
+             temp.substring(start + "&lt;p&gt;".length(), temp.length());
+
+      if(first) temp = Util.replaceStrings(temp, "&lt;/font&gt;&lt;/b&gt;", "");
+      temp = Util.cleanString(temp);
+
+      resb.append(temp);
+      resb.append("\n__________________________________________\n\n");
+
+      first = false;
+    }
+
+    return resb.toString();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/MainJFrame.java</summary>
+            <pre class="original">package screader;
+
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class MainJFrame extends JFrame
+  implements ActionListener, MouseListener
+{
+  private JSplitPane treeAndTopics = null;
+  private JSplitPane upAndDown = null;
+  private Insets insets2205 = new Insets(2, 2, 0, 5);
+  private Border emptyBorder = BorderFactory.createEmptyBorder();
+  private ContentParser cp = new ContentParser();
+  private JTextArea ta = new JTextArea();
+  private JTree jt = null;
+
+  public MainJFrame()
+  {
+    super();
+
+    this.addWindowListener( new WindowAdapter()
+       { public void windowClosing(WindowEvent e) { System.exit(0); } } );
+    Container c = this.getContentPane();
+    c.setLayout(new BorderLayout());
+
+    JPanel treePanel = new JPanel();
+    JPanel topicsPanel = new JPanel();
+    JPanel threadPanel = new JPanel();
+    threadPanel.setLayout(new BorderLayout());
+    threadPanel.add(ta, BorderLayout.CENTER);
+    ta.setEditable(false);
+    ta.setBackground(Color.yellow);
+    ta.setLineWrap(false);
+    ta.setDoubleBuffered(true);
+    ta.setLineWrap(true);
+    ta.setMargin(new Insets(5, 5, 5, 20));
+
+    JScrollPane jsp2 = new JScrollPane(topicsPanel);
+    topicsPanel.setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+
+    JScrollPane jsp3 = new JScrollPane(threadPanel);
+
+    treeAndTopics = new JSplitPane
+      (JSplitPane.HORIZONTAL_SPLIT, treePanel, jsp2);
+    upAndDown = new JSplitPane
+      (JSplitPane.VERTICAL_SPLIT, treeAndTopics, jsp3);
+
+    treeAndTopics.setOneTouchExpandable(true);
+    treeAndTopics.setContinuousLayout(true);
+    upAndDown.setOneTouchExpandable(true);
+    upAndDown.setContinuousLayout(true);
+
+    c.add(upAndDown, BorderLayout.CENTER);
+
+    jt = new JTree(TreeProducer.produceTree());
+    jt.addMouseListener(this);
+    treePanel.setLayout(new BorderLayout());
+    JScrollPane jsp = new JScrollPane(jt);
+    treePanel.add(jsp);
+
+    Topic t = null;
+    cp.parseTopics(ContentGetter.getContent
+    (Constants.SC_URL + Constants.KOSARKA_POSTFIX, ContentGetter.TOPICS));
+    if(cp.topics.size() == 0)
+    {
+      gbc.gridx = 0; gbc.gridy = 0;
+      JLabel l = new JLabel("No topics!");
+      topicsPanel.add(l, gbc);
+      return;
+    }
+    String rstring = null;
+    JButton b = null;
+    JPanel ppp = null;
+    for(int i=0; i&lt;cp.topics.size(); i++)
+    {
+      t = (Topic)cp.topics.elementAt(i);
+      b = new JButton("" + (i+1));
+      b.addActionListener(this);
+      if(t.replies &lt;= 0) rstring = "";
+      else if(t.replies == 1) rstring = "reply";
+      else rstring = "replies";
+      JTextField tf = new JTextField(t.title + " -- " + t.author + " " +
+        (t.replies == 0 ? "" : "(" + t.replies + " " + rstring + ")"));
+      tf.setBorder(emptyBorder);
+      tf.setEditable(false);
+      if(t.title.startsWith("ERROR"))
+      {
+        topicsPanel.setLayout(new BorderLayout());
+        topicsPanel.add(new JLabel(t.title));
+        break;
+      }
+      else if(t.replies == -1)
+      {
+        b.setText("Next 40");
+        gbc.fill = gbc.NONE;
+        gbc.gridx = 1; gbc.gridy = i; gbc.anchor = gbc.WEST;
+        topicsPanel.add(b, gbc);
+      }
+      else
+      {
+        gbc.gridx = 0; gbc.gridy = i; gbc.anchor = gbc.WEST;
+        gbc.fill = gbc.BOTH; gbc.insets = insets2205;
+        topicsPanel.add(b, gbc);
+        gbc.gridx = 1; gbc.gridy = i; gbc.anchor = gbc.WEST;
+        topicsPanel.add(tf, gbc);
+      }
+    }
+
+    setGuiStuff();
+    this.setVisible(true);
+  }
+
+  private void setGuiStuff()
+  {
+    int w = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.90);
+    int h = (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.90);
+    int x = (int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() - w) / 2);
+    int y = (int)((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - h) / 2);
+    this.setBounds(x, y, w, h);
+    this.setTitle(Constants.MAIN_TITLE);
+
+    treeAndTopics.setDividerLocation((int)(0.25 * getWidth()));
+    upAndDown.setDividerLocation((int)(0.66 * getHeight()));
+
+    treeAndTopics.setDoubleBuffered(true);
+    upAndDown.setDoubleBuffered(true);
+  }
+
+  public void actionPerformed(ActionEvent ae)
+  {
+    if(ae.getSource() instanceof JButton)
+    {
+      String label = ((JButton)ae.getSource()).getText();
+      try
+      {
+        int n = Integer.parseInt(label) - 1;
+        setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        String text = cp.parseSingleTopic(ContentGetter.getContent
+          (((Topic)cp.topics.elementAt(n)).url, ContentGetter.SINGLE_TOPIC));
+        //ta.setText(Util.formatText(text, 80));
+        ta.setText(text);
+        ta.setCaretPosition(0);
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+      }
+      catch(NumberFormatException nfe) { }
+      if(label.indexOf("ext") &gt; 0)
+      {
+        System.out.println("call next: " +
+          ((Topic)cp.topics.elementAt(cp.topics.size() - 1)).url);
+      }
+    }
+  }
+
+  public void mouseClicked(MouseEvent me)
+  {
+    String key = null;
+    try
+    {
+      key =  jt.getSelectionPath().getLastPathComponent().toString();
+    }
+    catch(Exception e) { /* ignore */ }
+    if(key != null &amp;&amp; key.length() &gt; 0 &amp;&amp;
+       TreeProducer.ht.get(key) != null &amp;&amp;
+       TreeProducer.ht.get(key).toString().length() &gt; 0)
+    {
+      System.out.println("CALL: " + TreeProducer.ht.get(key));
+    }
+  }
+  public void mouseExited(MouseEvent me) {}
+  public void mouseEntered(MouseEvent me) {}
+  public void mouseReleased(MouseEvent me) {}
+  public void mousePressed(MouseEvent me) {}
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/SCR.java</summary>
+            <pre class="original">package screader;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+import java.awt.*;
+
+public class SCR
+{ 
+  public static void main(String[] a)
+  {
+    try
+    { 
+      MainJFrame mf = new MainJFrame();
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    } 
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/Topic.java</summary>
+            <pre class="original">package screader;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class Topic
+{
+  public String title = "";
+  public String author = "";
+  public int replies = 0;
+  public String url = "";
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/TreeProducer.java</summary>
+            <pre class="original">package screader;
+
+import javax.swing.*;
+import javax.swing.tree.*;
+import java.util.*;
+
+public class TreeProducer
+{
+  public static Hashtable ht = new Hashtable();
+
+  public static TreeNode produceTree()
+  {
+    String content = ContentGetter.getContent
+    (Constants.SC_ROOT, ContentGetter.TREE);
+
+    DefaultMutableTreeNode root = new DefaultMutableTreeNode("Serbian Cafe");
+    DefaultMutableTreeNode branch = null;
+    DefaultMutableTreeNode node = null;
+
+    String name = null;
+    String url = null;
+
+    int ahref = 0;
+    int subh = 0;
+    int st = 0;
+    int end = 0;
+    int size = 0;
+
+    content = Util.replaceStrings
+      (content, "&lt;a href=/diskusije", "&lt;a href=\"/diskusije");
+
+    while(true)
+    {
+      ahref = content.indexOf(Constants.MSG_HEADER);
+      subh = content.indexOf("&lt;b class=subheading&gt;");
+
+      if(ahref &lt; 0) break;
+
+      // main topics that are not hyperlinked
+      if((subh &gt; 0) &amp;&amp; (subh &lt; ahref))
+      {
+        st = subh + "&lt;b class=subheading&gt;".length();
+        end = content.indexOf("&lt;/b&gt;");
+        name = content.substring(st, end);
+        url = "";
+        ht.put(name, url);
+        branch = new DefaultMutableTreeNode(Util.cleanString(name));
+        root.add(branch);
+        content = content.substring
+          (end + "&lt;/b&gt;".length(), content.length());
+        continue;
+      }
+
+      st = content.indexOf(Constants.MSG_HEADER);
+      String temp = content.substring(st, content.length());
+      size = temp.indexOf("&lt;/a&gt;");
+      name = temp.substring(0, size);
+
+      url = Util.getFirstUrl(name);
+      url = Constants.SC_URL + url;
+
+      if(name.indexOf("&lt;b class=subheading&gt;") &gt;= 0)
+      {
+        int start1 = name.indexOf("=subheading&gt;") + "=subheading&gt;".length();
+        int end1 = name.indexOf("&lt;/b&gt;");
+        name = name.substring(start1, end1);
+        ht.put(name, url);
+        branch = new DefaultMutableTreeNode(Util.cleanString(name));
+        root.add(branch);
+      }
+      else
+      {
+        int start1 = name.indexOf("&gt;") + 1;
+        name = name.substring(start1, name.length());
+        node = new DefaultMutableTreeNode(Util.cleanString(name));
+        ht.put(name, url);
+        if(branch != null) branch.add(node);
+        else root.add(node);
+      }
+
+      content = content.substring
+        (st + size + 1 + "&lt;/X&gt;".length(), content.length());
+    }
+
+    return root;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>screader/Util.java</summary>
+            <pre class="original">package screader;
+
+public class Util
+{
+  // replace all occurences of s1 with s2 in s
+  public static String replaceStrings(String s, String s1, String s2)
+  {
+    if (s == null || s1 == null || s2 == null || s1.equals("")) return s;
+
+    StringBuffer res = new StringBuffer();
+    int s1_len = s1.length();
+
+    for (int i = 0; i &lt; s.length(); i++)
+    {
+      if ((i &lt;= s.length() - s1_len) &amp;&amp;
+          (s.substring(i, i + s1_len).equals(s1)))
+      {
+        res.append(s2);
+        i += s1_len - 1;
+      }
+      else
+      {
+        res.append(s.charAt(i));
+      }
+    }
+    return res.toString();
+  }
+
+  // cleans string for gui display
+  public static String cleanString(String s)
+  {
+    s = replaceStrings(s, "&lt;b&gt;", "");
+    s = replaceStrings(s, "&lt;B&gt;", "");
+    s = replaceStrings(s, "&lt;/b&gt;", "");
+    s = replaceStrings(s, "&lt;/B&gt;", "");
+
+    s = replaceStrings(s, "&lt;br&gt;", "\n");
+    s = replaceStrings(s, "&lt;BR&gt;", "\n");
+    s = replaceStrings(s, "&lt;Br&gt;", "\n");
+    s = replaceStrings(s, "&lt;bR&gt;", "\n");
+
+    return s;
+  }
+
+  // returns the first url pointer in the string
+  public static String getFirstUrl(String s)
+  {
+    int start1 = s.indexOf("&lt;a href=") + "&lt;a href=".length();
+    int end1 = s.indexOf("&gt;");
+    String url = s.substring(start1, end1);
+    url = Util.replaceStrings(url, "\"", "");
+    url = Util.replaceStrings(url, "//", "/");
+    return url;
+  }
+
+  public static String formatText(String s, int cols)
+  {
+    String temp = "";
+    while(true)
+    {
+      if(s.length() &lt;= cols) break;
+      temp += s.substring(0, cols);
+      temp += "\n";
+      s = s.substring(cols, s.length());
+    }
+    return temp;
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

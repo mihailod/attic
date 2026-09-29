@@ -46,10 +46,16 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
             canvas { border: 1px solid #6d6d6d; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -84,6 +90,922 @@
         <label><input type="checkbox" id="diffuse"> Diffuse shading</label>
     </div>
     <script src="simple3d.js"></script>
+    <details class="original">
+        <summary>The original Java code, 12 files</summary>
+        <details>
+            <summary>mihailo/Simple3DDemo/Constants.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+/**
+ * Created by mihailod, Feb 20, 2011, 12:07:40 PM
+ */
+public class Constants {
+
+    public static final String S_APPLET_NAME = "Simple 3D Demo V1.0 by Mihailo Despotovic";
+    public static final String S_HELP = "Translate: arrows  Rotate: Q A (around x) O P (y) W S (z)  Zoom: PgUp PgDn";
+
+    public static final int X = 50; // screen position
+    public static final int Y = 50;
+    public static final int W = 1300; // screen width
+    public static final int H = 800; // screen height
+
+    public static final int TETRAHEDRON = 0;
+    public static final int CUBE = 1;
+
+    public static final double P_RATIO = -2.0;
+    public static final double Z_CLIP = -80;
+    public static final double XY_CLIP = 20;
+
+    public static final double INITIAL_ROTATION = Math.PI / 30;
+    public static final double ROTATION_STEP = Math.PI / 60;
+    public static final double TRANSLATION_STEP = 1;
+
+    public static void setupInitialTransformations() {
+        SimpleApplet.worldTransform = new double[][] {
+            { 1, 0, 0,    0},
+            { 0, 1, 0,    0},
+            { 0, 0, 1, -140}, // 140 pixels away down the Z axis
+            { 1, 0, 0,    1}
+        };
+
+        SimpleApplet.viewTransform = new double[][] {
+            { 1, 0, 0, 0},
+            { 0, 1, 0, 0},
+            { 0, 0, 1, 0},
+            { 1, 0, 0, 1}
+        };
+    }
+
+    public static String colorName(final Color c) {
+        if (c == Color.BLUE) {
+            return "blue";
+        } else if (c == Color.YELLOW) {
+            return "yellow";
+        } else if (c == Color.ORANGE) {
+            return "orange";
+        } else if (c == Color.MAGENTA) {
+            return "magenta";
+        } else if (c == Color.RED) {
+            return "red";
+        } else if (c == Color.GREEN) {
+            return "green";
+        } else {
+            return "???";
+        }
+    }
+
+    protected static final Point3D SPOTLIGHT_POSITION = new Point3D(-30, 30, 200, 1);
+    protected static final Color SPOTLIGHT_COLOR = Color.WHITE;
+    protected static Polygon3D SPOTLIGHT_POLYGON = null;
+    static {
+        final ArrayList&lt;Point3D&gt; points = new ArrayList&lt;Point3D&gt;();
+        points.add(new Point3D(SPOTLIGHT_POSITION.x,     SPOTLIGHT_POSITION.y,     SPOTLIGHT_POSITION.z, 1));
+        points.add(new Point3D(SPOTLIGHT_POSITION.x + 1, SPOTLIGHT_POSITION.y,     SPOTLIGHT_POSITION.z, 1));
+        points.add(new Point3D(SPOTLIGHT_POSITION.x + 1, SPOTLIGHT_POSITION.y + 1, SPOTLIGHT_POSITION.z, 1));
+        SPOTLIGHT_POLYGON = new Polygon3D(points, Color.BLACK);
+        SPOTLIGHT_POLYGON.dontTransform = true;
+        SPOTLIGHT_POLYGON.dontShade = true;
+    }
+
+    protected static Polygon3D GROUND = null;
+    static {
+        final ArrayList&lt;Point3D&gt; points = new ArrayList&lt;Point3D&gt;();
+        points.add(new Point3D(  200, 0,   220, 1));
+        points.add(new Point3D(  200, 520, 220, 1));
+        points.add(new Point3D( -200, 0,   220, 1));
+        GROUND = new Polygon3D(points, Color.BLACK);
+        GROUND.dontTransform = true;
+    }
+
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/DemoObjects.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+/**
+ * Created by mihailod, Feb 20, 2011, 9:30:14 AM
+ */
+public class DemoObjects {
+    public static void setupTetrahedron() {
+        ArrayList&lt;Point3D&gt; tetraVertices = new ArrayList&lt;Point3D&gt;();
+        tetraVertices.add(new Point3D(-20, -20,   0, 1));
+        tetraVertices.add(new Point3D(  0,  30,   0, 1));
+        tetraVertices.add(new Point3D( 30, -20,   0, 1));
+        tetraVertices.add(new Point3D(  0,   0, -25, 1));
+
+        addTetraPoligon(tetraVertices, 0, 1, 2, Color.ORANGE);
+        addTetraPoligon(tetraVertices, 2, 1, 3, Color.MAGENTA);
+        addTetraPoligon(tetraVertices, 2, 3, 0, Color.RED);
+        addTetraPoligon(tetraVertices, 3, 1, 0, Color.GREEN);
+    }
+
+    private static void addTetraPoligon(final ArrayList&lt;Point3D&gt; allTetraVertices, int i, int j, int k, Color c) {
+        ArrayList&lt;Point3D&gt; points = new ArrayList&lt;Point3D&gt;();
+        points.add(allTetraVertices.get(i));
+        points.add(allTetraVertices.get(j));
+        points.add(allTetraVertices.get(k));
+        Polygon3D tetraPolygon = new Polygon3D(points, c);        
+        SimpleApplet.polygons.add(tetraPolygon);
+    }
+
+    public static void setupCube() {
+        ArrayList&lt;Point3D&gt; cubeVertices = new ArrayList&lt;Point3D&gt;();
+        cubeVertices.add(new Point3D( 15,  15,  15, 1));
+        cubeVertices.add(new Point3D( 15,  15, -15, 1));
+        cubeVertices.add(new Point3D( 15, -15,  15, 1));
+        cubeVertices.add(new Point3D( 15, -15, -15, 1));
+        cubeVertices.add(new Point3D(-15,  15,  15, 1));
+        cubeVertices.add(new Point3D(-15,  15, -15, 1));
+        cubeVertices.add(new Point3D(-15, -15,  15, 1));
+        cubeVertices.add(new Point3D(-15, -15, -15, 1));
+
+        addCubePoligon(cubeVertices, 1, 3, 2, 0, Color.ORANGE);
+        addCubePoligon(cubeVertices, 5, 7, 3, 1, Color.MAGENTA);
+        addCubePoligon(cubeVertices, 4, 5, 1, 0, Color.RED);
+        addCubePoligon(cubeVertices, 3, 7, 6, 2, Color.GREEN);
+        addCubePoligon(cubeVertices, 5, 4, 6, 7, Color.BLUE);
+        addCubePoligon(cubeVertices, 0, 2, 6, 4, Color.YELLOW);
+    }
+
+    private static void addCubePoligon(final ArrayList&lt;Point3D&gt; allCubeVertices, int i, int j, int k, int l, Color c) {
+        ArrayList&lt;Point3D&gt; points = new ArrayList&lt;Point3D&gt;();
+        points.add(allCubeVertices.get(i));
+        points.add(allCubeVertices.get(j));
+        points.add(allCubeVertices.get(k));
+        points.add(allCubeVertices.get(l));
+        Polygon3D cubePoligon = new Polygon3D(points, c);
+        SimpleApplet.polygons.add(cubePoligon);
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/GUI.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import static mihailo.Simple3DDemo.Constants.SPOTLIGHT_POLYGON;
+import static mihailo.Simple3DDemo.SimpleApplet.*;
+
+/**
+ * Created by mihailod, Feb 20, 2011, 12:01:34 PM
+ */
+public class GUI {
+
+    public static void init(final Panel p1, final SimpleApplet sa) {
+        final Choice c = new Choice();
+        c.add("Terahedron");
+        c.add("Cube");
+        c.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                body = c.getSelectedIndex();
+                sa.initStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(c);
+
+        final Checkbox cb0 = new Checkbox("Hidden surface removal", false);
+        cb0.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                hiddenSurfaceRemoval = cb0.getState();
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb0);
+
+        final Checkbox cb1 = new Checkbox("Fill polygons", false);
+        cb1.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                fillPolygons = cb1.getState();
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb1);
+
+        final Checkbox cb2 = new Checkbox("z-ordering", false);
+        cb2.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                zorder = cb2.getState();
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb2);
+
+        final Checkbox cb3 = new Checkbox("Ambient shading:", false);
+        cb3.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                ambientShading = cb3.getState();
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb3);
+
+        final Choice cr = new Choice();
+        cr.add("r 0%");
+        cr.add("r 20%");
+        cr.add("r 40%");
+        cr.add("r 60%");
+        cr.add("r 80%");
+        cr.add("r 100%");
+        cr.select(5);
+        cr.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                ambientLight = new Color(cr.getSelectedIndex() * 51, ambientLight.getGreen(), ambientLight.getBlue());
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cr);
+
+        final Choice cg = new Choice();
+        cg.add("g 0%");
+        cg.add("g 20%");
+        cg.add("g 40%");
+        cg.add("g 60%");
+        cg.add("g 80%");
+        cg.add("g 100%");
+        cg.select(5);
+        cg.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                ambientLight = new Color(ambientLight.getRed(), cg.getSelectedIndex() * 51, ambientLight.getBlue());
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cg);
+
+        final Choice cb = new Choice();
+        cb.add("b 0%");
+        cb.add("b 20%");
+        cb.add("b 40%");
+        cb.add("b 60%");
+        cb.add("b 80%");
+        cb.add("b 100%");
+        cb.select(5);
+        cb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                ambientLight = new Color(ambientLight.getRed(), ambientLight.getGreen(), cg.getSelectedIndex() * 51);
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb);
+
+        final Checkbox cb4 = new Checkbox("Diffuse shading", false);
+        cb4.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                diffuseShading = cb4.getState();
+
+                if (diffuseShading) {
+                    cb1.setState(true);
+                    fillPolygons = true;
+                    polygons.add(SPOTLIGHT_POLYGON);
+                } else {
+                    polygons.remove(SPOTLIGHT_POLYGON);
+                }
+                
+                sa.updateStuff();
+                sa.repaint();
+                p.requestFocusInWindow();
+            }
+        });
+        p1.add(cb4);
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Listener.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import static mihailo.Simple3DDemo.SimpleApplet.*;
+import static mihailo.Simple3DDemo.Constants.*;
+import static mihailo.Simple3DDemo.RotationAppender.*;
+
+/**
+ * Created by mihailod, Feb 20, 2011, 6:21:00 PM
+ */
+public class Listener implements KeyListener {
+
+    private SimpleApplet sa;
+
+    public Listener(final SimpleApplet sa) {
+        this.sa = sa;
+    }
+
+    public void keyTyped(KeyEvent keyEvent) {}
+    public void keyReleased(KeyEvent keyEvent) {}
+    public void keyPressed(KeyEvent keyEvent) {
+        final int kc = keyEvent.getKeyCode();
+        switch (kc) {
+            // translation
+            case KeyEvent.VK_DOWN  : { if (worldTransform[1][3] &lt;  XY_CLIP) worldTransform[1][3] += TRANSLATION_STEP; break; }
+            case KeyEvent.VK_UP    : { if (worldTransform[1][3] &gt; -XY_CLIP) worldTransform[1][3] -= TRANSLATION_STEP; break; }
+            case KeyEvent.VK_RIGHT : { if (worldTransform[0][3] &lt;  XY_CLIP) worldTransform[0][3] += TRANSLATION_STEP; break; }
+            case KeyEvent.VK_LEFT  : { if (worldTransform[0][3] &gt; -XY_CLIP) worldTransform[0][3] -= TRANSLATION_STEP; break; }
+
+            // zoom
+            case KeyEvent.VK_PAGE_UP   : {                                    worldTransform[2][3] -= TRANSLATION_STEP; break; } // zoom away
+            case KeyEvent.VK_PAGE_DOWN : { if (worldTransform[2][3] &lt; Z_CLIP) worldTransform[2][3] += TRANSLATION_STEP; break; } // zoom in
+
+            // rotations
+            case KeyEvent.VK_O : { appendRotationY(-ROTATION_STEP); break; }
+            case KeyEvent.VK_P : { appendRotationY( ROTATION_STEP); break; }
+            case KeyEvent.VK_A : { appendRotationX(-ROTATION_STEP); break; }
+            case KeyEvent.VK_Q : { appendRotationX( ROTATION_STEP); break; }
+            case KeyEvent.VK_W : { appendRotationZ(-ROTATION_STEP); break; }
+            case KeyEvent.VK_S : { appendRotationZ( ROTATION_STEP); break; }
+        }
+        sa.updateStuff();
+        sa.repaint();
+    }
+
+    public void setupFrame(final Frame f) {
+        f.addWindowListener(new WindowListener() {
+            public void windowClosing(WindowEvent we) { sa.buffer = null; f.dispose(); }
+            public void windowOpened(WindowEvent windowEvent)      { sa.repaint(); }
+            public void windowClosed(WindowEvent windowEvent)      { sa.repaint(); }
+            public void windowIconified(WindowEvent windowEvent)   { sa.repaint(); }
+            public void windowDeiconified(WindowEvent windowEvent) { sa.repaint(); }
+            public void windowActivated(WindowEvent windowEvent)   { sa.repaint(); }
+            public void windowDeactivated(WindowEvent windowEvent) { sa.repaint(); }
+        });
+        f.addComponentListener(new ComponentListener() {
+            public void componentResized(ComponentEvent componentEvent) { sa.repaint(); }
+            public void componentMoved(ComponentEvent componentEvent)   { sa.repaint(); }
+            public void componentShown(ComponentEvent componentEvent)   { sa.repaint(); }
+            public void componentHidden(ComponentEvent componentEvent)  { sa.repaint(); }
+        });
+        f.setLayout(new BorderLayout());        
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Matrix.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+/**
+ * Created by mihailod, Feb 19, 2011, 11:43:41 AM
+ */
+public class Matrix {
+
+    public static Point3D multiplyByVector(double matrix [][], final Point3D vector) {
+        final Point3D resultVector = new Point3D(0, 0, 0, 0);
+
+        resultVector.x += matrix[0][0] * vector.x;
+        resultVector.x += matrix[0][1] * vector.y;
+        resultVector.x += matrix[0][2] * vector.z;
+        resultVector.x += matrix[0][3] * vector.w;
+
+        resultVector.y += matrix[1][0] * vector.x;
+        resultVector.y += matrix[1][1] * vector.y;
+        resultVector.y += matrix[1][2] * vector.z;
+        resultVector.y += matrix[1][3] * vector.w;
+
+        resultVector.z += matrix[2][0] * vector.x;
+        resultVector.z += matrix[2][1] * vector.y;
+        resultVector.z += matrix[2][2] * vector.z;
+        resultVector.z += matrix[2][3] * vector.w;
+
+        resultVector.w += matrix[3][0] * vector.x;
+        resultVector.w += matrix[3][1] * vector.y;
+        resultVector.w += matrix[3][2] * vector.z;
+        resultVector.w += matrix[3][3] * vector.w;
+
+        return resultVector;
+    }
+
+    public static double[][] multiplyByMatrix(double matrix[][], double m[][]) {
+        final double resultMatrix[][] = new double[4][4];
+        for (int i=0; i&lt;4; i++) {
+            for (int j=0; j&lt;4; j++) {
+                resultMatrix[i][j] = 0;
+                for (int k=0; k&lt;4; k++) {
+                    resultMatrix[i][j] += matrix[i][k] * m[k][j];
+                }
+            }
+        }
+        return resultMatrix;
+    }
+
+    public static Point3D crossProduct(final Point3D v, final Point3D w) {
+        final double x = v.y*w.z - v.z*w.y;
+        final double y = v.z*w.x - v.x*w.z;
+        final double z = v.x*w.y - v.y*w.x;
+        return new Point3D(x, y, z, v.w);
+    }
+
+    public static double dotProduct(final Point3D v, final Point3D w) {
+        return v.x*w.x + v.y*w.y + v.z*w.z;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Point2D.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+/**
+ * Created by mihailod, Feb 19, 2011, 12:02:14 PM
+ */
+public class Point2D {
+
+    public int x;
+    public int y;
+
+    public Point2D(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Point2D() { }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Point3D.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+/**
+ * Created by mihailod, Feb 19, 2011, 12:02:40 PM
+ */
+public class Point3D {
+    
+    public double x;
+    public double y;
+    public double z;
+    public double w;
+
+    public Point3D() { }
+
+    public Point3D(double x, double y, double z, double w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Polygon2D.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+/**
+ * Created by mihailod, Feb 19, 2011, 4:16:28 PM
+ */
+public class Polygon2D implements Comparable {
+
+    public Color color = Color.BLACK;
+    public double zorder;
+
+    public ArrayList&lt;Point2D&gt; points;
+    public Polygon2D(ArrayList&lt;Point2D&gt; points, Color color) {
+        this.points = points;
+        this.color = color;
+    }
+
+    public int compareTo(Object o) {
+        return zorder - ((Polygon2D)o).zorder &gt;= 0 ? 1 : -1;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Polygon3D.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+/**
+ * Created by mihailod, Feb 19, 2011, 12:12:49 PM
+ */
+public class Polygon3D {
+
+    public Color color = Color.BLACK;
+
+    public double zorder;
+    private double vp;
+
+    private Point3D unitNormal = null;
+    public boolean dontTransform = false;
+    public boolean dontShade = false;
+
+    public ArrayList&lt;Point3D&gt; points;
+    public Polygon3D(final ArrayList&lt;Point3D&gt; points, final Color color) {
+
+        this.points = points;
+        this.color = color;
+
+        double zsum = 0;
+        for (Point3D p : points) {
+            zsum += p.z;
+        }
+        zorder = zsum / (double)points.size();
+
+        /*double minz = points.get(0).z;
+        for (Point3D p : points) {
+            if (minz &gt; p.z) {
+                minz = p.z;
+            }
+        }
+        zorder = minz;*/
+    }
+
+    private void calculateUnitNormal() {
+        if (unitNormal != null) {
+            return;
+        }
+        final Point3D first = points.get(0);
+        final Point3D second = points.get(1);
+        final Point3D last = points.get(points.size() - 1);
+
+        final double v1 = second.x - first.x;
+        final double v2 = second.y - first.y;
+        final double v3 = second.z - first.z;
+
+        final double w1 = last.x - first.x;
+        final double w2 = last.y - first.y;
+        final double w3 = last.z - first.z;
+
+        final Point3D v = new Point3D(v1, v2, v3, first.w);
+        final Point3D w = new Point3D(w1, w2, w3, second.w);
+
+        unitNormal = Matrix.crossProduct(v, w);
+
+        final double length = Math.sqrt(unitNormal.x*unitNormal.x + unitNormal.y*unitNormal.y + unitNormal.z*unitNormal.z);
+
+        unitNormal.x /= length;
+        unitNormal.y /= length;
+        unitNormal.z /= length;
+    }
+
+    public Point3D unitNormal() {
+        calculateUnitNormal();
+        return unitNormal;
+    }
+
+    public boolean isVisible() {
+        calculateUnitNormal();
+        return unitNormal.z &gt; 0;
+    }
+
+    public String toString() {
+        return Constants.colorName(color) + " " + isVisible() + " (" + vp + ")";
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/RotationAppender.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import static mihailo.Simple3DDemo.SimpleApplet.*;
+
+/**
+ * Created by mihailod, Feb 20, 2011, 9:42:01 PM
+ */
+public class RotationAppender {
+
+    public static void appendRotationX(final double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+
+        double t10 = cos*worldTransform[1][0] + -sin*worldTransform[2][0];
+        double t11 = cos*worldTransform[1][1] + -sin*worldTransform[2][1];
+        double t12 = cos*worldTransform[1][2] + -sin*worldTransform[2][2];
+
+        double t20 = sin*worldTransform[1][0] +  cos*worldTransform[2][0];
+        double t21 = sin*worldTransform[1][1] +  cos*worldTransform[2][1];
+        double t22 = sin*worldTransform[1][2] +  cos*worldTransform[2][2];
+
+        worldTransform[1][0] = t10;
+        worldTransform[1][1] = t11;
+        worldTransform[1][2] = t12;
+        worldTransform[2][0] = t20;
+        worldTransform[2][1] = t21;
+        worldTransform[2][2] = t22;
+    }
+
+    public static void appendRotationY(final double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+
+        double t00 =  cos*worldTransform[0][0] + sin*worldTransform[2][0];
+        double t01 =  cos*worldTransform[0][1] + sin*worldTransform[2][1];
+        double t02 =  cos*worldTransform[0][2] + sin*worldTransform[2][2];
+
+        double t20 = -sin*worldTransform[0][0] + cos*worldTransform[2][0];
+        double t21 = -sin*worldTransform[0][1] + cos*worldTransform[2][1];
+        double t22 = -sin*worldTransform[0][2] + cos*worldTransform[2][2];
+
+        worldTransform[0][0] = t00;
+        worldTransform[0][1] = t01;
+        worldTransform[0][2] = t02;
+        worldTransform[2][0] = t20;
+        worldTransform[2][1] = t21;
+        worldTransform[2][2] = t22;
+    }
+
+    public static void appendRotationZ(final double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+
+        double t00 = cos*worldTransform[0][0] + -sin*worldTransform[1][0];
+        double t01 = cos*worldTransform[0][1] + -sin*worldTransform[1][1];
+        double t02 = cos*worldTransform[0][2] + -sin*worldTransform[1][2];
+
+        double t10 = sin*worldTransform[0][0] +  cos*worldTransform[1][0];
+        double t11 = sin*worldTransform[0][1] +  cos*worldTransform[1][1];
+        double t12 = sin*worldTransform[0][2] +  cos*worldTransform[1][2];
+
+        worldTransform[0][0] = t00;
+        worldTransform[0][1] = t01;
+        worldTransform[0][2] = t02;
+        worldTransform[1][0] = t10;
+        worldTransform[1][1] = t11;
+        worldTransform[1][2] = t12;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/Shading.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.awt.*;
+
+/**
+ * Created by mihailod, Feb 21, 2011, 7:40:26 PM
+ */
+public class Shading {
+
+    public static Color applyAmbientShading(final Color originalColor, final Color ambientColor) {
+
+        final int r = (int)Math.round(originalColor.getRed()   * ambientColor.getRed()   / 255d);
+        final int g = (int)Math.round(originalColor.getGreen() * ambientColor.getGreen() / 255d);
+        final int b = (int)Math.round(originalColor.getBlue()  * ambientColor.getBlue()  / 255d);
+
+        return new Color(r, g, b);
+    }
+
+    public static Color applyDiffuseShading(final Color originalColor, final Point3D spotLightPosition, final Color spotLightColor, final Point3D unitNormal) {
+
+        final double diffusion = Matrix.dotProduct(spotLightPosition, unitNormal);
+        if (diffusion &gt; 0) {
+
+            int r = originalColor.getRed();
+            int g = originalColor.getGreen();
+            int b = originalColor.getBlue();
+
+            r += (int)Math.round((spotLightColor.getRed()   / 255d) * diffusion);
+            g += (int)Math.round((spotLightColor.getGreen() / 255d) * diffusion);
+            b += (int)Math.round((spotLightColor.getBlue()  / 255d) * diffusion);
+
+            if (r &gt; 255) r = 255;
+            if (g &gt; 255) g = 255;
+            if (b &gt; 255) b = 255;
+
+            return new Color(r, g, b);
+        } else {
+            return originalColor;
+        }
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>mihailo/Simple3DDemo/SimpleApplet.java</summary>
+            <pre class="original">package mihailo.Simple3DDemo;
+
+import java.applet.Applet;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static mihailo.Simple3DDemo.Constants.*;
+import static mihailo.Simple3DDemo.Shading.*;
+
+/**
+ * Created by mihailod, Feb 15, 2011, 7:24:14 PM
+ */
+public class SimpleApplet extends Applet {
+
+    // features
+    protected static boolean hiddenSurfaceRemoval = false;
+    protected static boolean fillPolygons = false;
+    protected static boolean zorder = false;
+    protected static boolean ambientShading = false;
+    protected static Color ambientLight = Color.WHITE;
+    protected static boolean diffuseShading = false;
+
+    protected Image buffer = null;
+    private static Graphics bg = null;
+
+    protected static final Panel p = new Panel();
+
+    protected static double[][] worldTransform;
+    protected static double[][] viewTransform;
+
+    protected static ArrayList&lt;Polygon3D&gt; polygons = new ArrayList&lt;Polygon3D&gt;();
+    private static ArrayList&lt;Polygon2D&gt; polygonsToDraw = new ArrayList&lt;Polygon2D&gt;();
+
+    protected static int body = TETRAHEDRON;
+
+    protected static double rotationX;
+    protected static double rotationY;
+    protected static double rotationZ;
+
+    public void init() {
+        final Frame f = new Frame(S_APPLET_NAME);
+        final Listener l = new Listener(this);
+        l.setupFrame(f);
+        f.add(p, BorderLayout.CENTER);
+        p.addKeyListener(l);
+
+        final Panel p1 = new Panel(new FlowLayout());
+        GUI.init(p1, this);
+        f.add(p1, BorderLayout.SOUTH);
+        
+        buffer = createImage(W, H);
+        bg = buffer.getGraphics();
+
+        initStuff();
+
+        //final Thread d = new Thread(new Drawer()); d.start();
+        f.setBounds(X, Y, W, H);
+        f.setVisible(true);
+        p.requestFocusInWindow();
+    }
+
+    protected void initStuff() {
+        polygons.clear();
+        setupInitialTransformations();
+        rotationX = rotationY = rotationZ = INITIAL_ROTATION;
+        setupPolygons();
+        updateStuff();
+    }
+
+    protected void updateStuff() {
+        double[][] t = Matrix.multiplyByMatrix(viewTransform, worldTransform);
+        transformAndProjectPolygons(t);
+    }
+
+    private void drawStuff(final Graphics g) {
+        // clear old image
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, W, H);
+        g.setColor(Color.BLACK);
+        g.drawString(S_HELP, 10, 20);
+        g.drawString(S_HELP, 11, 20);
+        drawPolygons(g);
+    }
+
+    private void drawPolygons(final Graphics g) {
+        final Color originalColor = g.getColor();
+        for (Polygon2D polygonToDraw : polygonsToDraw) {
+            final int n = polygonToDraw.points.size();
+            final int[] x = new int[n];
+            final int[] y = new int[n];
+            for (int i=0; i&lt;n; i++) {
+                x[i] = polygonToDraw.points.get(i).x;
+                y[i] = polygonToDraw.points.get(i).y;
+            }
+            final Polygon p = new Polygon(x, y, n);
+            if (fillPolygons) {
+                g.setColor(polygonToDraw.color);
+                g.fillPolygon(p);
+            } else {
+                g.drawPolygon(p);
+            }
+        }
+        g.setColor(originalColor);
+    }
+
+    /*private class Drawer extends Thread {
+        public void run() {
+            while (true) {
+                updateStuff();
+                repaint();
+                yield();
+            }
+        }
+    }*/
+
+    public void update(Graphics g) {
+        drawStuff(bg);
+        if (p.getGraphics() != null) {
+            p.getGraphics().drawImage(buffer, 0, 0, null);
+        }
+    }
+
+    public void paint(Graphics g) {
+        update(g);
+    }
+
+    private void transformAndProjectPolygons(final double[][] t) {
+
+        polygonsToDraw.clear();
+
+        // for all 3D polygons
+        for (Polygon3D p : polygons) {
+
+            final ArrayList&lt;Point3D&gt; transformedPoints = new ArrayList&lt;Point3D&gt;();
+            final Polygon2D projectedP = new Polygon2D(new ArrayList&lt;Point2D&gt;(), p.color);
+
+            // for all points in the 3D polygon
+            for (Point3D currentPoint : p.points) {
+
+                // transform the 3D point to the view space
+                Point3D transformedPoint = currentPoint;
+                if (!p.dontTransform) {
+                    transformedPoint = Matrix.multiplyByVector(t, currentPoint);
+                }
+                transformedPoints.add(transformedPoint);
+
+                // project the 3D point to the screen and it becomes a 2D point
+                final Point2D projectedPoint = new Point2D();
+                projectedPoint.x = Math.round(Math.round(transformedPoint.x / transformedPoint.z * P_RATIO * W/2d + 0.5d + W/2d));
+                projectedPoint.y = Math.round(Math.round(transformedPoint.y / transformedPoint.z * P_RATIO * H/2d + 0.5d + H/2d));
+
+                // add that 2D point to the projected polygon's points
+                projectedP.points.add(projectedPoint);
+            }
+
+            final Polygon3D transformedP = new Polygon3D(transformedPoints, p.color);
+            if (p.dontTransform) {
+                projectedP.zorder = p.zorder;
+            } else {
+                projectedP.zorder = transformedP.zorder;
+            }
+
+            // add 2D polygon to the list of the polygons to draw
+            if (hiddenSurfaceRemoval || p.dontTransform) {
+                if (transformedP.isVisible()) {
+                    polygonsToDraw.add(projectedP);
+                }
+            } else {
+                polygonsToDraw.add(projectedP);
+            }
+            //System.out.print(transformedP + " ");
+
+            if (ambientShading &amp;&amp; !p.dontShade) {
+                projectedP.color = applyAmbientShading(p.color, ambientLight);
+            }
+
+            if (diffuseShading &amp;&amp; !p.dontShade) {
+                projectedP.color = applyDiffuseShading(projectedP.color, SPOTLIGHT_POSITION, SPOTLIGHT_COLOR, transformedP.unitNormal());
+            }
+        }
+        if (zorder) {
+            Collections.sort(polygonsToDraw);
+        }
+        //System.out.println();
+    }
+
+    private static void setupPolygons() {
+        if (body == TETRAHEDRON) {
+            DemoObjects.setupTetrahedron();
+        } else if (body == CUBE) {
+            DemoObjects.setupCube();
+        }
+    }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

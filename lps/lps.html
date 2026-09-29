@@ -38,10 +38,16 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
             pre { border: 1px solid #6d6d6d; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -56,6 +62,443 @@
     <pre id="output"></pre>
     <script src="words.js"></script>
     <script src="lps.js"></script>
+    <details class="original">
+        <summary>The original Java code, 2 files</summary>
+        <details>
+            <summary>lps/Preprocessor.java</summary>
+            <pre class="original">package lps;
+
+import java.io.*;
+
+/**
+ * &lt;p&gt;Title: LPS&lt;/p&gt;
+ * &lt;p&gt;Description: Letters Puzzle Solver&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+public class Preprocessor
+{
+  private static final int PROGRESS_TICK = 20000;
+
+  private static int min = -1;
+  private static int max = -1;
+  private static File f = null;
+
+  private static StringBuffer sb = new StringBuffer();
+
+  /**
+   * 1st argument: file name
+   * 2nd argument: min number of letters
+   * 3rd argument: max number of letters
+   *
+   * Will create fileName.idx file
+   */
+  public static void main(String args[])
+  {
+    if(args.length != 3)
+      usage();
+    String ret = null;
+    if((ret = badArgs(args)) != null)
+    {
+      Solver.log("Bad arguments:");
+      Solver.log(ret);
+      usage();
+    }
+    try
+    {
+      preprocess();
+    }
+    catch(Exception e)
+    {
+      Solver.log("FATAL EXCEPTION!!!");
+      e.printStackTrace();
+      usage();
+    }
+  }
+
+  private static String badArgs(String args[])
+  {
+    f = new File(args[0]);
+    if(!f.exists())
+      return "File doesn't exist!";
+    try
+    {
+      min = Integer.parseInt(args[1]);
+      max = Integer.parseInt(args[2]);
+      if(min &lt; 1 || max &gt; 12)
+        throw new Exception();
+    }
+    catch(Exception e)
+    {
+      return "Bad min/max number.";
+    }
+    return null; // all ok!
+  }
+
+  private static void usage()
+  {
+    Solver.log("Preprocessor will create the .idx file");
+    Solver.log("Usage: Preprocessor &lt;inputFile&gt; &lt;minLetters&gt; &lt;maxLetters&gt;");
+    Solver.log("File should exist, min&gt;=1, max&lt;=12.");
+    System.exit(-1);
+  }
+
+  private static void preprocess() throws Exception
+  {
+    File indexFile = new File(f.getName() + ".idx");
+    long totalWords = 0;
+    long shorter = 0;
+    long longer = 0;
+    long badLines = 0;
+    BufferedReader br = new BufferedReader(new FileReader(f));
+    PrintWriter pw = new PrintWriter(new FileWriter(indexFile));
+    String line = null;
+    String finalLine = null;
+    String currentWord = null;
+    String index = null;
+    while(true)
+    {
+      line = br.readLine();
+      if(line == null)
+        break;
+
+      currentWord = getWord(line);
+      if(currentWord == null)
+        badLines++;
+      else // we have a word
+      {
+        totalWords++;
+        if(totalWords % PROGRESS_TICK == 0)
+          Solver.log(totalWords + " processed so far...");
+
+        if(currentWord.length() &gt; max)
+          longer++;
+        else if(currentWord.length() &lt; min)
+          shorter++;
+        else // happy path!
+        {
+          // write word and it's index
+          index = Solver.index(currentWord);
+          if(index == null)
+          {
+            badLines++;
+            continue;
+          }
+          finalLine = currentWord + "\t" + index;
+          pw.println(finalLine);
+          pw.flush();
+        }
+      }
+    }
+    br.close();
+    pw.flush();
+    pw.close();
+
+    Solver.log("Done!");
+    Solver.log("Bad lines " + badLines);
+    Solver.log("Total words " + totalWords);
+    Solver.log("Words shorter than " + min + ": " + shorter);
+    Solver.log("Words longer than " + max + ": " + longer);
+    Solver.log("Final number of OK words " + (totalWords - (shorter + longer)));
+  }
+
+  /**
+   * This method is highly data dependant!!!
+   * Expects one '&lt;b&gt;word&lt;/b&gt;' combination per line
+   */
+  private static String getWord(String line)
+  {
+    String s = line.toLowerCase();
+    int start = s.indexOf("&lt;b&gt;");
+    int end = s.indexOf("&lt;/b&gt;");
+    if(start &lt; 0 || end &lt; 0)
+      return null;
+    String ret = s.substring(start + 3, end);
+    if(ret.indexOf("'") &gt;= 0 ||
+       ret.indexOf("-") &gt;= 0 ||
+       ret.indexOf(" ") &gt;= 0 ||
+       ret.indexOf("/") &gt;= 0 ||
+       ret.indexOf("\"") &gt;= 0 ||
+       ret.indexOf(".") &gt;= 0 ||
+       ret.indexOf("(") &gt;= 0 ||
+       ret.indexOf(")") &gt;= 0)
+       return null;
+    return ret.trim();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>lps/Solver.java</summary>
+            <pre class="original">package lps;
+
+import java.applet.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+
+/**
+ * Title: LPS
+ * Description: Letters Puzzle Solver
+ * Copyright: Copyright (c) 2003 Mihailo Despotovic
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+public class Solver extends Applet
+{
+  public static String alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+  public static final int ROMAN_LETTERS = 26;
+  private static final int TICK = 1000;
+  private static final String TICK_CHAR = ".";
+  private static final String DB_FILENAME = "words.idx";
+
+  private static StringBuffer sb = new StringBuffer();
+  private static String letters = null;
+
+  private static TextArea ta = new TextArea("", 40, 60, TextArea.SCROLLBARS_VERTICAL_ONLY);
+  private static TextField tf = new TextField("DSTPYGNEUEIA", 25);
+  private static Button b = new Button("Solve");
+
+  public void init()
+  {
+    final Frame f = new Frame("Letter Puzzle Solver V1.0 by Mihailo Despotovic");
+
+    f.addWindowListener(new WindowAdapter()
+    {
+      public void windowClosing(WindowEvent we)
+      {
+        f.dispose();
+      }
+    });
+
+    f.setLayout(new BorderLayout());
+    Panel north = new Panel(new FlowLayout(FlowLayout.LEFT));
+    north.add(new Label("Puzzle:"));
+    north.add(tf);
+    north.add(b);
+    b.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent ae)
+      {
+        main(new String[] { tf.getText() });
+      }
+    });
+    f.add(north, BorderLayout.NORTH);
+
+    f.add(ta, BorderLayout.CENTER);
+    ta.setEditable(false);
+    ta.setBackground(Color.white);
+
+    f.setBounds(50, 20, 200,200);
+    f.pack();
+    f.show();
+  }
+
+  public static void main(String args[])
+  {
+    if(args.length != 1)
+      usage();
+    letters = keepLettersOnly(args[0].toLowerCase());
+    try
+    {
+      solve();
+    }
+    catch(Exception e)
+    {
+      log("FATAL ERROR!!!");
+      e.printStackTrace();
+      usage();
+    }
+  }
+
+  private static void solve() throws Exception
+  {
+    if(ta == null)
+    {
+      log("");
+      log("Welcome to Letter Puzzle Solver, V1.0");
+      log("");
+    }
+    else
+      ta.setText("");
+    log("Matching pattern: " + letters + "\n");
+    BufferedReader br = getBufferedReader(DB_FILENAME);
+    String line = null;
+    String localIndex = index(letters);
+    Vector words = new Vector();
+    int count = 0;
+    while(true)
+    {
+      line = br.readLine();
+      if(line == null)
+        break;
+      count++;
+      if(count % TICK == 0)
+        l(TICK_CHAR);
+      int indexStart = line.indexOf("\t") + 1;
+      String word = line.substring(0, indexStart-1);
+      String index = line.substring(indexStart, line.length());
+      if(similarIndex(index, localIndex))
+        words.addElement(word);
+    }
+    br.close();
+
+    words = removeDuplicates(words);
+
+    log("\n\n[" + count + " words processed]\n");
+    for(int i=7; i&lt;13; i++)
+    {
+      log("Size " + i + " words:");
+      int specific = 0;
+      for(int j=0; j&lt;words.size(); j++)
+      {
+        String temp = (String)words.elementAt(j);
+        if(temp.length() == i)
+        {
+          l(temp + " ");
+          specific++;
+        }
+      }
+      if(specific == 0)
+        log("Sorry, no match with " + i + " letters found.\n");
+      else
+        log("\nTotal of " + specific + " word(s) of size " + i + " found.\n");
+    }
+
+    log("Thank you for using Letter Puzzle Solver");
+    log("Please, do not use results of this program for humiliation purposes.");
+    log("");
+    log("Program by Mihailo Despotovic, October 2003.");
+    log("http://home.earthlink.net/~mihailod - mihailod@hotmail.com");
+  }
+
+  private static void usage()
+  {
+    log("Usage: Solver &lt;letters&gt;");
+    System.exit(-1);
+  }
+
+  private static boolean similarIndex(String index, String localIndex)
+  {
+    int numberOfEquals = 0;
+    for(int i=0; i&lt;ROMAN_LETTERS; i++)
+    {
+      if(index.charAt(i) == '0' &amp;&amp; localIndex.charAt(i) == '0')
+        continue;
+      else if(index.charAt(i) == localIndex.charAt(i))
+        numberOfEquals++;
+      else if(index.charAt(i) - '0' &gt; 0 &amp;&amp; localIndex.charAt(i) - '0' == 0)
+        return false;
+      else if(index.charAt(i) - '0' == 0 &amp;&amp; localIndex.charAt(i) - '0' &gt; 0)
+        continue;
+      else if(index.charAt(i) - '0' &lt; localIndex.charAt(i) - '0')
+        numberOfEquals++;
+      else if(index.charAt(i) - '0' &gt; localIndex.charAt(i) - '0')
+        return false;
+    }
+
+    return numberOfEquals &gt; 6;
+  }
+
+  public static String index(String word)
+  {
+    try
+    {
+      int[] index = new int[Solver.ROMAN_LETTERS];
+      for(int i=0; i&lt;word.length(); i++)
+      {
+        String currentLetter = "" + word.charAt(i);
+        int position = alphabet.indexOf(currentLetter);
+        index[position]++;
+      }
+      sb.setLength(0);
+      for(int i=0; i&lt;index.length; i++)
+        sb.append(String.valueOf(index[i]));
+      return sb.toString();
+    }
+    catch(Exception e)
+    {
+      Solver.log("Rejecting word: " + word);
+      return null;
+    }
+  }
+
+
+// utility methods
+
+  private static Vector removeDuplicates(Vector v)
+  {
+    Vector res = new Vector();
+    for(int i=0; i&lt;v.size(); i++)
+      if(!res.contains(v.elementAt(i)))
+         res.addElement(v.elementAt(i));
+    return res;
+  }
+
+  /**
+   * Utility method to get a reader for a file depending on the file's location (filesystem or JAR)
+   * @param name the file's name
+   */
+  private static final BufferedReader getBufferedReader(String name)
+  {
+    BufferedReader br = null;
+    try
+    {
+      br = new BufferedReader(new FileReader(name)); // file system?
+    }
+    catch(Exception e) // not in the file system, try the JAR
+    {
+      InputStream in = Solver.class.getResourceAsStream("/" + name); // JAR?
+      br = new BufferedReader(new InputStreamReader(in));
+    }
+    return br;
+  }
+
+  private static String keepLettersOnly(String s)
+  {
+    StringBuffer res = new StringBuffer();
+    for(int i=0; i&lt;s.length(); i++)
+    {
+      char c = s.charAt(i);
+      if(Character.isLetter(c))
+        res.append(String.valueOf(c));
+    }
+    if(tf != null)
+      tf.setText(res.toString());
+    return res.toString();
+  }
+
+  public static void log(String s)
+  {
+    if(ta != null &amp;&amp; ta.isShowing())
+    {
+      ta.append(s + "\n");
+      try { ta.setCaretPosition(ta.getText().length()); }
+      catch(Exception e) { ; }
+    }
+    else
+      System.out.println(s);
+  }
+
+  public static void l(String s)
+  {
+    if(ta != null &amp;&amp; ta.isShowing())
+    {
+      ta.append(s);
+      try { ta.setCaretPosition(ta.getText().length()); }
+      catch(Exception e) { ; }
+    }
+    else
+      System.out.print(s);
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

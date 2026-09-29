@@ -46,6 +46,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -59,6 +64,7 @@
             .axis { stroke: #919191; }
             .tick { fill: #aeaeae; }
             .label { fill: #87b1fa; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -81,6 +87,263 @@
     <p id="result"></p>
     <svg id="line" role="img" aria-label="The segments on a number line, with the merged result below them"></svg>
     <script src="segments.js"></script>
+    <details class="original">
+        <summary>The original Java code, 2 files</summary>
+        <details>
+            <summary>com/ea/mihailo/LineSegment.java</summary>
+            <pre class="original">package com.ea.mihailo;
+
+import java.util.*;
+
+/**
+ * This is a java programming task. You have 90 minutes to complete it.
+ * At the end of the 90 minutes, you are expected to mail back the source
+ * code implementing the result.
+ *
+ * It is not necessary to submit code that tests the api, but it
+ * certainly won't hurt.
+ *
+ * The programming task is to implement the mergeAndSort function.
+ * It'd be nice if the result was working java code, but whatever you
+ * have at the end of the time limit is fine.
+ *
+ * This class represents a line segment, which is a begin point and
+ * end point on the number line.
+ *
+ * When solving this problem, assume a real-world situation, as
+ * opposed to a school situtation. In other words, you're sitting
+ * at your desk, and i come up to you and say "Can you do this for me?".
+ * You will then try to get this done as quickly as possible, keeping
+ * best practices, reusability, and the availability of "standard" APIs
+ * in mind.
+ */
+public class LineSegment implements Comparable
+{
+	private int	beginPoint;
+	private int	endPoint;
+
+  public LineSegment(int beginPoint, int endPoint)
+  {
+    this.beginPoint = beginPoint;
+    this.endPoint = endPoint;
+  }
+
+  /**
+   * Override toString for convenient printing.
+   * @return string representation
+   */
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+    sb.append("[").append(beginPoint).append(", ").append(endPoint).append("]");
+    return sb.toString();
+  }
+
+  /**
+   * Compare elements: beginning first; then end.
+   * @param segment
+   * @return -1, 0 or 1 (usual comparison motif)
+   */
+  public int compareTo(Object segment)
+  {
+    if(!(segment instanceof LineSegment))
+      throw new IllegalArgumentException
+        ("Bad comparison object, nedd LineSegment got: " + segment.getClass().toString());
+    else if(segment == null)
+     throw new IllegalArgumentException("Comparison object is null!");
+    else
+    {
+      if(this.beginPoint != ((LineSegment)segment).endPoint)
+        return this.beginPoint - ((LineSegment)segment).beginPoint;
+      else
+        return this.endPoint - ((LineSegment)segment).endPoint;
+    }
+  }
+
+	/**
+	 * This function will sort and merge a Collection of
+	 * LineSegment objects. I am referring to java.util.Collection
+	 * here, but note that you are free to use some other
+	 * type of object if that makes more sense to you (especially
+	 * if you aren't familiar with the 1.2 collection api).
+	 *
+	 * @param c	A Collection of LineSegment objects, unsorted.
+	 * The input should NOT be modified.
+	 * @return Returns a new Collection of sorted and merged LineSegment
+	 * objects. The objects should be sorted by 'beginPt' and then
+	 * 'endPt'. Merging means that any part of a line segment
+	 * overlaps any other, or the line segments are end-to-end.
+	 *
+	 * Examples of line segments that merge:
+	 *
+	 * (1,3),(2,4) ==&gt; (1,4)
+	 * (2,3),(3,4) ==&gt; (2,4)
+	 *
+	 * Be aware that more than two line segments might merge, eg:
+	 * (1,3), (2,4), (4,5) ==&gt; (1,5)
+	 *
+	 * Change this class accordingly to come up with a clean
+	 * design (eg, add helper methods/classes).
+	 *
+	 * So for example, if the input collection has N LineSegment
+	 * objects, you could end up with the output containing just
+	 * 1 if they all happened to merge. On the other hand, if none
+	 * merged, then you'd get back N objects (sorted).
+	 */
+	public static Collection mergeAndSort( Collection c )
+  {
+    // check the null argument
+    if(c == null)
+      return null;
+
+    // convert to a convenient vector
+    Vector v = new Vector();
+    Iterator iter = c.iterator();
+    while(iter.hasNext())
+      v.addElement(iter.next());
+
+    // check if there is anything to do
+    if(v.size() &lt;= 1)
+      return v; // nothing to do
+
+    // sort the collection
+    Collections.sort(v);
+
+    // initialize
+    int dataCount = 0;
+    Vector result = new Vector();
+
+    while(dataCount &lt; v.size() - 1)
+    {
+      // initialize loop variables
+      LineSegment currentSegment = (LineSegment)v.elementAt(dataCount); // the current data segment
+      LineSegment nextSegment = (LineSegment)v.elementAt(dataCount + 1); // the next data segment
+
+      // the current result segment
+      LineSegment resultSegment = new LineSegment(currentSegment.beginPoint, currentSegment.endPoint);
+
+      // if the next segment is a subsegment of the current result, just skip it
+      if(nextSegment.beginPoint &lt;= resultSegment.endPoint &amp;&amp;
+         nextSegment.endPoint &lt;= resultSegment.endPoint)
+        dataCount++;
+
+      // while the next segment is connected to the result, expand the result
+      while(nextSegment.beginPoint &lt;= resultSegment.endPoint &amp;&amp; dataCount &lt; v.size() - 1)
+      {
+        resultSegment.endPoint = nextSegment.endPoint;
+        dataCount++;
+        if(dataCount == v.size() - 1)
+          break; // reached the end of the data
+        nextSegment = (LineSegment)v.elementAt(dataCount + 1);
+      }
+
+      // at this point we have a result segment; add it
+      result.addElement(resultSegment);
+
+      // move on in the data set
+      dataCount++;
+
+    }
+
+    return result;
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/ea/mihailo/MainClass.java</summary>
+            <pre class="original">package com.ea.mihailo;
+
+import java.util.*;
+
+/**
+ * The Electronic Arts Java programming interview problem.
+ *
+ * @author Mihailo Despotovic
+ * @since Aug 1, 2005 8:10:56 PM
+ */
+public class MainClass
+{
+  public static void main(String args[])
+  {
+    // given tests
+    LineSegment ls1 = new LineSegment(1, 3);
+    LineSegment ls2 = new LineSegment(2, 4);
+
+    LineSegment ls3 = new LineSegment(2, 3);
+    LineSegment ls4 = new LineSegment(3, 4);
+
+    LineSegment ls5 = new LineSegment(1, 3);
+    LineSegment ls6 = new LineSegment(2, 4);
+    LineSegment ls7 = new LineSegment(4, 5);
+
+    Vector v = new Vector();
+    v.add(ls1);
+    v.add(ls2);
+
+    Vector v1 = new Vector();
+    v1.add(ls3);
+    v1.add(ls4);
+
+    Vector v2 = new Vector();
+    v2.add(ls5);
+    v2.add(ls6);
+    v2.add(ls7);
+
+    // additional test: subsegment
+    Vector v3 = new Vector();
+    v3.add(new LineSegment(1, 4));
+    v3.add(new LineSegment(2, 3));
+
+    Vector res = (Vector)LineSegment.mergeAndSort(v);
+    dump(res);
+    res = (Vector)LineSegment.mergeAndSort(v1);
+    dump(res);
+    res = (Vector)LineSegment.mergeAndSort(v2);
+    dump(res);
+    res = (Vector)LineSegment.mergeAndSort(v3);
+    dump(res);
+
+    // additional test 2
+    Vector v4 = new Vector();
+    v4.add(new LineSegment(1, 2));
+    v4.add(new LineSegment(4, 6));
+    v4.add(new LineSegment(5, 7));
+    res = (Vector)LineSegment.mergeAndSort(v4);
+    dump(res);
+
+    // test empty vector
+    Vector v5 = new Vector();
+    res = (Vector)LineSegment.mergeAndSort(v5);
+    dump(res);
+
+    // do not fail on null
+    Vector v6 = null;
+    res = (Vector)LineSegment.mergeAndSort(v6);
+    dump(res);
+
+    System.exit(0);
+  }
+
+  /**
+   * Just dump a given vector of objects.
+   * @param v
+   */
+  private static final void dump(Vector v)
+  {
+    if(v == null)
+    {
+      System.out.println("Got null -- nothing to print.");
+      return;
+    }
+    for(int i=0; i&lt;v.size(); i++)
+      System.out.print(v.elementAt(i).toString() + " ");
+    System.out.println();
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

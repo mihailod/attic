@@ -78,6 +78,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -86,6 +91,7 @@
             #board button { background: #121212; border: 1px solid #7c7c7c; }
             #to-move { color: #bebebe; }
             dialog { border: 1px solid #7c7c7c; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -162,6 +168,1871 @@
 
     <script src="ttdb.js"></script>
     <script src="tt.js"></script>
+    <details class="original">
+        <summary>The original Java code, 8 files</summary>
+        <details>
+            <summary>tt/FieldFlasherThread.java</summary>
+            <pre class="original">package tt;
+
+import java.awt.*;
+
+public class FieldFlasherThread extends Thread
+{
+  private boolean flash = true;
+  private Button oldButton = null;
+  private Button newButton = null;
+
+  private boolean adviseX = true;
+  private boolean adviseO = true;
+  int moveCounter = 0;
+
+  /**
+   * Flashes one (in opening) two fields ("from" and "to") (in the game)
+   */
+  public FieldFlasherThread(Button oldButton, Button newButton, int moveCounter,
+                            boolean adviseX, boolean adviseO)
+  {
+    this.newButton = newButton;
+    this.oldButton = oldButton;
+    this.moveCounter = moveCounter;
+    this.adviseX = adviseX;
+    this.adviseO = adviseO;
+  }
+
+  public void run()
+  {
+    while(flash)
+    {
+      if(xIsOnTheMove() &amp;&amp; adviseX ||
+         !xIsOnTheMove() &amp;&amp; adviseO)
+      {
+        setAdvisingX(adviseX);
+        setAdvisingO(adviseO);
+
+        if(newButton != null)
+          newButton.setBackground(Color.white);
+        if(oldButton != null)
+          oldButton.setBackground(Color.yellow);
+
+        try { Thread.sleep(TTStarter.FLASH_DELAY); }
+        catch(InterruptedException ie) { ; }
+
+        if(!flash)
+        {
+          reset();
+          return;
+        }
+
+        setAdvisingX(adviseX);
+        setAdvisingO(adviseO);
+
+        if(xIsOnTheMove() &amp;&amp; adviseX ||
+         !xIsOnTheMove() &amp;&amp; adviseO)
+        {
+          if(newButton != null)
+            newButton.setBackground(Color.yellow);
+          if(oldButton != null)
+            oldButton.setBackground(Color.white);
+
+          try { Thread.sleep(TTStarter.FLASH_DELAY); }
+          catch(InterruptedException ie){ ; }
+
+          setAdvisingX(adviseX);
+          setAdvisingO(adviseO);
+        }
+      }
+    }
+
+    if(newButton != null)
+      newButton.setBackground(Color.white);
+    if(oldButton != null)
+      oldButton.setBackground(Color.white);
+  }
+
+  private void reset()
+  {
+    if(newButton != null)
+      newButton.setBackground(Color.white);
+    if(oldButton != null)
+      oldButton.setBackground(Color.white);
+  }
+
+  public void stopFlashing()
+  {
+    flash = false;
+    try
+    {
+      interrupt();
+    }
+    catch(Throwable t)
+    {
+      System.out.println("You can ignore this:");
+      t.printStackTrace();
+    }
+  }
+
+  public void setAdvisingX(boolean b)
+  {
+    if(!xIsOnTheMove())
+      reset();
+    adviseX = b;
+  }
+
+  public void setAdvisingO(boolean b)
+  {
+    if(xIsOnTheMove())
+      reset();
+    adviseO = b;
+  }
+
+  private boolean xIsOnTheMove()
+  {
+    return moveCounter % 2 != 0;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/MessageBox.java</summary>
+            <pre class="original">package tt;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/**
+ * Encapsulates a trivial message box.
+ */
+public class MessageBox extends Frame implements ActionListener
+{
+  private Button b = new Button("  OK  ");
+  private TTFrame tf = null;
+  private boolean restart = false;
+
+  public MessageBox(String title, String message, TTFrame tf, boolean restart, boolean textAreaDisplay)
+  {
+    super(title);
+    this.tf = tf;
+    this.restart = restart;
+
+    this.setLayout(new BorderLayout());
+    Panel p = new Panel(new BorderLayout());
+    if(!textAreaDisplay)
+    {
+      p.add(new Label(message, Label.CENTER), BorderLayout.CENTER);
+      this.setResizable(false);
+    }
+    else
+    {
+      TextArea ta = new TextArea(message, 20, 60, TextArea.SCROLLBARS_VERTICAL_ONLY);
+      ta.setEditable(false);
+      ta.setBackground(Color.white);
+      p.add(ta);
+      this.setResizable(true);
+    }
+
+    Panel bWrap = new Panel(new FlowLayout(FlowLayout.CENTER));
+    bWrap.add(b);
+    b.addActionListener(this);
+
+    add(p, BorderLayout.CENTER);
+    add(bWrap, BorderLayout.SOUTH);
+
+    // closing of the frame
+    this.addWindowListener(new WindowAdapter()
+    {
+      public void windowClosing(WindowEvent we)
+      {
+        MessageBox.this.dispose();
+      }
+    });
+
+    pack();
+
+    int w = Toolkit.getDefaultToolkit().getScreenSize().width;
+    int h = Toolkit.getDefaultToolkit().getScreenSize().height;
+    int x = (int)(w - getPreferredSize().width) / 2;
+    int y = (int)(h - getPreferredSize().height) / 2;
+    this.setBounds(x, y, (int)getPreferredSize().width, (int)getPreferredSize().height);
+
+    show();
+  }
+
+  public void actionPerformed(ActionEvent ae)
+  {
+    dispose();
+    if(restart &amp;&amp; tf != null)
+      tf.restart();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTBoard.java</summary>
+            <pre class="original">package tt;
+
+import java.util.*;
+
+public class TTBoard
+{
+  public static TTFrame f = null;
+
+  public static final int SIZE = 5;
+  public int[][] board = new int[SIZE][SIZE]; // the board
+
+  public TTBoard nextBestPosition = null;
+  public int oldX = -1;
+  public int oldY = -1;
+  public int newX = -1;
+  public int newY = -1;
+
+  public int wonFirst = -1;
+  public int wonSecond = -1;
+
+  /**
+   * Default constructor
+   */
+  public TTBoard() { ; }
+
+  /**
+   * Constructor that takes a board
+   */
+  public TTBoard(TTBoard currBoard)
+  {
+    if(currBoard == null)
+      return;
+
+    for (int i = 0; i &lt; SIZE; i++)
+      for (int j = 0; j &lt; SIZE; j++)
+        board[i][j] = currBoard.board[i][j];
+
+    oldX = currBoard.oldX;
+    oldY = currBoard.oldY;
+    newX = currBoard.newX;
+    newY = currBoard.newY;
+    nextBestPosition = currBoard.nextBestPosition;
+    wonFirst = currBoard.wonFirst;
+    wonSecond = currBoard.wonSecond;
+  }
+
+  /**
+   * Dumps the board to log (used for debug)
+   */
+  public static void dumpBoard(TTBoard b)
+  {
+    if(b == null)
+    {
+      System.out.println("NULL!");
+      return;
+    }
+    for(int i=0; i&lt;SIZE; i++)
+      System.out.println("" + b.board[i][0] +
+                         "" + b.board[i][1] +
+                         "" + b.board[i][2] +
+                         "" + b.board[i][3] +
+                         "" + b.board[i][4]);
+    System.out.println("oldX: " + b.oldX + " oldY: " + b.oldY);
+    System.out.println("newX: " + b.newX + " newY: " + b.newY);
+  }
+
+  /**
+   * Determine if there are four in a row, column, diagonal or square.
+   */
+  public boolean hasFour(int piece)
+  {
+    return fourInARow(piece) ||
+           fourInAColumn(piece) ||
+           fourInADiagonal(piece) ||
+           fourInASquare(piece);
+  }
+
+  private boolean fourInARow(int piece)
+  {
+    for(int i=0; i&lt;SIZE; i++)
+    {
+      for(int offset = 0; offset&lt;2; offset++)
+      {
+        boolean found = true;
+        for(int j=0 + offset; j&lt;4 + offset; j++)
+        {
+          if(board[i][j] != piece)
+          {
+            found = false;
+            break;
+          }
+        }
+        if(found) return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean fourInAColumn(int piece)
+  {
+    for(int j=0; j&lt;SIZE; j++)
+    {
+      for(int offset = 0; offset&lt;2; offset++)
+      {
+        boolean found = true;
+        for(int i=0 + offset; i&lt;4 + offset; i++)
+        {
+          if(board[i][j] != piece)
+          {
+            found = false;
+            break;
+          }
+        }
+        if(found) return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean fourInADiagonal(int piece)
+  {
+    return
+      // diagonals on main diagonals
+      board[0][0] == piece &amp;&amp; board[1][1] == piece &amp;&amp; board[2][2] == piece &amp;&amp; board[3][3] == piece ||
+      board[1][1] == piece &amp;&amp; board[2][2] == piece &amp;&amp; board[3][3] == piece &amp;&amp; board[4][4] == piece ||
+      board[0][4] == piece &amp;&amp; board[1][3] == piece &amp;&amp; board[2][2] == piece &amp;&amp; board[3][1] == piece ||
+      board[1][3] == piece &amp;&amp; board[2][2] == piece &amp;&amp; board[3][1] == piece &amp;&amp; board[4][0] == piece ||
+      // "small" diagonals
+      board[0][1] == piece &amp;&amp; board[1][2] == piece &amp;&amp; board[2][3] == piece &amp;&amp; board[3][4] == piece ||
+      board[1][0] == piece &amp;&amp; board[2][1] == piece &amp;&amp; board[3][2] == piece &amp;&amp; board[4][3] == piece ||
+      board[0][3] == piece &amp;&amp; board[1][2] == piece &amp;&amp; board[2][1] == piece &amp;&amp; board[3][0] == piece ||
+      board[1][4] == piece &amp;&amp; board[2][3] == piece &amp;&amp; board[3][2] == piece &amp;&amp; board[4][1] == piece;
+  }
+
+  private boolean fourInASquare(int piece)
+  {
+    for(int i=0; i&lt;SIZE-1; i++)
+    {
+      for(int j=0; j&lt;SIZE-1; j++)
+      {
+        if(fourInASpecificSquare(piece, i, j))
+           return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean fourInASpecificSquare(int piece, int x, int y)
+  {
+    return board[x][y] == piece &amp;&amp; board[x+1][y] == piece &amp;&amp;
+           board[x][y+1] == piece &amp;&amp; board[x+1][y+1] == piece;
+  }
+
+  /**
+   * Checks if the whole board is empty
+   */
+  public boolean isEmpty()
+  {
+    for(int i=0; i&lt;SIZE; i++)
+      for(int j=0; j&lt;SIZE; j++)
+        if(board[i][j] != TTEngine.EMPTY)
+          return false;
+    return true;
+
+  }
+
+  /**
+   * Calculate all successors of a given board for a given player
+   * @return vector of all successors
+   */
+  public static Vector getAllSuccessors(TTBoard b, int piece)
+  {
+    Vector all = new Vector();
+    for(int i=0; i&lt;SIZE; i++)
+    {
+      for(int j=0; j&lt;SIZE; j++)
+      {
+        if(b.board[i][j] == piece)
+        {
+          // find all successors that emerge when you move this piece
+          Vector allForThisPiece = getAllSuccessorsForOnePiece(b, piece, i, j);
+          // add them to the result
+          for(int k=0; k&lt;allForThisPiece.size(); k++)
+            all.addElement(allForThisPiece.elementAt(k));
+        }
+      }
+    }
+    return all;
+  }
+
+  /**
+   * Try to make all possible moves with one piece
+   */
+  private static Vector getAllSuccessorsForOnePiece(TTBoard b, int piece, int x, int y)
+  {
+    Vector v = new Vector();
+
+    // there are maximum 8 possible successors from x,y:
+    addSingleSuccessor(v, b, piece, x, y, x-1, y-1); // up left
+    addSingleSuccessor(v, b, piece, x, y, x,   y-1); // up
+    addSingleSuccessor(v, b, piece, x, y, x+1, y-1); // up right
+
+    addSingleSuccessor(v, b, piece, x, y, x-1, y  ); // left
+    addSingleSuccessor(v, b, piece, x, y, x+1, y  ); // right
+
+    addSingleSuccessor(v, b, piece, x, y, x-1, y+1); // down left
+    addSingleSuccessor(v, b, piece, x, y, x,   y+1); // down
+    addSingleSuccessor(v, b, piece, x, y, x+1, y+1); // up right
+
+    return v;
+  }
+
+  /**
+   * Creates a successor (if possible)
+   */
+  private static void addSingleSuccessor(Vector v, TTBoard b, int piece, int oldX, int oldY, int newX, int newY)
+  {
+    if(newX &gt;= 0 &amp;&amp; newX &lt; SIZE &amp;&amp; newY &gt;= 0 &amp;&amp; newY &lt; SIZE &amp;&amp; // new position must be valid...
+       b.board[newX][newY] == TTEngine.EMPTY) // ...and empty
+    {
+      TTBoard temp = new TTBoard(b);
+      temp.board[oldX][oldY] = TTEngine.EMPTY; // remove the piece from the old position
+      temp.board[newX][newY] = piece; // put the piece to the new position
+      temp.newX = newX;
+      temp.newY = newY;
+      temp.oldX = oldX;
+      temp.oldY = oldY;
+      v.addElement(temp);
+    }
+  }
+
+  /**
+   * Checks if two boards are the same
+   */
+  public static boolean sameBoards(TTBoard b1, TTBoard b2)
+  {
+    if(b1 == null || b2 == null) // have to be non-null boards
+      return false;
+    for(int i=0; i&lt;SIZE; i++)
+      for(int j=0; j&lt;SIZE; j++)
+        if(b1.board[i][j] != b2.board[i][j])
+          return false;
+    return true;
+  }
+
+  /**
+   * Makes a symmetric board (in the terms of the player's pieces)
+   */
+  private void makeSymmetric()
+  {
+    for(int i=0; i&lt;SIZE; i++)
+      for(int j=0; j&lt;SIZE; j++)
+      {
+        if(board[i][j] == TTEngine.O)
+          board[i][j] = TTEngine.X;
+        else if(board[i][j] == TTEngine.X)
+          board[i][j] = TTEngine.O;
+      }
+  }
+
+  /**
+   * Calculates the best position succeeding the current one.
+   * 1. Finds all successors of the current position.
+   * 2. Tries to see which ones match with the database.
+   * 3. Uses the highest ranked position among the matched positions.
+   */
+  public void calculateNextBestPosition(int piece, boolean opening, int moveCounter)
+  {
+    if(opening) // opening, use heuristic
+    {
+      nextBestPosition = TTOpening.getMove(piece, this, moveCounter);
+      f.log("Heuristic is suggesting this opening move: " +
+            (char)('A' + nextBestPosition.newY) + "" + (nextBestPosition.newX+1));
+    }
+    else // post-opening, use the database
+    {
+      // find the succesors that are present in the database
+      Vector plainSuccessors = getAllSuccessors(this, piece);
+      Vector present = new Vector();
+      int plainCount = 0;
+      int symmetricCount = 0;
+      for(int i=0; i&lt;TTDatabase.boards.size(); i++)
+      {
+        TTBoard dbBoard = (TTBoard)TTDatabase.boards.elementAt(i);
+
+        // check how many plain successors we have in the database
+        for(int j=0; j&lt;plainSuccessors.size(); j++)
+        {
+          TTBoard temp = (TTBoard)plainSuccessors.elementAt(j);
+          if(TTBoard.sameBoards(dbBoard, temp))
+          {
+            addBoard(present, temp, dbBoard, false);
+            plainCount++;
+          }
+          else // maybe the symmetric one is there?
+          {
+            temp.makeSymmetric();
+            if(TTBoard.sameBoards(dbBoard, temp))
+            {
+              addBoard(present, temp, dbBoard, true);
+              symmetricCount++;
+            }
+          }
+        }
+      }
+
+      f.log(plainSuccessors.size() + " possible moves for '" +
+            TTEngine.getPieceGUI(piece) + "' found from this position");
+      f.log(plainCount + " plain and " + symmetricCount + " symmetric move(s) found in the database");
+
+      nextBestPosition = null;
+
+      // calculate the best plain position
+      int maxScore = Integer.MIN_VALUE;
+      int gamesPlayed = 0;
+      int gamesWon = 0;
+      for(int i=0; i&lt;present.size(); i++)
+      {
+        TTBoard temp = (TTBoard)present.elementAt(i);
+        int score = piece == TTEngine.X ? temp.wonFirst - temp.wonSecond :
+                                          temp.wonSecond - temp.wonFirst;
+        if(score &gt; maxScore)
+        {
+          gamesPlayed = temp.wonFirst + temp.wonSecond;
+          gamesWon = piece == TTEngine.X ? temp.wonFirst : temp.wonSecond;
+          maxScore = score;
+          nextBestPosition = new TTBoard(temp);
+        }
+      }
+
+      if(nextBestPosition != null)
+      {
+        float winningPercentage = (100 * gamesWon) / gamesPlayed;
+        f.log("Recommended move: " + (char)('A' + nextBestPosition.oldY) + "" + (nextBestPosition.oldX+1) +
+              "-" + (char)('A' + nextBestPosition.newY) + "" + (nextBestPosition.newX+1));
+        f.log("The advice was part of a winning strategy in " + gamesWon + " of " + gamesPlayed +
+              " games (" + winningPercentage + "%)");
+      }
+    }
+  }
+
+  private void addBoard(Vector present, TTBoard temp, TTBoard dbBoard, boolean symmetric)
+  {
+    TTBoard toAdd = new TTBoard(temp);
+    // propagate the values!
+    toAdd.wonFirst = symmetric ? dbBoard.wonSecond : dbBoard.wonFirst;
+    toAdd.wonSecond = symmetric ?  dbBoard.wonFirst : dbBoard.wonSecond;
+    present.addElement(toAdd);
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTDatabase.java</summary>
+            <pre class="original">package tt;
+
+import java.io.*;
+import java.util.*;
+
+public class TTDatabase
+{
+  public static Vector boards = new Vector(); // all positions will be here
+  public static int total = 0;
+
+  /**
+   * The class that populates and encapsulates the database of positions
+   */
+  public TTDatabase(String fileName)
+  {
+    System.out.println("Reading the database...");
+    readRawData(fileName);
+    total = boards.size();
+    System.out.println("Parsed " + total + " positions.");
+    System.out.println("Cleaning the database...");
+    postprocessData();
+  }
+
+  /**
+   * Reads the raw data file and populates the database
+   */
+  private void readRawData(String fileName)
+  {
+    char[] buffer = new char[4];
+
+    try
+    {
+      InputStreamReader fr = getReader(fileName);
+      while(true)
+      {
+        TTBoard b = new TTBoard();
+
+        // read the board fields
+        for(int i=0; i&lt;25; i++)
+        {
+          int x = i / TTBoard.SIZE;
+          int y = i - x * TTBoard.SIZE;
+
+          int field = fr.read();
+          switch(field)
+          {
+            case  -1 : return; // EOF!
+            case '1' : { b.board[x][y] = TTEngine.X; break; }
+            case '2' : { b.board[x][y] = TTEngine.O; break; }
+            default  : { b.board[x][y] = TTEngine.EMPTY; }
+          }
+        }
+
+        // read wins and loses of the first player (here, it's 'X') and calculate the score
+        fr.read(buffer);
+        b.wonFirst = convertToInt(buffer);
+        fr.read(buffer);
+        b.wonSecond = convertToInt(buffer);
+
+        // add the board
+        boards.addElement(b);
+      }
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Goes trough all positions, finds duplicates and accumulates them
+   */
+  private void postprocessData()
+  {
+    for(int i=0; i&lt;boards.size()-1; i++)
+    {
+      if(i &gt; 0 &amp;&amp; i % 500 == 0)
+        System.out.println("Added " + i + " unique positions...");
+
+      TTBoard first = (TTBoard)boards.elementAt(i);
+      for(int j=i+1; j&lt;boards.size(); j++)
+      {
+        TTBoard second = (TTBoard)boards.elementAt(j);
+        if(TTBoard.sameBoards(first, second))
+        {
+          first.wonFirst += second.wonFirst;
+          first.wonSecond +=second.wonSecond;
+          boards.removeElementAt(j);
+        }
+      }
+    }
+  }
+
+  // utility methods
+
+  /**
+   * Convert an array of chars to integer
+   */
+  private static final int convertToInt(char[] chars)
+  {
+    // put leading zeros instead of spaces
+    for(int i=0; i&lt;chars.length; i++)
+      if(chars[i] == ' ')
+        chars[i] = '0';
+    // calculate the number
+    int res = 0;
+    for(int i=0; i&lt;chars.length; i++)
+      res += powTen(i) * (chars[chars.length - i - 1] - '0');
+    return res;
+  }
+
+  /**
+   * Quick power of ten (faster than Java's Math.pow which deals with doubles)
+   */
+  private static final int powTen(int pow)
+  {
+    int res = 1;
+    for(int i=0; i&lt;pow; i++)
+      res *= 10;
+    return res;
+  }
+
+  /**
+   * Gets a reader for the database file depending on the file location (filesystem or applet's JAR)
+   */
+  private static final InputStreamReader getReader(String name)
+  {
+    InputStreamReader isr = null;
+    try
+    {
+      isr = new FileReader(name); // file system
+    }
+    catch(Exception e)
+    {
+      InputStream in = TTStarter.class.getResourceAsStream("/" + name); // applet's JAR
+      isr = new InputStreamReader(in);
+    }
+    return isr;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTEngine.java</summary>
+            <pre class="original">package tt;
+
+import java.awt.*;
+import java.util.*;
+
+public class TTEngine
+{
+  // internal statics
+  public static final int EMPTY = 0; // empty field
+  public static final int X = 1; // "X" piece
+  public static final int O = 2; // "O" piece
+  private TTFrame f;
+
+  // game states
+  public static final int COMPUTER_WON = 0;
+  public static final int USER_WON = 1;
+  public static final int DRAW = 2;
+  private static final int KEEP_PLAYING = -1;
+
+  // other internal variables
+  public TTBoard board = null; // the board
+  public boolean computerFirst = false; // whether computer played first or not
+  public int moveCounter = 1; // the current move
+  public int gameState = KEEP_PLAYING; // the state of the game
+  private TTBoard[] history = new TTBoard[13]; // if 1 == 5 == 9 == 13  =&gt;  draw
+
+  FieldFlasherThread t = null;
+
+  /**
+   * The constructor
+   */
+  public TTEngine(TTFrame f)
+  {
+    board = new TTBoard();
+    this.f = f;
+  }
+
+  /**
+   * Resets the board
+   */
+  public void resetBoard()
+  {
+    board = new TTBoard();
+    moveCounter = 1;
+    this.gameState = KEEP_PLAYING;
+    if(t != null)
+      t.stopFlashing();
+  }
+
+  /**
+   * User's move implementation
+   * Updates the game state
+   * @return true if the move was valid
+   */
+  public boolean play(int field, int prevField)
+  {
+    int i = field / TTBoard.SIZE;
+    int j = field - TTBoard.SIZE * i;
+
+    int iPrev = prevField / TTBoard.SIZE;
+    int jPrev = prevField - TTBoard.SIZE * iPrev;
+
+    if(isOpening())
+    {
+      if(board.board[i][j] == EMPTY)
+      {
+        board.board[i][j] = getUserPiece();
+        f.log("'" + getPieceGUI(getUserPiece()) + "' played on " + (char)('A' + i) + "" + (j+1));
+        moveCounter++;
+        updateGameState();
+        return true;
+      }
+      else
+        return false;
+    }
+    else
+    {
+      if(board.board[iPrev][jPrev] == getUserPiece() &amp;&amp; // can move it's own pieces only...
+         board.board[i][j] == EMPTY &amp;&amp; // ...to unoccupied...
+         canMoveHere(iPrev, jPrev, i, j)) // ...AND adjacent fileds
+      {
+        board.board[iPrev][jPrev] = EMPTY;
+        board.board[i][j] = getUserPiece();
+        f.log("'" + getPieceGUI(getUserPiece()) + "' played " +
+              (char)('A' + jPrev) + "" + (iPrev+1) + "-" +
+              (char)('A' + j) + "" + (i+1));
+        moveCounter++;
+        updateGameState();
+        return true;
+      }
+      else
+        return false;
+    }
+  }
+
+  /**
+   * Return all immediate successors from a given position
+   */
+  private Vector getAllSuccessors(TTBoard b, int player)
+  {
+    // todo...
+    return new Vector();
+  }
+
+  /**
+   * Returns the internal representation of computer's piece
+   */
+  public int getComputerPiece()
+  {
+    //return computerFirst ? X : O;
+    return moveCounter % 2 == 0 ? X : O;
+  }
+
+  /**
+   * Returns the internal representation of user's piece
+   */
+  public int getUserPiece()
+  {
+    //return computerFirst ? O : X;
+    return moveCounter % 2 == 0 ? O : X;
+  }
+
+  /**
+   * Returns the representaion of the piece on the board
+   */
+  public static String getPieceGUI(int i)
+  {
+    switch(i)
+    {
+      case X : return "X";
+      case O : return "O";
+      default : return "";
+    }
+  }
+
+  /**
+   * Getter for the gameState
+   */
+  public int getGameState()
+  {
+    return gameState;
+  }
+
+  /**
+   * Updates the game state
+   */
+  public void updateGameState()
+  {
+    pushPosition();
+
+    if(board.hasFour(getComputerPiece()))
+    {
+      gameState = COMPUTER_WON;
+      return;
+    }
+
+    if(board.hasFour(getUserPiece()))
+    {
+      gameState = USER_WON;
+      return;
+    }
+
+    if(isDraw())
+    {
+      gameState = DRAW;
+      return;
+    }
+
+    // calculate the next best position (covers both opening and the real game)
+    board.calculateNextBestPosition(getUserPiece(), isOpening(), moveCounter);
+
+    // stop the previous thread (if any)
+    if(t != null)
+    {
+      t.stopFlashing();
+      t = null;
+    }
+    if(board.nextBestPosition != null)
+    {
+      // create and start a new one (old button is present only if not in opening phase)
+      Button newB = f.buttons[board.nextBestPosition.newX][board.nextBestPosition.newY];
+      Button oldB = isOpening() ? null : f.buttons[board.nextBestPosition.oldX][board.nextBestPosition.oldY];
+      boolean adviseX = f.adviseBoth.getState() || f.adviseX.getState();
+      boolean adviseO = f.adviseBoth.getState() || f.adviseO.getState();
+      t = new FieldFlasherThread(oldB, newB, moveCounter, adviseX, adviseO);
+      t.start();
+    }
+    else
+      f.log("Sorry, no advice for this position");
+    f.log("'" + getPieceGUI(getUserPiece()) + "' is on the move..");
+  }
+
+  /**
+   * Checks if the game is in it's opening phase (first 8 moves) or not
+   */
+  private boolean isOpening()
+  {
+    return moveCounter &lt; 9;
+  }
+
+  /**
+   * Checks if a move is valid
+   */
+  private boolean canMoveHere(int fromX, int fromY, int toX, int toY)
+  {
+    int xDiff = Math.abs(fromX - toX);
+    int yDiff = Math.abs(fromY - toY);
+
+    if(xDiff == 0 &amp;&amp; yDiff == 0) // can't move on the same spot
+      return false;
+
+    if(xDiff &gt; 1 || yDiff &gt; 1) // can't move more than 1 field away
+      return false;
+
+    return true;
+  }
+
+  /**
+   * Pushes the current position into the history
+   */
+  private void pushPosition()
+  {
+    for(int i=1; i&lt;history.length; i++)
+    {
+      if(history[i] != null)
+      {
+        TTBoard temp = new TTBoard(history[i]);
+        history[i-1] = temp;
+      }
+    }
+    history[history.length-1] = new TTBoard(board);
+  }
+
+  /**
+   * Checks if the last 3 moves were repeated ones.  This is a draw.
+   */
+  private boolean isDraw()
+  {
+    for(int i=0; i&lt;5; i++)
+    {
+      if(!TTBoard.sameBoards(history[i], history[i+4]) ||
+         !TTBoard.sameBoards(history[i+4], history[i+8]))
+        return false;
+    }
+    return true;
+  }
+
+  /*private void dumpHistory()
+  {
+    for(int i=0; i&lt;history.length; i++)
+    {
+      System.out.println(i);
+      TTBoard.dumpBoard(history[i]);
+      System.out.println("===");
+    }
+  }*/
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTFrame.java</summary>
+            <pre class="original">package tt;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+
+/**
+ * Frame to encapsulate the GUI for the game
+ */
+public class TTFrame extends Frame implements ActionListener, ItemListener
+{
+  // GUI appearance
+  private static final String BOARD_FONT = "monospaced";
+  private static final int BOARD_FONT_SIZE = 60;
+
+  // GUI variables
+  private TextArea status = null;
+  private Button restartButton = new Button("Restart Game");
+  private Button clearLogButton = new Button("Clear Log");
+  private Checkbox playsFirstCB = new Checkbox("Computer Plays First");
+  private Checkbox logCB = new Checkbox("Show Log", true);
+  private Panel statusPanelWrap = null;
+  public Button buttons[][] = null;
+  private MenuItem instructionsMenuItem = new MenuItem("Instructions");
+  private MenuItem aboutMenuItem = new MenuItem("About TeekoTeacher");
+  private MenuItem databaseMenuItem = new MenuItem("Database Info");
+  private CheckboxGroup cbg = new CheckboxGroup();
+  public Checkbox adviseO = new Checkbox("Player 'O'", cbg, false);
+  public Checkbox adviseX = new Checkbox("Player 'X'", cbg, false);
+  public Checkbox adviseBoth = new Checkbox("Both", cbg, true);
+
+  // internal variables
+  private TTEngine engine = null;
+  private boolean firstTime = true;
+  private int field = -1; // the current clicked field
+  private int prevField = -1; // the precvious clicked field
+
+  /**
+   * The constructor
+   */
+  public TTFrame()
+  {
+    super();
+    TTBoard.f = this;
+    engine = new TTEngine(this);
+    initGUI();
+    log("Welcome to TeekoTeacher");
+    restart();
+  }
+
+  /**
+   * Inits the GUI
+   */
+  private void initGUI()
+  {
+    setTitle("TeekoTeacher");
+    setLayout(new BorderLayout());
+
+    // set up the menu bar and menus
+    MenuBar mb = new MenuBar();
+    this.setMenuBar(mb);
+
+    Menu fm = new Menu("File");
+    fm.add(databaseMenuItem);
+    mb.add(fm);
+
+    Menu hm = new Menu("Help");
+    hm.add(instructionsMenuItem);
+    hm.addSeparator();
+    hm.add(aboutMenuItem);
+    mb.setHelpMenu(hm);
+
+    databaseMenuItem.addActionListener(this);
+    instructionsMenuItem.addActionListener(this);
+    aboutMenuItem.addActionListener(this);
+
+    Panel controlPanel = new Panel();
+    controlPanel.setLayout(new BorderLayout());
+
+    Panel radios = new Panel(new GridLayout(4, 1));
+    radios.add(new Label("Advise:"));
+    radios.add(adviseX);
+    radios.add(adviseO);
+    radios.add(adviseBoth);
+    adviseX.addItemListener(this);
+    adviseO.addItemListener(this);
+    adviseBoth.addItemListener(this);
+    Panel radiosWrap = new Panel(new BorderLayout());
+    radiosWrap.add(new Panel(), BorderLayout.NORTH);
+    radiosWrap.add(new Panel(), BorderLayout.CENTER);
+    radiosWrap.add(radios, BorderLayout.SOUTH);
+
+    Panel bp = new Panel(new BorderLayout());
+    bp.add(clearLogButton, BorderLayout.NORTH);
+    bp.add(new Panel(), BorderLayout.CENTER);
+    bp.add(restartButton, BorderLayout.SOUTH);
+
+    controlPanel.add(radiosWrap, BorderLayout.NORTH);
+    controlPanel.add(logCB, BorderLayout.CENTER);
+    controlPanel.add(bp, BorderLayout.SOUTH);
+
+    Panel controlPanelWrap = new Panel(new BorderLayout());
+    controlPanelWrap.add(controlPanel, BorderLayout.CENTER);
+    controlPanelWrap.add(new Panel(), BorderLayout.EAST);
+
+    Panel boardPanel = new Panel(new GridLayout(TTBoard.SIZE+1, TTBoard.SIZE+1))
+    {
+      public Dimension getPreferredSize() { return new Dimension(350, 350); }
+    };
+
+    boardPanel.add(new Label());
+    for(int i=0; i&lt;TTBoard.SIZE; i++)
+    {
+      Label l = new Label("" + (i+1));
+      boardPanel.add(new Label("" + (char)('A' + i), Label.CENTER));
+    }
+    buttons = new Button[TTBoard.SIZE][TTBoard.SIZE];
+    for(int i=0; i&lt;TTBoard.SIZE; i++)
+    {
+      boardPanel.add(new Label("" + (i+1), Label.CENTER));
+      for(int j=0; j&lt;TTBoard.SIZE; j++)
+      {
+        Button b = new Button() { public boolean isFocusTraversable() { return false; } };
+        int buttonId = i * TTBoard.SIZE + j;
+        b.addActionListener(this);
+        b.setActionCommand("" + buttonId);
+        b.setBackground(Color.white);
+        b.setFont(new Font(BOARD_FONT, Font.BOLD, BOARD_FONT_SIZE));
+        boardPanel.add(b);
+        buttons[i][j] = b;
+      }
+    }
+    Panel boardPanelWrap = new Panel(new BorderLayout());
+    boardPanelWrap.add(boardPanel, BorderLayout.CENTER);
+    boardPanelWrap.add(new Panel(), BorderLayout.SOUTH);
+    boardPanelWrap.add(new Panel(), BorderLayout.WEST);
+    boardPanelWrap.add(new Panel(), BorderLayout.NORTH);
+    boardPanelWrap.add(new Panel(), BorderLayout.EAST);
+
+    Panel statusPanel = new Panel();
+    statusPanel.setLayout(new BorderLayout());
+    status = new TextArea(8, 60);
+    status.setEditable(false);
+    status.setBackground(Color.white);
+    statusPanel.add(status, BorderLayout.CENTER);
+    statusPanelWrap = new Panel(new BorderLayout());
+    statusPanelWrap.add(statusPanel, BorderLayout.CENTER);
+    statusPanelWrap.add(new Panel(), BorderLayout.NORTH);
+    statusPanelWrap.add(new Panel(), BorderLayout.SOUTH);
+    statusPanelWrap.add(new Panel(), BorderLayout.WEST);
+    statusPanelWrap.add(new Panel(), BorderLayout.EAST);
+
+    Panel infoPanel = new Panel(new FlowLayout(FlowLayout.CENTER));
+    infoPanel.add(new Label("TeekoTeacher"));
+
+    //add(infoPanel, BorderLayout.NORTH);
+    add(controlPanelWrap, BorderLayout.EAST);
+    add(boardPanelWrap, BorderLayout.CENTER);
+    add(statusPanelWrap, BorderLayout.SOUTH);
+    refreshLogging();
+
+    // closing of the frame
+    this.addWindowListener(new WindowAdapter()
+     {
+       public void windowClosing(WindowEvent we)
+       {
+         TTFrame.this.dispose();
+       }
+     });
+
+    // add listeners
+    restartButton.addActionListener(this);
+    clearLogButton.addActionListener(this);
+    playsFirstCB.addItemListener(this);
+    logCB.addItemListener(this);
+
+    pack();
+
+    int w = Toolkit.getDefaultToolkit().getScreenSize().width;
+    int h = Toolkit.getDefaultToolkit().getScreenSize().height;
+    int x = (w - (int)getPreferredSize().width) / 2;
+    int y = (h - (int)getPreferredSize().height) / 2;
+    setBounds(x, y, (int)getPreferredSize().width, (int)getPreferredSize().height );
+
+    show();
+
+    if(TTDatabase.boards.size() == 0)
+      new MessageBox("No Database!", "The database file (" +
+                     TTStarter.DATABASE_FILE_NAME + ") not found or empty.", this, false, false);
+  }
+
+  /**
+   * Deals with the buttons
+   */
+  public void actionPerformed(ActionEvent ae)
+  {
+    Object src = ae.getSource();
+    String cmd = ae.getActionCommand();
+
+    if(src == restartButton)
+    {
+      try { restart(); }
+      catch(Throwable t) { new MessageBox("Exception!", t.toString(), this, false, false); }
+    }
+    else if(src == aboutMenuItem)
+      about();
+    else if(src == instructionsMenuItem)
+      instructions();
+    else if(src == databaseMenuItem)
+      showDatabaseInfo();
+    else if(src == clearLogButton)
+      status.setText("");
+    else // board fields
+    {
+      prevField = field;
+      field = Integer.parseInt(cmd);
+      if(engine.play(field, prevField)) // if the move was legal, the board was updated...
+      {
+        updateBoard(field);
+        if(gameFinished())
+        {
+          engine.resetBoard();
+          return;
+        }
+      }
+    }
+  }
+
+  /**
+   * Deals with the checkboxes
+   */
+  public void itemStateChanged(ItemEvent ie)
+  {
+    Object src = ie.getSource();
+    if(src == logCB)
+      refreshLogging();
+    else if(src == adviseX || src == adviseO || src == adviseBoth)
+    {
+      boolean ax = adviseBoth.getState() || adviseX.getState();
+      boolean ao = adviseBoth.getState() || adviseO.getState();
+      engine.t.setAdvisingX(ax);
+      engine.t.setAdvisingO(ao);
+    }
+  }
+
+  /**
+   * Restarts the game if one is in progress
+   */
+  protected void restart()
+  {
+    if(!engine.board.isEmpty())
+    {
+      if(!firstTime)
+        log("Game has been restarted");
+    }
+    updateBoard(-1);
+    firstTime = false;
+  }
+
+  /**
+   * Updates the board GUI
+   */
+  private void updateBoard(int field)
+  {
+    if(field == -1) // restart
+    {
+      engine.resetBoard();
+      for(int i=0; i&lt;TTBoard.SIZE; i++)
+        for(int j=0; j&lt;TTBoard.SIZE; j++)
+        {
+          buttons[i][j].setLabel("");
+          buttons[i][j].invalidate();
+          engine.board = new TTBoard();
+        }
+      engine.updateGameState();
+    }
+    else // user played
+    {
+      for(int i=0; i&lt;TTBoard.SIZE; i++)
+      {
+        for(int j=0; j&lt;TTBoard.SIZE; j++)
+        {
+          String piece = engine.getPieceGUI(engine.board.board[i][j]);
+          buttons[i][j].setForeground(piece.equals("X") ? Color.blue : Color.red);
+          buttons[i][j].setLabel(piece);
+          buttons[i][j].invalidate();
+        }
+      }
+    }
+    repaint();
+  }
+
+  /**
+   * Check if the game is finished.
+   * Might restart the game as a side effect.
+   */
+  private boolean gameFinished()
+  {
+    switch(engine.getGameState())
+    {
+      case TTEngine.COMPUTER_WON :
+      {
+        displayWin("COMP");
+        return true;
+      }
+      case TTEngine.USER_WON :
+      {
+        displayWin("USER");
+        return true;
+      }
+      case TTEngine.DRAW :
+      {
+        displayDraw();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Displays won message
+   */
+  private void displayWin(String who)
+  {
+    String msg = who.equals("USER") ?
+      "Player '" + engine.getPieceGUI(engine.getUserPiece())  + "'" :
+      "Player '" + engine.getPieceGUI(engine.getComputerPiece()) + "'";
+    msg += " won the game";
+    log(msg);
+    new MessageBox("The End", msg, this, true, false);
+  }
+
+  /**
+   * Displays draw message
+   */
+  private void displayDraw()
+  {
+    String msg = "The game has been drawn.";
+    log(msg);
+    new MessageBox("The End", msg, this, true, false);
+  }
+
+  /**
+   * Hide/display the logging area
+   */
+  private void refreshLogging()
+  {
+    statusPanelWrap.setVisible(logCB.getState());
+    pack();
+  }
+
+  /**
+   * Appends a string to the status
+   */
+  public void log(String s)
+  {
+    status.append(s + ".\n");
+    status.setCaretPosition(status.getText().length());
+  }
+
+  /**
+   * Display the about box
+   */
+  private void about()
+  {
+    new MessageBox("About TeekoTeacher", "TeekoTeacher, Version " +
+                   TTStarter.VERSION +
+                   " by Mihailo Despotovic 2003.", this, false, false);
+  }
+
+  /**
+   * Display the instructions
+   */
+  private void instructions()
+  {
+    String s = "";
+    BufferedReader br = null;
+    try // try loading from the local fule system
+    {
+      br = new BufferedReader(new FileReader(TTStarter.INSTRUCTIONS_FILE_NAME));
+    }
+    catch(Exception e)
+    {
+      try // try loading from applet's JAR as a resource
+      {
+        InputStream in = TTStarter.class.getResourceAsStream("/" + TTStarter.INSTRUCTIONS_FILE_NAME);
+        br = new BufferedReader(new InputStreamReader(in));
+      }
+      catch(Exception e1)
+      {
+        e1.printStackTrace();
+        log(e1.toString());
+        s = "Sorry, could not open the instructions file (" + TTStarter.INSTRUCTIONS_FILE_NAME + ")";
+      }
+    }
+    if(br != null)
+    {
+      StringBuffer sb = new StringBuffer("");
+      String line = null;
+      try
+      {
+        while((line = br.readLine()) != null)
+          sb.append(line + "\n");
+        s = sb.toString();
+        s = s.substring(0, s.length() -1); // chop off the trailing '\n'
+      }
+      catch(Exception e)
+      {
+        e.printStackTrace();
+        s = "Sorry, could not read the instructions file (" + TTStarter.INSTRUCTIONS_FILE_NAME + ")";
+      }
+    }
+    new MessageBox("TeekoTeacher Instructions", s, this, false, true);
+  }
+
+  /**
+   * Displays some basic informations about the database used
+   */
+  private void showDatabaseInfo()
+  {
+    String s = "The database contains " + TTDatabase.total + " (" + TTDatabase.boards.size() +
+               " unique) Teeko positions.";
+    new MessageBox("TeekoTeacher Database", s, this, false, false);
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTOpening.java</summary>
+            <pre class="original">package tt;
+
+import java.util.*;
+
+public class TTOpening
+{
+  private static Random r = new Random(System.currentTimeMillis());
+
+  public static TTBoard getMove(int piece, TTBoard b, int moveCounter)
+  {
+    if(piece == TTEngine.O)
+      piece = TTEngine.X;
+    else
+      piece = TTEngine.O;
+
+    TTBoard temp = new TTBoard(b);
+    switch(moveCounter)
+    {
+      case 0 : { move1(temp); break; }
+      case 1 : { move2(temp); break; }
+      case 2 : { move3(temp, piece); break; }
+      case 3 : { move4(temp, piece); break; }
+      case 4 : { move5(temp, piece); break; }
+      case 5 : { move6(temp, piece); break; }
+      case 6 : { move7(temp, piece); break; }
+      case 7 : { move7(temp, piece); break; }
+      case 8 : { move7(temp, piece); break; }
+    }
+    return temp;
+  }
+
+  private static void move1(TTBoard b)
+  {
+    playInTheMiddle(b);
+  }
+
+  private static void move2(TTBoard b)
+  {
+    if(b.board[2][2] == TTEngine.EMPTY)
+      playInTheMiddle(b);
+    else
+      playInACorner(b);
+  }
+
+  private static void move3(TTBoard b, int piece)
+  {
+    if(b.board[2][2] == TTEngine.EMPTY)
+      playInTheMiddle(b);
+    else
+      makeDangerous2(b, piece);
+  }
+
+  private static void move4(TTBoard b, int piece)
+  {
+    if(!avoidDangerous3(b, piece))
+      move3(b, piece);
+  }
+
+  private static void move5(TTBoard b, int piece)
+  {
+    if(!make3(b, piece))
+      move4(b, piece);
+  }
+
+  private static void move6(TTBoard b, int piece)
+  {
+    if(!avoid4(b, piece))
+      move5(b, piece);
+  }
+
+  private static void move7(TTBoard b, int piece)
+  {
+    if(!make4(b, piece))
+      move6(b, piece);
+  }
+
+  private static void playInTheMiddle(TTBoard b)
+  {
+    b.newX = 2;
+    b.newY = 2;
+  }
+
+  private static void makeDangerous2(TTBoard b, int piece)
+  {
+    if(b.board[2][2] == piece) // middle field is mine, OK to play "corner"
+    {
+      playInACorner(b);
+    }
+    else
+    {
+      if( ((b.board[1][1] == piece || b.board[3][3] == piece) &amp;&amp;
+          (b.board[1][3] == TTEngine.EMPTY || b.board[3][1] == TTEngine.EMPTY))
+          ||
+          ((b.board[1][3] == piece || b.board[3][1] == piece) &amp;&amp;
+          (b.board[1][1] == TTEngine.EMPTY || b.board[3][3] == TTEngine.EMPTY)) )
+        playInACross(b);
+      else
+        playInACorner(b);
+    }
+  }
+
+  private static boolean avoidDangerous3(TTBoard b, int piece)
+  {
+    for(int i=0; i&lt;=4; i++) // horizontal
+    {
+      if(b.board[i][1]==piece &amp;&amp; b.board[i][2]==piece &amp;&amp; b.board[i][3]==0) { tryToPlay(b, i, 3); return true; }
+      if(b.board[i][2]==piece &amp;&amp; b.board[i][3]==piece &amp;&amp; b.board[i][1]==0) { tryToPlay(b, i, 1); return true; }
+      if(b.board[i][1]==piece &amp;&amp; b.board[i][3]==piece &amp;&amp; b.board[i][2]==0) { tryToPlay(b, i, 2); return true; }
+    }
+
+    for(int j=0; j&lt;=4; j++) // vertical
+    {
+      if(b.board[1][j]==piece &amp;&amp; b.board[2][j]==piece &amp;&amp; b.board[3][j]==0) { tryToPlay(b, 3, j); return true; }
+      if(b.board[2][j]==piece &amp;&amp; b.board[3][j]==piece &amp;&amp; b.board[1][j]==0) { tryToPlay(b, 1, j); return true; }
+      if(b.board[1][j]==piece &amp;&amp; b.board[3][j]==piece &amp;&amp; b.board[2][j]==0) { tryToPlay(b, 2, j); return true; }
+    }
+
+    // diagonal
+    if(b.board[1][1]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[3][3]==0) { tryToPlay(b, 3, 3); return true; }
+    if(b.board[2][2]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[1][1]==0) { tryToPlay(b, 1, 1); return true; }
+    if(b.board[1][3]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[3][1]==0) { tryToPlay(b, 3, 1); return true; }
+    if(b.board[3][1]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[1][3]==0) { tryToPlay(b, 1, 3); return true; }
+
+    return false;
+  }
+
+  private static boolean make3(TTBoard b, int piece)
+  {
+    // horizontal
+    if(b.board[1][1]==piece &amp;&amp; b.board[1][2]==piece &amp;&amp; b.board[1][3]==0) {tryToPlay(b, 1, 3); return true;}
+    if(b.board[1][2]==piece &amp;&amp; b.board[1][3]==piece &amp;&amp; b.board[1][1]==0) {tryToPlay(b, 1, 1); return true;}
+    if(b.board[1][1]==piece &amp;&amp; b.board[1][3]==piece &amp;&amp; b.board[1][2]==0) {tryToPlay(b, 1, 2); return true;}
+
+    if(b.board[2][1]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[2][3]==0) {tryToPlay(b, 2, 3); return true;}
+    if(b.board[2][2]==piece &amp;&amp; b.board[2][3]==piece &amp;&amp; b.board[2][1]==0) {tryToPlay(b, 2, 1); return true;}
+    if(b.board[2][3]==piece &amp;&amp; b.board[2][1]==piece &amp;&amp; b.board[2][2]==0) {tryToPlay(b, 1, 2); return true;}
+
+    if(b.board[3][1]==piece &amp;&amp; b.board[3][2]==piece &amp;&amp; b.board[3][3]==0) {tryToPlay(b, 3, 3); return true;}
+    if(b.board[3][2]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[3][1]==0) {tryToPlay(b, 3, 1); return true;}
+    if(b.board[3][1]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[3][2]==0) {tryToPlay(b, 3, 2); return true;}
+
+    // vertical
+    if(b.board[1][1]==piece &amp;&amp; b.board[2][1]==piece &amp;&amp; b.board[3][1]==0) {tryToPlay(b, 3, 1); return true;}
+    if(b.board[2][1]==piece &amp;&amp; b.board[3][1]==piece &amp;&amp; b.board[1][1]==0) {tryToPlay(b, 1, 1); return true;}
+    if(b.board[1][1]==piece &amp;&amp; b.board[3][1]==piece &amp;&amp; b.board[2][1]==0) {tryToPlay(b, 2, 1); return true;}
+
+    if(b.board[1][2]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[3][2]==0) {tryToPlay(b, 3, 2); return true;}
+    if(b.board[1][2]==piece &amp;&amp; b.board[3][2]==piece &amp;&amp; b.board[2][2]==0) {tryToPlay(b, 2, 2); return true;}
+    if(b.board[2][2]==piece &amp;&amp; b.board[3][2]==piece &amp;&amp; b.board[1][2]==0) {tryToPlay(b, 1, 2); return true;}
+
+    if(b.board[1][3]==piece &amp;&amp; b.board[2][3]==piece &amp;&amp; b.board[3][3]==0) {tryToPlay(b, 3, 3); return true;}
+    if(b.board[1][3]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[2][3]==0) {tryToPlay(b, 2, 3); return true;}
+    if(b.board[2][3]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[1][3]==0) {tryToPlay(b, 1, 3); return true;}
+
+    // diagonal
+    if(b.board[1][1]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[3][3]==0) {tryToPlay(b, 3, 3); return true;}
+    if(b.board[2][2]==piece &amp;&amp; b.board[3][3]==piece &amp;&amp; b.board[1][1]==0) {tryToPlay(b, 1, 1); return true;}
+    if(b.board[1][3]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[3][1]==0) {tryToPlay(b, 3, 1); return true;}
+    if(b.board[3][1]==piece &amp;&amp; b.board[2][2]==piece &amp;&amp; b.board[1][3]==0) {tryToPlay(b, 1, 3); return true;}
+
+    // square ?!
+
+    return false;
+  }
+
+  private static boolean avoid4(TTBoard b, int e)
+  {
+    // horizontal
+    for(int i=0; i&lt;=4; i++)
+    {
+      if(b.board[i][0]==e &amp;&amp; b.board[i][1]==e &amp;&amp; b.board[i][2]==e &amp;&amp; b.board[i][3]==0)
+      { tryToPlay(b, i, 3); return true; }
+
+      if(b.board[i][2]==e &amp;&amp; b.board[i][3]==e &amp;&amp; b.board[i][4]==e &amp;&amp; b.board[i][1]==0)
+      { tryToPlay(b, i, 1); return true; }
+    }
+
+    // vertical
+    for(int j=0; j&lt;=4; j++)
+    {
+      if(b.board[0][j]==e &amp;&amp; b.board[1][j]==e &amp;&amp; b.board[2][j]==e &amp;&amp; b.board[3][j]==0)
+      { tryToPlay(b, 3, j); return true; }
+
+      if(b.board[2][j]==e &amp;&amp; b.board[3][j]==e &amp;&amp; b.board[4][j]==e &amp;&amp; b.board[1][j]==0)
+      { tryToPlay(b, 1, j); return true; }
+    }
+
+    // diagonal
+    if(b.board[0][1]==e&amp;&amp;b.board[1][2]==e&amp;&amp;b.board[2][3]==e&amp;&amp;b.board[3][4]==0){tryToPlay(b, 3, 4); return true;}
+    if(b.board[3][4]==e&amp;&amp;b.board[1][2]==e&amp;&amp;b.board[2][3]==e&amp;&amp;b.board[0][1]==0){tryToPlay(b, 0, 1); return true;}
+
+    if(b.board[0][0]==e&amp;&amp;b.board[1][1]==e&amp;&amp;b.board[2][2]==e&amp;&amp;b.board[3][3]==0){tryToPlay(b, 3, 3); return true;}
+    if(b.board[2][2]==e&amp;&amp;b.board[3][3]==e&amp;&amp;b.board[4][4]==e&amp;&amp;b.board[1][1]==0){tryToPlay(b, 1, 1); return true;}
+
+    if(b.board[1][0]==e&amp;&amp;b.board[2][1]==e&amp;&amp;b.board[3][2]==e&amp;&amp;b.board[4][3]==0){tryToPlay(b, 4, 3); return true;}
+    if(b.board[2][1]==e&amp;&amp;b.board[3][2]==e&amp;&amp;b.board[4][3]==e&amp;&amp;b.board[1][0]==0){tryToPlay(b, 1, 0); return true;}
+
+
+    if(b.board[0][3]==e&amp;&amp;b.board[1][2]==e&amp;&amp;b.board[2][1]==e&amp;&amp;b.board[3][0]==0){tryToPlay(b, 3, 0); return true;}
+    if(b.board[3][0]==e&amp;&amp;b.board[1][2]==e&amp;&amp;b.board[2][1]==e&amp;&amp;b.board[0][3]==0){tryToPlay(b, 0, 3); return true;}
+
+    if(b.board[0][4]==e&amp;&amp;b.board[1][3]==e&amp;&amp;b.board[2][2]==e&amp;&amp;b.board[3][1]==0){tryToPlay(b, 3, 1); return true;}
+    if(b.board[2][2]==e&amp;&amp;b.board[3][1]==e&amp;&amp;b.board[4][0]==e&amp;&amp;b.board[1][3]==0){tryToPlay(b, 1, 3); return true;}
+
+    if(b.board[1][4]==e&amp;&amp;b.board[2][3]==e&amp;&amp;b.board[3][2]==e&amp;&amp;b.board[4][1]==0){tryToPlay(b, 4, 1); return true;}
+    if(b.board[2][3]==e&amp;&amp;b.board[3][2]==e&amp;&amp;b.board[4][1]==e&amp;&amp;b.board[1][4]==0){tryToPlay(b, 1, 4); return true;}
+
+    // square
+    for(int i=0; i&lt;=3; i++)
+    {
+      for(int j=0; j&lt;=3; j++)
+      {
+        if(b.board[i][j]==e &amp;&amp; b.board[i+1][j]==e &amp;&amp; b.board[i][j+1]==e &amp;&amp; b.board[i+1][j+1]==0)
+        { tryToPlay(b, i+1, j+1); return true; }
+        if(b.board[i][j]==e &amp;&amp; b.board[i+1][j]==e &amp;&amp; b.board[i+1][j+1]==e &amp;&amp; b.board[i][j+1]==0)
+        { tryToPlay(b, i, j+1); return true; }
+        if(b.board[i+1][j+1]==e &amp;&amp; b.board[i+1][j]==e &amp;&amp; b.board[i][j+1]==e &amp;&amp; b.board[i][j]==0)
+        { tryToPlay(b, i, j); return true; }
+        if(b.board[i][j]==e &amp;&amp; b.board[i+1][j+1]==e &amp;&amp; b.board[i][j+1]==e &amp;&amp; b.board[i+1][j]==0)
+        { tryToPlay(b, i+1, j); return true; }
+      }
+    }
+
+    return false;
+  }
+
+  private static boolean make4(TTBoard b, int piece)
+  {
+    // horizontal
+    for(int i=0; i&lt;=4; i++)
+     {
+      if(b.board[i][0]==piece &amp;&amp; b.board[i][1]==piece &amp;&amp; b.board[i][2]==piece &amp;&amp; b.board[i][3]==0)
+       { tryToPlay(b, i, 3); return true; }
+
+      if(b.board[i][2]==piece &amp;&amp; b.board[i][3]==piece &amp;&amp; b.board[i][4]==piece &amp;&amp; b.board[i][1]==0)
+       { tryToPlay(b, i, 1); return true; }
+     }
+
+    // vertical
+    for(int j=0; j&lt;=4; j++)
+     {
+      if(b.board[0][j]==piece &amp;&amp; b.board[1][j]==piece &amp;&amp; b.board[2][j]==piece &amp;&amp; b.board[3][j]==0)
+       { tryToPlay(b, 3, j); return true; }
+
+      if(b.board[2][j]==piece &amp;&amp; b.board[3][j]==piece &amp;&amp; b.board[4][j]==piece &amp;&amp; b.board[1][j]==0)
+       { tryToPlay(b, 1, j); return true; }
+     }
+
+    // diagonal
+    if(b.board[0][1]==piece&amp;&amp;b.board[1][2]==piece&amp;&amp;b.board[2][3]==piece&amp;&amp;b.board[3][4]==0)
+     {tryToPlay(b, 3, 4); return true;}
+    if(b.board[3][4]==piece&amp;&amp;b.board[1][2]==piece&amp;&amp;b.board[2][3]==piece&amp;&amp;b.board[0][1]==0)
+     {tryToPlay(b, 0, 1); return true;}
+
+    if(b.board[0][0]==piece&amp;&amp;b.board[1][1]==piece&amp;&amp;b.board[2][2]==piece&amp;&amp;b.board[3][3]==0)
+     {tryToPlay(b, 3, 3); return true;}
+    if(b.board[2][2]==piece&amp;&amp;b.board[3][3]==piece&amp;&amp;b.board[4][4]==piece&amp;&amp;b.board[1][1]==0)
+     {tryToPlay(b, 1, 1); return true;}
+    if(b.board[1][1]==piece&amp;&amp;b.board[2][2]==piece&amp;&amp;b.board[3][3]==piece)
+     {
+      if(b.board[0][0]==0) { tryToPlay(b, 0, 0); return true; }
+      if(b.board[4][4]==0) { tryToPlay(b, 4, 4); return true; }
+     }
+
+    if(b.board[1][0]==piece&amp;&amp;b.board[2][1]==piece&amp;&amp;b.board[3][2]==piece&amp;&amp;b.board[4][3]==0)
+     {tryToPlay(b, 4, 3); return true;}
+    if(b.board[2][1]==piece&amp;&amp;b.board[3][2]==piece&amp;&amp;b.board[4][3]==piece&amp;&amp;b.board[1][0]==0)
+     {tryToPlay(b, 1, 0); return true;}
+
+
+    if(b.board[0][3]==piece&amp;&amp;b.board[1][2]==piece&amp;&amp;b.board[2][1]==piece&amp;&amp;b.board[3][0]==0)
+     {tryToPlay(b, 3, 0); return true;}
+    if(b.board[3][0]==piece&amp;&amp;b.board[1][2]==piece&amp;&amp;b.board[2][1]==piece&amp;&amp;b.board[0][3]==0)
+     {tryToPlay(b, 0, 3); return true;}
+
+    if(b.board[0][4]==piece&amp;&amp;b.board[1][3]==piece&amp;&amp;b.board[2][2]==piece&amp;&amp;b.board[3][1]==0)
+     {tryToPlay(b, 3, 1); return true;}
+    if(b.board[2][2]==piece&amp;&amp;b.board[3][1]==piece&amp;&amp;b.board[4][0]==piece&amp;&amp;b.board[1][3]==0)
+     {tryToPlay(b, 1, 3); return true;}
+    if(b.board[1][3]==piece&amp;&amp;b.board[2][2]==piece&amp;&amp;b.board[3][1]==piece)
+     {
+      if(b.board[0][4]==0) { tryToPlay(b, 0, 4); return true; }
+      if(b.board[4][0]==0) { tryToPlay(b, 4, 0); return true; }
+     }
+
+    if(b.board[1][4]==piece&amp;&amp;b.board[2][3]==piece&amp;&amp;b.board[3][2]==piece&amp;&amp;b.board[4][1]==0)
+     {tryToPlay(b, 4, 1); return true;}
+    if(b.board[2][3]==piece&amp;&amp;b.board[3][2]==piece&amp;&amp;b.board[4][1]==piece&amp;&amp;b.board[1][4]==0)
+     {tryToPlay(b, 1, 4); return true;}
+
+    // square
+    for(int i=0; i&lt;=3; i++)
+    {
+     for(int j=0; j&lt;=3; j++)
+      {
+       if(b.board[i][j]==piece&amp;&amp;b.board[i+1][j]==piece&amp;&amp;b.board[i][j+1]==piece&amp;&amp;b.board[i+1][j+1]==0)
+        { tryToPlay(b, i+1, j+1); return true; }
+       if(b.board[i][j]==piece&amp;&amp;b.board[i+1][j]==piece&amp;&amp;b.board[i+1][j+1]==piece&amp;&amp;b.board[i][j+1]==0)
+        { tryToPlay(b, i, j+1); return true; }
+       if(b.board[i+1][j+1]==piece&amp;&amp;b.board[i+1][j]==piece&amp;&amp;b.board[i][j+1]==piece&amp;&amp;b.board[i][j]==0)
+        { tryToPlay(b, i, j); return true; }
+       if(b.board[i][j]==piece&amp;&amp;b.board[i+1][j+1]==piece&amp;&amp;b.board[i][j+1]==piece&amp;&amp;b.board[i+1][j]==0)
+        { tryToPlay(b, i+1, j); return true; }
+      }
+    }
+
+    return false;
+  }
+
+  private static void playInACorner(TTBoard b)
+  {
+    if(b.board[1][1] != TTEngine.EMPTY &amp;&amp;
+       b.board[1][3] != TTEngine.EMPTY &amp;&amp;
+       b.board[3][1] != TTEngine.EMPTY &amp;&amp;
+       b.board[3][3] != TTEngine.EMPTY)
+      playInACross(b);
+
+    while(true)
+    {
+      if(b.board[1][1] != TTEngine.EMPTY &amp;&amp;
+         b.board[1][3] != TTEngine.EMPTY &amp;&amp;
+         b.board[3][1] != TTEngine.EMPTY &amp;&amp;
+         b.board[3][3] != TTEngine.EMPTY)
+      {
+        return;
+      }
+
+      Thread.yield();
+      int i = getNextRandomInt(4);
+      switch(i)
+      {
+        case 0 : { if(tryToPlay(b, 1, 1)) return; }
+        case 1 : { if(tryToPlay(b, 1, 3)) return; }
+        case 2 : { if(tryToPlay(b, 3, 1)) return; }
+        case 3 : { if(tryToPlay(b, 3, 3)) return; }
+      }
+    }
+  }
+
+  private static void playInACross(TTBoard b)
+  {
+    if(b.board[1][2] != TTEngine.EMPTY &amp;&amp;
+       b.board[2][3] != TTEngine.EMPTY &amp;&amp;
+       b.board[3][2] != TTEngine.EMPTY &amp;&amp;
+       b.board[2][1] != TTEngine.EMPTY)
+      playInACorner(b);
+
+    while(true)
+    {
+      if(b.board[1][2] != TTEngine.EMPTY &amp;&amp;
+         b.board[2][3] != TTEngine.EMPTY &amp;&amp;
+         b.board[3][2] != TTEngine.EMPTY &amp;&amp;
+         b.board[2][1] != TTEngine.EMPTY)
+      {
+        return;
+      }
+
+      Thread.yield();
+      int i = getNextRandomInt(4);
+      switch(i)
+      {
+        case 0 : { if(tryToPlay(b, 1, 2)) return; }
+        case 1 : { if(tryToPlay(b, 2, 3)) return; }
+        case 2 : { if(tryToPlay(b, 3, 2)) return; }
+        case 3 : { if(tryToPlay(b, 2, 1)) return; }
+      }
+    }
+  }
+
+  private static boolean tryToPlay(TTBoard b, int x, int y)
+  {
+    if(b.board[x][y] == TTEngine.EMPTY)
+    {
+       b.newX = x;
+       b.newY = y;
+       return true;
+    }
+    else
+      return false;
+  }
+
+  private static final int getNextRandomInt(int bound)
+  {
+    return r.nextInt() % bound;
+  }
+
+  /*
+  private static void playRandom(TTBoard b)
+  {
+    while(true)
+    {
+      int x = r.nextInt(4);
+      int y = r.nextInt(4);
+      if(tryToPlay(b, x, y))
+         return;
+    }
+  }
+  */
+}
+</pre>
+        </details>
+        <details>
+            <summary>tt/TTStarter.java</summary>
+            <pre class="original">package tt;
+
+import java.applet.*;
+import java.awt.*;
+
+/**
+ * TeekoTeacher
+ *
+ * Developed for the CAPS4 Conference paper:
+ *
+ * "TeekoTeacher: A Tool for Learning Good Teeko Strategies"
+ * The Fourth International Conference on Human-System Learning
+ * Glasgow, Scotland, UK, 2003.
+ *
+ * Copyright (c) 2003. Mihailo Despotovic, Redwood City, CA, USA [ mihailod@hotmail.com ]
+ *
+ * -------------------------------------------------------------------------------------------
+ *
+ * Developer's diary:
+ *
+ * Development started on Saturday, March 15. 2003.
+ *
+ * BETA 1 released on March 19. 2003.
+ * - program is able to parse the database and advise both players
+ * - Java 1.1 compliant version released on March 21. 2003.
+ *
+ * BETA 2 released on March 23. 2003. (TODO)
+ * - fixed a nasty bug (position properties were not propagated, the first one was always suggested)
+ * - selective advising
+ * - draw detection
+ * - work with player symmetric positions
+ * - cumulative populating of same positions during the database parsing
+ * - a little bit more detailed logging info
+ *
+ * Version 1.0 Released on June 8th 2003.
+ * - the version to be shown on the CAPS4 confernece, Glasgow, UK, 2003.
+ * - same as BETA 2 but with the security exception issue (while restarting the game) fixed
+ */
+public class TTStarter extends Applet
+{
+  public static final String VERSION = "1.0 (June 8th 2003)"; // tehnically, the build date should not go here...
+
+  public static final String INSTRUCTIONS_FILE_NAME = "ttinstr.txt";
+  public static final String DATABASE_FILE_NAME = "ttdb.txt";
+  public static final int FLASH_DELAY = 400;
+
+  /**
+   * This class can be used as the main clas of an application
+   */
+  public static void main(String[] a)
+  {
+    initApplication();
+  }
+
+  /**
+   * Also, this class can be used as the entry point to an applet
+   */
+  public void init()
+  {
+    initApplication();
+  }
+
+  /**
+   * The code that actually starts the application
+   */
+  private static void initApplication()
+  {
+    new TTDatabase(DATABASE_FILE_NAME);
+    new TTFrame();
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

@@ -42,6 +42,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -50,6 +55,7 @@
             th, td { border-bottom: 1px solid #454545; }
             th { border-bottom-color: #7c7c7c; }
             td.wrong { color: #ff7160; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -75,6 +81,78 @@
         <tbody id="results"></tbody>
     </table>
     <script src="parallelsum.js"></script>
+    <details class="original">
+        <summary>The original Java code, 2 files</summary>
+        <details>
+            <summary>Adder.java</summary>
+            <pre class="original">/**
+ * Created by mihailod, Jun 11, 2007, 8:50:56 PM
+ */
+public class Adder implements Runnable {
+
+    private int start;
+    private int end;
+    public double localSum = 0;
+
+    public Adder(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public void run() {
+        for(int i=start; i&lt;end; i++) {
+            localSum += ParallelSum.A[i];
+        }
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>ParallelSum.java</summary>
+            <pre class="original">/**
+ * Created by mihailod, Jun 11, 2007, 8:42:00 PM
+ */
+public class ParallelSum {
+    private static final int N = 1000000000;
+    public static double[] A = new double[N];
+
+    public static void main(String[] args) {
+        init();
+        long start = System.currentTimeMillis();
+        double sum = 0;
+        for(int i=0; i&lt;N; i++) {
+            sum += A[i];
+        }
+        long time = System.currentTimeMillis() - start;
+        System.out.println("SERIAL sum = " + sum + " in " + time + "ms");
+        System.out.println("--------------------------");
+
+        start = System.currentTimeMillis();
+        final Adder a1 = new Adder(0, N/2);
+        final Adder a2 = new Adder(N/2, N);
+        final Thread t1 = new Thread(a1);
+        final Thread t2 = new Thread(a2);
+        t1.start();
+        t2.start();
+        try {
+            t1.join();
+            t2.join();
+        } catch(InterruptedException ie) {
+            ie.printStackTrace();
+        }
+        time = System.currentTimeMillis() - start;
+        System.out.println("PARALLEL sum = " + sum + " in " + time + "ms");
+    }
+
+    private static void init() {
+        for(int i=0; i&lt;N; i++) {
+            A[i] = 1;
+        }
+    }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

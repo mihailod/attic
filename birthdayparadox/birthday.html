@@ -60,6 +60,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -77,6 +82,7 @@
             .day.one { background: #3b5d85; }
             #tally { color: #b6b6b6; }
             #table { background: #1b1b1b; border: 1px solid #454545; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -109,6 +115,32 @@
         <pre id="table"></pre>
     </details>
     <script src="birthday.js"></script>
+    <details class="original">
+        <summary>The original Java code: BP.java</summary>
+        <pre class="original">
+/**
+ * @author Mihailo Despotovic
+ * @since Sep 18, 2005 3:04:26 PM
+ */
+public class BP
+{
+  private static final double DAYS = 365d;
+
+  public static void main(String[] args)
+  {
+    System.out.println("Probabilities that 2 people in the room will have the same birthday:");
+    System.out.println("People --- Probability");
+    for(int people=0; people&lt;90; people++)
+    {
+      double p = 1;
+      for(int i=0; i&lt;people; i++)
+        p *= (DAYS-i)/DAYS;
+      System.out.println(people + " --- " + (1-p));
+    }
+  }
+}
+</pre>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

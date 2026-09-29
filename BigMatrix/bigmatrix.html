@@ -44,6 +44,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -55,6 +60,7 @@
             .ok { color: #60bc71; }
             .wrong { color: #ff7160; }
             #note { color: #b6b6b6; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -84,6 +90,141 @@
     <p id="summary"></p>
     <p id="note"></p>
     <script src="bigmatrix.js"></script>
+    <details class="original">
+        <summary>The original Java code, 2 files</summary>
+        <details>
+            <summary>BigMatrix.java</summary>
+            <pre class="original">/**
+ * User: mihailod, Apr 29, 2007, 8:43:32 AM
+ */
+public class BigMatrix {
+
+    private static boolean parallel = true;
+    public static boolean rowMajor = true;
+
+    public static final int N = 6000;
+    public static int[][] A = new int[N][N];
+    public static int[][] B = new int[N][N];
+    public static int[][] C = new int[N][N];
+
+    public static void main(String[] arg) {
+        init();
+        if(parallel) {
+            addParallel();
+        } else {
+            addSerial();
+        }
+    }
+
+    private static void addSerial() {
+        if(rowMajor) {
+            addRowMajor();
+        } else {
+            addColMajor();
+        }
+    }
+
+    private static void addParallel() {
+        long startTime = System.currentTimeMillis();
+
+        int cpus = Runtime.getRuntime().availableProcessors();
+        int load = N / cpus;
+
+        MatrixRowBasedAdder adders[] = new MatrixRowBasedAdder[cpus];
+        Thread threads[] = new Thread[cpus];
+        int start = 0;
+        for(int i=0; i&lt;cpus; i++) {
+            adders[i] = new MatrixRowBasedAdder();
+            threads[i] = new Thread(adders[i]);
+            adders[i].start = start;
+            start += load;
+            adders[i].end = start;
+        }
+
+        for(Thread t : threads) {
+            t.start();
+        }
+
+        for(Thread t : threads) {
+            try {
+                t.join(999999999);
+                System.out.println("thread " + t + " done");
+            } catch(InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+
+        System.out.println("Parallel time: " + (System.currentTimeMillis() - startTime) + "ms");
+    }
+
+    private static void addRowMajor() {
+        long start = System.currentTimeMillis();
+        for(int i=0; i&lt;N; i++) {
+            for(int j=0; j&lt;N; j++) {
+                C[i][j] = A[i][j] + B[i][j];
+            }
+        }
+        System.out.println("Row major time:" + (System.currentTimeMillis() - start) + "ms");
+    }
+
+    private static void addColMajor() {
+        long start = System.currentTimeMillis();
+        for(int j=0; j&lt;N; j++) {
+            if(j % 1000 == 0) {
+                //System.out.print(j + " ");
+            }
+            for(int i=0; i&lt;N; i++) {
+                C[i][j] = A[i][j] + B[i][j];
+            }
+        }
+        System.out.println("\nCol major time:" + (System.currentTimeMillis() - start) + "ms");
+
+    }
+
+    private static void init() {
+        long start = System.currentTimeMillis();
+        for(int i=0; i&lt;N; i++) {
+            for(int j=0; j&lt;N; j++) {
+                A[i][j] = B[i][j] = i+j;
+            }
+        }
+        System.out.println("Init time (row major):" + (System.currentTimeMillis() - start) + "ms");
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>MatrixRowBasedAdder.java</summary>
+            <pre class="original">/**
+ * User: mihailod, Jun 9, 2007, 4:45:22 PM
+ */
+public class MatrixRowBasedAdder implements Runnable {
+
+    public int start;
+    public int end;
+
+    public void run() {
+        System.out.println(Thread.currentThread() + " Start: " + start + " End: " + (end-1));
+        for(int i=start; i&lt;end; i++) {
+            for(int j=0; j&lt;BigMatrix.N; j++) {
+                if(j % 1000 == 0) {
+                    //System.out.print(Thread.currentThread().getId());
+                    if(j % 80000 == 0) {
+                       // System.out.println();
+                    }
+                }
+                if(BigMatrix.rowMajor) {
+                    BigMatrix.C[i][j] = BigMatrix.A[i][j] + BigMatrix.B[i][j];
+                } else {
+                    BigMatrix.C[j][i] = BigMatrix.A[j][i] + BigMatrix.B[j][i];                    
+                }
+            }
+        }
+    }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

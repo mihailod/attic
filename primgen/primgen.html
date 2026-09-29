@@ -57,12 +57,18 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
             .intro { color: #aeaeae; }
             pre { border: 1px solid #6d6d6d; }
             .note { color: #a6a6a6; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -130,6 +136,754 @@
         encrypts the same way. Don't use it to protect anything.</p>
 
     <script src="primgen.js"></script>
+    <details class="original">
+        <summary>The original Java code, 11 files</summary>
+        <details>
+            <summary>PrimeGen.java</summary>
+            <pre class="original">import com.mihailod.crypto.rsa.Util;
+
+import java.util.Random;
+import java.math.BigInteger;
+
+/**
+ * Created by mihailod, 23.05.2008., 23.54.37
+ */
+public class PrimeGen {
+
+    private static final int NUM = 100;
+    private static final int BITS = 12;
+    private static final Random r;
+    static {
+        r = new Random(System.currentTimeMillis());
+        PrimeNumbers.init();
+    }
+
+    public static void main(final String[] args) {
+        //primGen64Bit();
+        for(int i=0; i&lt;NUM; i++) {
+            new Thread() {
+                public void run() {
+                    final long start = System.currentTimeMillis();
+                    final BigInteger candidate = BigInteger.probablePrime(BITS, r);
+                    Util.p("Testing " + candidate);
+                    final long ms = System.currentTimeMillis() - start;
+                    //p(candidate.toString() + " in " + ms + " ms" + " by " + Thread.currentThread().getId());
+                    PrimeTest.isPrimeNaive(candidate);
+                }
+            }.start();
+        }
+    }
+
+    // big numbers methods
+
+    private static BigInteger findOneCandidate() {
+        for(int i=0; i&lt;5; i++) {
+            final BigInteger candidate = new BigInteger(BITS, r);
+            System.out.println(candidate);
+        }
+        return BigInteger.ZERO;
+    }
+
+    // 64-bit methods (actually, 63 bits since it's java!)
+
+    private static void primGen64Bit() {
+        for(int i=0; i&lt;NUM; i++) {
+            final long start = System.currentTimeMillis();
+            final long candidate = findOneCandiate64Bit();
+            final long ms = System.currentTimeMillis() - start;
+            Util.p(candidate + " [" + ms + " ms]");
+        }
+    }
+
+    private static long findOneCandiate64Bit() {
+        for(;;) {
+            long candidate = r.nextLong();
+            if(candidate &lt; 0) {
+                candidate &amp;= 0x7FFFFFFFFFFFFFFFL;
+            }
+            candidate |= 0x1;
+            candidate |= 0x4000000000000000L;
+            final int smallDivisor = findSmallDivisor64(candidate);
+            if(smallDivisor == 0) {
+                return candidate;
+            }
+        }
+    }
+
+    // utility methods
+
+    private static int findSmallDivisor64(final long l) {
+        for(final int prime : PrimeNumbers.PRIMES64) {
+            if(l % prime == 0) {
+                return prime;
+            }
+        }
+        return 0;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>PrimeNumbers.java</summary>
+            <pre class="original">import java.io.*;
+import java.util.StringTokenizer;
+import java.math.BigInteger;
+
+/**
+ * Created by mihailod, 24.05.2008., 00.33.16
+ */
+public class PrimeNumbers {
+
+    private static final int N = 78498;
+
+    public static final int[] PRIMES64 = new int[N];
+    public static final BigInteger[] PRIMES = new BigInteger[N];
+
+    public static void init() {
+    }
+
+    static {
+        final long start = System.currentTimeMillis();
+        try {
+            final BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("primes.txt")));
+            final String line = br.readLine();
+            final StringTokenizer st = new StringTokenizer(line, ", ");
+            int i=0;
+            while(st.hasMoreTokens()) {
+                final String token = st.nextToken();
+                PRIMES64[i] = Integer.parseInt(token);
+                PRIMES[i] = new BigInteger(token);
+                i++;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        final long ms = System.currentTimeMillis() - start;
+        System.out.println(N + " primes initialized in " + ms + "ms");
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>PrimeTest.java</summary>
+            <pre class="original">import com.mihailod.crypto.rsa.Util;
+
+import java.math.BigInteger;
+
+/**
+ * Created by mihailod, 24.05.2008., 11.20.02
+ */
+public class PrimeTest {
+
+    private static BigInteger ZERO = BigInteger.ZERO;
+    private static BigInteger ONE = BigInteger.ONE;
+    private static BigInteger TWO = ONE.add(ONE);
+    private static BigInteger SIX = TWO.add(TWO).add(TWO);
+    private static BigInteger MILLION = new BigInteger("1000000");
+
+    public static boolean isPrimeNaive(final BigInteger n) {
+        long start = System.currentTimeMillis();
+
+        for(final BigInteger p : PrimeNumbers.PRIMES) {
+            final BigInteger dr[] = n.divideAndRemainder(p);
+            if(dr[1].compareTo(ZERO) == 0 &amp;&amp; n.compareTo(p) != 0) {
+                Util.p("\n" + n + " is not prime!");
+                Util.p("divide it by precomputed " + p + " and you get " + dr[0] + " and remainder " + dr[1]);
+                return false;
+            }
+        }
+        Util.p("Sanity check took " + Util.msToReadableTime(System.currentTimeMillis() - start));
+
+        start = System.currentTimeMillis();
+
+        float percentPrev = 0;
+        float percent;
+
+        long msPrev = start;
+        long ms;
+
+        final BigInteger sqrt = TWO.pow(n.bitLength() / 2);
+        BigInteger feedbackGranularity = MILLION; // try this first, increase if too small
+
+        BigInteger firstToTest = new BigInteger((PrimeNumbers.PRIMES[PrimeNumbers.PRIMES.length - 1].add(TWO)).toString());
+        BigInteger k = firstToTest.divide(SIX);
+
+        for(;;) {
+
+            if(k.compareTo(sqrt) &gt; 0) {
+                break;
+            }
+
+            final BigInteger prev = k.subtract(ONE);
+            final BigInteger next = prev.add(TWO);
+
+            BigInteger[] dr = n.divideAndRemainder(prev);
+            if(dr[1].compareTo(ZERO) == 0) {
+                Util.p("\n" + n + " is not prime!");
+                Util.p("divide it by " + prev + " and you get " + dr[0] + " and remainder " + dr[1]);
+                return false;
+            }
+            dr = n.divideAndRemainder(next);
+            if(dr[1].compareTo(ZERO) == 0) {
+                Util.p("\n" + n + " is not prime!");
+                Util.p("divide it by " + prev + " and you get " + dr[0] + " and remainder " + dr[1]);
+                return false;
+            }
+
+            k = k.add(SIX);
+
+            if(k.divideAndRemainder(feedbackGranularity)[1].intValue() &lt; SIX.intValue()) {
+                percent = k.floatValue() * 100 / sqrt.floatValue();
+                ms = System.currentTimeMillis();
+                final double msDiff = System.currentTimeMillis() - msPrev;
+
+                // let's estimate time remaining
+                final double percentDiff = percent - percentPrev;
+                final boolean estimateOK;
+                if(percentDiff &lt; 0.1) {
+                    estimateOK = false;
+                    feedbackGranularity = feedbackGranularity.multiply(TWO);
+                } else {
+                    estimateOK = true;
+                }
+
+                if(estimateOK) {
+                    final double msForPercent = msDiff / percentDiff;
+                    final double estimateTotal = msForPercent * 100;
+                    final double estimateRemaininig = estimateTotal - msForPercent * percent;
+                    Util.p(((int)(percent * 100)) / 100f + "% done, " + Util.msToReadableTime((long)estimateRemaininig) + " to go...");
+                } else {
+                    Util.p(percent + "% done, ETA unavailable yet...");
+                }
+
+                msPrev = ms;
+                percentPrev = percent;
+            }
+        }
+        Util.p("\n" + n + " is prime!");
+        ms = System.currentTimeMillis() - start;
+        Util.p(n.bitLength() + " bits, running time " + Util.msToReadableTime(ms));
+        return true;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/math/MathUtil.java</summary>
+            <pre class="original">package com.mihailod.crypto.math;
+
+import java.math.BigInteger;
+import static java.math.BigInteger.*;
+
+/**
+ * Created by mihailod, 05.06.2008., 22.39.25
+ */
+public class MathUtil {
+
+   /**
+    * Extended Euclid's algorithm solves a*u + b*v = gcd(a, b).
+    * @param a parameter a
+    * @param b parameter b
+    * @return an array of three numbers: u, v and gcd(a, b)
+    */
+    public static BigInteger[] extendedEuclid(final BigInteger a, final BigInteger b) {
+        if (b.compareTo(ZERO) == 0) {
+            final BigInteger result[] = {ONE, ZERO, a};
+            return result;
+        }
+
+        final BigInteger u = a;
+        final BigInteger v = b;
+        BigInteger x1, x2, x3, y1, y2, y3;
+
+        if (u.compareTo(v) &lt; 0) {
+            x1 = ZERO; x2 = ONE; x3 = v;
+            y1 = ONE; y2 = ZERO; y3 = u;
+        } else {
+            x1 = ONE; x2 = ZERO; x3 = u;
+            y1 = ZERO; y2 = ONE; y3 = v;
+        }
+
+        while (y3.compareTo(ONE) &gt; 0) {
+            final BigInteger q = x3.divide(y3);
+            final BigInteger t1 = x1.subtract(q.multiply(y1));
+            final BigInteger t2 = x2.subtract(q.multiply(y2));
+            final BigInteger t3 = x3.subtract(q.multiply(y3));
+
+            x1 = y1; x2 = y2; x3 = y3;
+            y1 = t1; y2 = t2; y3 = t3;
+        }
+        if (y3.compareTo(ZERO) == 0) {
+            final BigInteger result[] = {x1, x2, x3};
+            return result;
+        } else {
+            final BigInteger result[] = {y1, y2, y3};
+            return result;
+        }
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSA.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+import java.math.BigInteger;
+import static java.math.BigInteger.*;
+import java.util.StringTokenizer;
+
+/**
+ * Created by mihailod, 01.06.2008., 17.16.02
+ */
+public class RSA {
+
+    private static final BigInteger BI_256 = new BigInteger("256");
+    private static final byte PAD_MARKER = (byte)63;
+
+    private RSAData rsa = null;
+
+    public RSA(final RSAData rsa) throws RSAException {
+        RSAData.throwIfBad(rsa);
+        this.rsa = rsa;
+    }
+
+    /**
+     * c = m^e mod n
+     * @param m plaintext bytes
+     * @return encrypted bytes
+     */
+    public byte[] encrypt(final byte[] m) {
+        final byte[] pm = pad(m);
+        final StringBuilder sb = new StringBuilder();
+        for(int i=0; i&lt;pm.length; i+=rsa.numBytesInBlock) {
+            BigInteger block = ZERO;
+            for(int j=0; j&lt;rsa.numBytesInBlock; j++) {
+                // contruct a big number from the digits
+                block = block.multiply(BI_256).add(new BigInteger(String.valueOf(pm[i+j])));
+            }
+            final BigInteger encryption = block.modPow(RSAData.e, rsa.n);
+            sb.append(encryption.toString()).append("\n");
+        }
+        return sb.toString().getBytes();
+    }
+
+    /**
+     * m = c^d mod n
+     * @param c encrypted bytes
+     * @return plaintext bytes
+     * @throws RSAException if anything bad happens 
+     */
+    public byte[] decrypt(final byte[] c) throws RSAException {
+        final StringBuilder sb = new StringBuilder();
+        final StringTokenizer st = new StringTokenizer(new String(c), "\n");
+        final char[] chars = new char[rsa.numBytesInBlock];
+        BigInteger big;
+        BigInteger dandr[];
+        while(st.hasMoreTokens()) {
+            final String token = st.nextToken();
+            big = (new BigInteger(token)).modPow(rsa.d, rsa.n);
+            for(int i=0; i&lt;rsa.numBytesInBlock; i++) {
+                // deduct the digits from a big number (they will be backwards!)
+                dandr = big.divideAndRemainder(BI_256);
+                big = dandr[0];
+                chars[(rsa.numBytesInBlock - 1) - i] = (char)(dandr[1].intValue());
+            }
+            sb.append(chars);
+        }
+        return unpad(sb.toString().getBytes());
+    }
+
+    /**
+     * Pad the bytes with the padding marker and the appropriate number of zeros.
+     * @param m unpadded message
+     * @return padded message
+     */
+    private byte[] pad(final byte[] m) {
+        final int missing = rsa.numBytesInBlock - (m.length % rsa.numBytesInBlock);
+        final byte[] pm = new byte[m.length + missing];
+        System.arraycopy(m, 0, pm, 0, m.length);
+        pm[m.length] = PAD_MARKER;
+        // this loop is necessary in Java since the bytes in the array are already initialized to 0
+        for(int i=m.length+1; i&lt;pm.length; i++) {
+            pm[i] = (byte)0;
+        }
+        return pm;
+    }
+
+    /**
+     * Unpad the bytes.
+     * @param pm padded bytes
+     * @return unpadded bytes
+     * @throws RSAException if the padding bute not 0 or pad marker not found.
+     */
+    private static byte[] unpad(final byte[] pm) throws RSAException {
+        // need to discover the last byte with value 128
+        int i;
+        for(i=pm.length-1; i&gt;0; i--) {
+            final byte b = pm[i];
+            if(b == 0) {
+                /* keep going */
+            } else if(b == PAD_MARKER) {
+                break;
+            } else {
+                throw new RSAException("Pading byte not 0!");
+            }
+        }
+        if(i == 0) {
+            throw new RSAException("Pad marker not found in the message!");
+        }
+        // at this point, i marks the last valid byte before the padding
+        final byte[] m = new byte[i];
+        System.arraycopy(pm, 0, m, 0, m.length);
+        return m;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSACLI.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+import java.io.*;
+
+/**
+ * Created by mihailod, 07.06.2008., 16.17.12
+ *
+ * Command Line Interface for the RSA engine
+ */
+public class RSACLI {
+    public static void main(final String[] args) {
+        if(args.length != 3) {
+            usage();
+            return;
+        }
+        if("g".equals(args[0])) {
+            generate(args[1], args[2]);
+        } else if("e".equals(args[0])) {
+            encrypt(args[1], args[2]);
+        } else if("d".equals(args[0])) {
+            decrypt(args[1], args[2]);
+        } else {
+            usage();
+        }
+    }
+
+    private static void generate(final String privFile, final String pubFile) {
+        final RSAData rsaData = RSAKeyPairGenerator.generateKeys(new RSAData());
+        PrintWriter privpw = null;
+        PrintWriter pubpw = null;
+        try {
+            privpw = new PrintWriter(new FileWriter(privFile));
+            pubpw = new PrintWriter(new FileWriter(pubFile));
+            privpw.println(rsaData.getPrivateKey());
+            pubpw.println(rsaData.getPublicKey());
+        } catch(IOException iox) {
+            iox.printStackTrace();
+        } finally {
+            if(privpw != null) {
+                privpw.flush();
+                privpw.close();
+            }
+            if(pubpw != null) {
+                pubpw.flush();
+                pubpw.close();
+            }
+        }
+    }
+
+    private static void encrypt(final String keyFile, final String plainFile) {
+        BufferedReader brkey = null;
+        BufferedReader brfile = null;
+        try {
+            brkey = new BufferedReader(new FileReader(keyFile));
+            brfile = new BufferedReader(new FileReader(plainFile));
+            final String key = brkey.readLine();
+            // todo get the file as byte[]
+            final RSAData rsaData = new RSAData();
+            rsaData.setPublicKey(key);
+            final RSA rsa;
+            try {
+                rsa = new RSA(rsaData);
+            } catch(RSAException rsae) {
+                rsae.printStackTrace();
+            }
+        } catch(IOException iox) {
+            iox.printStackTrace();
+        } finally {
+            if(brkey != null) {
+                try {
+                    brkey.close();
+                } catch(IOException iox) {
+                    iox.printStackTrace();
+                }
+            }
+            if(brfile != null) {
+                try {
+                    brfile.close();
+                } catch(IOException iox) {
+                    iox.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void decrypt(final String keyFile, final String encryptedFile) {
+        // todo
+        Util.p("Not implemented...");
+    }
+
+    private static void usage() {
+        Util.p("RSACLI -- Command Line Interface for the RSA engine");
+        Util.p("by Mihailo Despotovic, May/June 2008");
+        Util.p("Usage:");
+        Util.p("  rsacli g &lt;privKeyFile&gt; &lt;pubKeyFile&gt;");
+        Util.p("  rsacli e &lt;keyFile&gt; &lt;plainFile&gt;");
+        Util.p("  rsacli d &lt;keyFile&gt; &lt;encryptedFile&gt;");
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSAData.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+import java.math.BigInteger;
+
+/**
+ * Created by mihailod, 01.06.2008., 17.06.13
+ */
+public class RSAData {
+
+    private static final int MIN_KEY_BITS = 8; // the minimum key size
+
+    public int keyBits = 512; // how many bits in the key
+
+    public static final BigInteger e = new BigInteger("65537"); // exponent, deafult to Fermat's prime 2^16 + 1
+
+    public BigInteger n; // public key
+    public BigInteger d; // private key
+
+    public String getPublicKey() {
+        return n.toString();
+    }
+
+    public void setPublicKey(final String s) {
+        n = new BigInteger(s);
+    }
+
+    public String getPrivateKey() {
+        return d.toString();
+    }
+
+    public void setPrivateKey(final String s) {
+        d = new BigInteger(s);
+    }
+
+    public int numBytesInBlock = keyBits / 8;
+
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Exponent: ").append(e).append("\n");
+        sb.append("Public key:\n").append(n).append("\n");
+        sb.append("Private key:\n").append(d).append("\n");
+        return sb.toString();
+    }
+
+    public static void throwIfBad(final RSAData rsa) throws RSAException {
+        if(rsa == null) {
+            throw new RSAException("RSAData not inited!");
+        }
+        if(rsa.keyBits % 8 != 0) {
+            throw new RSAException("keyBits must multiply 8");
+        }
+        if(rsa.keyBits &lt; MIN_KEY_BITS) {
+            throw new RSAException("keyBits cannot be less than " + MIN_KEY_BITS +"!");
+        }
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSAException.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+/**
+ * Created by mihailod, 07.06.2008., 11.11.10
+ */
+public class RSAException extends Exception {
+    public RSAException(final String msg) {
+        super(msg);
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSAKeyPairGenerator.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+import java.math.BigInteger;
+import static java.math.BigInteger.*;
+import java.security.SecureRandom;
+
+import com.mihailod.crypto.math.MathUtil;
+
+/**
+ * Created by mihailod, 01.06.2008., 12.06.52
+ *
+ * test data: p = 47, q = 71, e = 79 =&gt; d = 1019
+ */
+public class RSAKeyPairGenerator {
+
+    public static RSAData generateKeys(final RSAData rsa) {
+
+        // instantiate a random number generator
+        final SecureRandom sr = new SecureRandom();
+        sr.setSeed(System.currentTimeMillis());
+
+        // calculate the public key
+        Util.p("Calculating public key...");
+
+        // obtain p and q and calculate n
+        final BigInteger p = BigInteger.probablePrime(rsa.keyBits, sr);
+        final BigInteger q = BigInteger.probablePrime(rsa.keyBits, sr);
+        final BigInteger n = p.multiply(q);
+        rsa.n = n;
+
+        // calculate the private key
+        Util.p("Calculating private key...");
+
+        // find d such that e * d = 1 mod (p - 1)(q - 1)
+        final BigInteger p1 = p.subtract(ONE);
+        final BigInteger q1 = q.subtract(ONE);
+        final BigInteger prod = p1.multiply(q1);
+        // now need to solve ed = 1 (mod prod) i.e. d is inverse of e (mod prod)
+        final BigInteger d = findInverse(RSAData.e, prod);
+        rsa.d = d;
+
+        return rsa;
+    }
+
+    private static BigInteger findInverse(final BigInteger e, final BigInteger prod) {
+        // need to solve e * d = 1 (mod prod)
+        // now, the extended Euclid's algorithm solves a * u + b * v = gcd(a, b)
+        // which means a = e and b = 0 = prod (mod prod)
+        // and gcd(a, b) = 1 since e and prod are relatively prime (since e is prime)
+        //   (I think this is the only way the algorithm can know about the value prod, seems to work)
+        // so the formula becomes: e * u + prod * b = 1 (mod prod)
+        // and we need to invoke the algorithm with e and prod as the inputs a and b
+        // and the result will be u, which is the first element of the return array
+        final BigInteger[] result = MathUtil.extendedEuclid(e, prod);
+        BigInteger d = result[0];
+        if(d.compareTo(ZERO) &lt; 0) {
+            d = d.add(prod);
+        }
+
+        //Util.p("inverse of " + e + " is " + d + " mod " + prod);
+        //Util.p("  because " + e + " * " + d + " = " + e.multiply(d));
+        //Util.p("  and then " + e.multiply(d) + " - 1 = " + e.multiply(d).subtract(ONE));
+        //Util.p("  and then " + e.multiply(d).subtract(ONE) + " / " + prod + " = " + e.multiply(d).subtract(ONE).divide(prod));
+
+        return d;
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/RSATest.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+/**
+ * Created by mihailod, 06.06.2008., 23.34.58
+ */
+public class RSATest {
+
+    public static void main(final String[] args) {
+        
+        final RSAData rsaData = RSAKeyPairGenerator.generateKeys(new RSAData());
+        Util.p(rsaData.toString());
+        final RSA rsa;
+        try {
+            rsa = new RSA(rsaData);
+        } catch(RSAException rsae) {
+            Util.p("Fatal RSA Exception occurred, terminating.");
+            rsae.printStackTrace();
+            return;
+        }
+        final String m;
+        try {
+            m = args.length == 1 ? getMessageFromFile(args[0]) : "o tempora o mores amiga!";
+        } catch(IOException iox) {
+            iox.printStackTrace();
+            return;
+        }
+        final String c = new String(rsa.encrypt(m.getBytes()));
+        Util.p("Plain text:\n" + m);
+        Util.p("Encrypted text:\n" + c);
+        final byte[] decm;
+        try {
+            decm = rsa.decrypt(c.getBytes());
+        } catch(RSAException rsae) {
+            Util.p("Fatal RSAException occurred, terminating.");
+            rsae.printStackTrace();
+            return;
+        }
+        Util.p("Decrypted text:\n" + new String(decm));
+    }
+
+    private static String getMessageFromFile(final String fileName) throws IOException {
+        final BufferedReader br = new BufferedReader(new FileReader(fileName));
+        final StringBuilder sb = new StringBuilder();
+        String line;
+        while((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>com/mihailod/crypto/rsa/Util.java</summary>
+            <pre class="original">package com.mihailod.crypto.rsa;
+
+/**
+ * Created by mihailod, 24.05.2008., 13.35.57
+ */
+public class Util {
+    public static String msToReadableTime(final long ms) {
+        final long h = ms / (1000*60*60);
+        final long m = (ms % (1000*60*60)) / (1000*60);
+        final long s = ((ms % (1000*60*60)) % (1000*60)) / 1000;
+        if(h == 0 &amp;&amp; m == 0 &amp;&amp; s == 0) {
+            return ms == 0 ? "negligible" : ms + "ms";
+        }
+        final StringBuilder sb = new StringBuilder();
+        sb.append(h &gt; 0 ? h + "h " : " ");
+        sb.append(m &gt; 0 ? m + "m " : " ");
+        sb.append(s &gt; 0 ? s + "s " : " ");
+        return sb.toString();
+    }
+
+    public static void p(final String s) {
+        System.out.println(s);
+    }
+
+    public static String makeSpacePadder(final int len) {
+        final StringBuilder sb = new StringBuilder(len);
+        for(int i=0; i&lt;len; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

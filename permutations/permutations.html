@@ -50,6 +50,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -62,6 +67,7 @@
             .row.more { color: #9f9f9f; }
             #list-head { color: #b6b6b6; }
             #list { background: #1b1b1b; border: 1px solid #454545; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -89,6 +95,55 @@
     <div id="list-head"></div>
     <pre id="list"></pre>
     <script src="permutations.js"></script>
+    <details class="original">
+        <summary>The original Java code: Permutations.java</summary>
+        <pre class="original">import java.util.*;
+
+public class Permutations {
+	private static Vector&lt;String&gt; allPerms(final String a)
+	{
+		final Vector&lt;String&gt; v = new Vector&lt;String&gt;();
+		if (a.length() &lt;= 1) {
+			v.add(a);
+		}
+		else {
+			final String allButLastChar = a.substring(0, a.length() - 1);
+			final String lastChar = a.substring(a.length() - 1, a.length());
+			final Vector&lt;String&gt; permsSoFar = allPerms(allButLastChar);
+			for (int i=0; i&lt;permsSoFar.size(); i++) {
+				final String curr = (String)permsSoFar.elementAt(i);
+				for (int j=0; j&lt;a.length(); j++) {
+					v.add(generateSimplePerm(curr, lastChar, j));
+				}
+			}
+		}
+		return v;
+	}
+	
+	private static String generateSimplePerm(final String s, final String c, final int position) {
+		final StringBuffer sb = new StringBuffer();
+		for(int i=0; i&lt;position; i++) {
+			sb.append(s.charAt(i));
+		}
+		sb.append(c);
+		for(int i=position; i&lt;s.length(); i++) {
+			sb.append(s.charAt(i));
+		}
+		return sb.toString();
+	}
+	
+	public static void main(String[] args) {
+		final String s = args.length == 0 ? "ABC" : args[0];
+		final Vector&lt;String&gt; v = allPerms(s);
+		System.out.print("String '" + s + "', number of permutations: " + v.size() + "\n{ ");
+		for (int i=0; i&lt;v.size(); i++) {
+			System.out.print(v.elementAt(i) + " ");
+		}
+		System.out.println("}");
+	}
+}
+</pre>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

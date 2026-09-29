@@ -72,6 +72,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -98,6 +103,7 @@
             .converter { border: 1px solid #6d6d6d; }
             #ascii, #convert-log { border: 1px solid #525252; }
             #convert-log { background: #1b1b1b; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -162,6 +168,4083 @@
 
     <script src="db-data.js"></script>
     <script src="flybynight.js"></script>
+    <details class="original">
+        <summary>The original Java code and documents, 27 files</summary>
+        <details>
+            <summary>overview.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This is the "Fly by Night" Application Overview
+(the same information are located in README.TXT).
+
+&lt;H2&gt;Fly by Night Application Overview.&lt;/H2&gt;
+&lt;P&gt;
+&lt;PRE&gt;
+Fly by Night Application README file
+
+------------------------
+APPLICATION INSTALLATION
+------------------------
+
+1. after unpacking of original .jar file, you will
+have the following .jar files:
+   doc.jar (user and development documentation)
+   server.jar (server source and object code)
+   client.jar (client source and object code)
+   dataconverter.jar (data converter source and object code)
+   original.jar (the original project files)
+   
+You can either unpack all jar files into the same directory
+or you can use separate jars for installation of single modules.
+It is important that the structure of the directories must be
+preserved because of Java naming conventions.
+
+NOTE: some files are shared among different jars. So, if
+you unpack them all, you will overwrite some of them which
+is a regular situation.
+
+-----------------
+APPLICATION USAGE
+-----------------
+
+The application consists of three modules:
+1. Database Server
+2. Client Application
+3. Conversion Tool
+
+In order to run any of these modules, you need:
+1. Java 2 SDK properly set up
+2. you have to change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)
+
+1. Database Server
+------------------
+Purpose: to provide access to the Fly by night data
+to client applications.
+
+Start the module with the following command:
+java -Djava.security.policy=server.policy suncertify.server.Server
+
+2. Client application
+---------------------
+Purpose: to provide easy interface towards database.
+Users should use the client application to book seats
+on desired flights.
+
+Start the module witht the following command:
+java -Djava.security.policy=client.policy suncertify.client.Client
+
+3. Conversion Tool
+------------------
+Purpose: to convert legacy "Fly by Night" data (ASCII files)
+into binary format appropriate for the database engine.
+
+Start the module witht the following command:
+java suncertify.dataconverter.Converter &lt;legacy file&gt; &lt;DB file&gt;
+
+---------------------------
+APPLICATION FILES STRUCTURE
+---------------------------
+
+After you unpack all .jar files, you will have the following
+overall directory structure (we omit source files here,
+they follow the same structure)
+
+APPLICATION_ROOT
+|   client.policy (client policy file)
+|   db (legacy database sample)
+|   README.TXT (this file)
+|   server.policy (server policy file)
+|   testascii.txt (ascii database sample)
+|
++---javadoc (directory with javadoc project files)
++---userdoc (directory with user documentation)
+|
+\---suncertify
+    +---client
+    |   |   Client.class
+    |   |
+    |   \---gui
+    |       |   Client.class (just creates MainFrame)
+    |       |   MainFrame.class (all client logic is here)
+    |       |   RemoteDialog.class (dialog for gathering of RMI connection info)
+    |       |
+    |       +---data
+    |       |       DatabaseProxy.class (Proxy database access)
+    |       |       FlightsTableModel.class (table model for GUI)
+    |       |
+    |       \---util
+    |               ColoredLabel.class (extends label - for GUI)
+    |
+    +---dataconverter
+    |       Converter.class (contains main and some wrapping stuff, calls engine)
+    |       ConverterEngine.class (converter engine)
+    |
+    +---db
+    |       Data.class (database)
+    |       DatabaseException.class (database exception)
+    |       DatabaseLock.class (database lock)
+    |       DataInfo.class (database record description)
+    |       FieldInfo.class (field record description)
+    |       Fields.class (database description)
+    |
+    \---server
+            RemoteDataRmiImplementation.class (RMI implementation)
+            RemoteDataRmiImplementation_Stub.class (RMI Stub)
+            RemoteDataRmiInterface.class (RMI interface)
+            Server.class (the server is here)
+
+---------------------
+FURTHER DOCUMENTATION
+---------------------
+
+DETAILED DESIGN DOCUMENTATION - look into the directory 'javadoc'
+
+USER DOCUMENTATION - look into the directory 'userdoc'
+
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>README.TXT</summary>
+            <pre class="original">Fly by Night Application README file
+
+------------------------
+APPLICATION INSTALLATION
+------------------------
+
+1. after unpacking of original .jar file, you will
+have the following .jar files:
+   doc.jar (user and development documentation)
+   server.jar (server source and object code)
+   client.jar (client source and object code)
+   dataconverter.jar (data converter source and object code)
+   original.jar (the original project files)
+   
+You can either unpack all jar files into the same directory
+or you can use separate jars for installation of single modules.
+It is important that the structure of the directories must be
+preserved because of Java naming conventions.
+
+NOTE: some files are shared among different jars. So, if
+you unpack them all, you will overwrite some of them which
+is a regular situation.
+
+-----------------
+APPLICATION USAGE
+-----------------
+
+The application consists of three modules:
+1. Database Server
+2. Client Application
+3. Conversion Tool
+
+In order to run any of these modules, you need:
+1. Java 2 SDK properly set up
+2. you have to change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)
+
+1. Database Server
+------------------
+Purpose: to provide access to the Fly by night data
+to client applications.
+
+Start the module with the following command:
+java -Djava.security.policy=server.policy suncertify.server.Server
+
+2. Client application
+---------------------
+Purpose: to provide easy interface towards database.
+Users should use the client application to book seats
+on desired flights.
+
+Start the module witht the following command:
+java -Djava.security.policy=client.policy suncertify.client.Client
+
+3. Conversion Tool
+------------------
+Purpose: to convert legacy "Fly by Night" data (ASCII files)
+into binary format appropriate for the database engine.
+
+Start the module witht the following command:
+java suncertify.dataconverter.Converter &lt;legacy file&gt; &lt;DB file&gt;
+
+---------------------------
+APPLICATION FILES STRUCTURE
+---------------------------
+
+After you unpack all .jar files, you will have the following
+overall directory structure (we omit source files here,
+they follow the same structure)
+
+APPLICATION_ROOT
+|   client.policy (client policy file)
+|   db (legacy database sample)
+|   README.TXT (this file)
+|   server.policy (server policy file)
+|   testascii.txt (ascii database sample)
+|
++---javadoc (directory with javadoc project files)
++---userdoc (directory with user documentation)
+|
+\---suncertify
+    +---client
+    |   |   Client.class
+    |   |
+    |   \---gui
+    |       |   Client.class (just creates MainFrame)
+    |       |   MainFrame.class (all client logic is here)
+    |       |   RemoteDialog.class (dialog for gathering of RMI connection info)
+    |       |
+    |       +---data
+    |       |       DatabaseProxy.class (Proxy database access)
+    |       |       FlightsTableModel.class (table model for GUI)
+    |       |
+    |       \---util
+    |               ColoredLabel.class (extends label - for GUI)
+    |
+    +---dataconverter
+    |       Converter.class (contains main and some wrapping stuff, calls engine)
+    |       ConverterEngine.class (converter engine)
+    |
+    +---db
+    |       Data.class (database)
+    |       DatabaseException.class (database exception)
+    |       DatabaseLock.class (database lock)
+    |       DataInfo.class (database record description)
+    |       FieldInfo.class (field record description)
+    |       Fields.class (database description)
+    |
+    \---server
+            RemoteDataRmiImplementation.class (RMI implementation)
+            RemoteDataRmiImplementation_Stub.class (RMI Stub)
+            RemoteDataRmiInterface.class (RMI interface)
+            Server.class (the server is here)
+
+---------------------
+FURTHER DOCUMENTATION
+---------------------
+
+DETAILED DESIGN DOCUMENTATION - look into the directory 'javadoc'
+
+USER DOCUMENTATION - look into the directory 'userdoc'
+</pre>
+        </details>
+        <details>
+            <summary>testascii.txt</summary>
+            <pre class="original">SA001^SFO^DEN^SpeedyAir^400^Sun^13:40^20m^50
+SA002^SFO^LHR^SpeedyAir^2000^Mon^11:20^11h65m^22
+SA003^SFO^LAX^SpeedyAir^100^Tue^10:50^22m^37
+SA004^LAX^SFO^SpeedyAir^100^Tue^14:75^34m^0
+PA001^DAL^FRA^PromptAir^800^Wed^15:25^9h35m^14
+PA002^FRA^DAL^PromptAir^800^Thu^5:25^9h55m^4
+PA003^FRA^BOM^PromptAir^700^Thu^9:30^8h30m^97
+PA004^BOM^FRA^PromptAir^700^Fri^19:45^8h10m^75
+PA005^DEN^ABQ^PromptAir^756^Wed^19:50^1h10m^43
+PA006^ABQ^DEN^PromptAir^756^Thu^8:00^1h10m^28
+PA007^DEN^ATL^PromptAir^536^Wed^18:55^2h55m^78
+PA008^ATL^DEN^PromptAir^536^Thu^6:45^3h10m^21
+RA981^FRA^BOM^RainvilleAir^700^Fri^12:00^9h30m^120
+RA982^BOM^FRA^RainvilleAir^700^Sat^4:45^9h10m^99
+RA983^DAL^FRA^RainvilleAir^800^Thu^5:55^10h35m^43
+RA984^FRA^DAL^RainvilleAir^800^Fri^15:55^10h55m^95
+RA985^DEN^ATL^RainvilleAir^536^Sat^8:50^3h55m^5
+RA986^ATL^DEN^RainvilleAir^536^Fri^16:54^4h10m^5
+RA987^DEN^ABQ^RainvilleAir^756^Thu^9:44^2h10m^7
+RA988^ABQ^DEN^RainvilleAir^756^Fri^18:20^2h10m^11
+BA001^SFO^DEN^BeethAir^387^Sun^13:40^20m^50
+BA002^SFO^LHR^BeethAir^1645^Mon^11:20^11h65m^22
+BA003^SFO^LAX^BeethAir^99^Sun^23:50^30m^7
+BA004^LAX^SFO^BeethAir^99^Sun^14:75^40m^10
+</pre>
+        </details>
+        <details>
+            <summary>Userdoc/index.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;TITLE&gt;Fly by Night Application - User Documentation&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+&lt;a name=top&gt;&lt;/a&gt;
+&lt;H2&gt;Fly By Night Application - User Documentation&lt;/H2&gt;
+
+&lt;hr&gt;
+&lt;li&gt;&lt;a href=#client&gt;Client Application&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=#server&gt;Database Server&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=#dctool&gt;Data Conversion Tool&lt;/a&gt;&lt;/li&gt;
+&lt;hr&gt;
+
+&lt;br&gt;
+
+&lt;a name=client&gt;&lt;/a&gt;&lt;a href=#top&gt;Top&lt;/a&gt;
+&lt;H3&gt;Client Application&lt;/h3&gt;
+&lt;p&gt;
+The purpose of the client application is to provide easy
+user interface for booking the seats on desired flights.
+The client application has ability to connect both to
+local and to remote database.&lt;br&gt;&lt;br&gt;
+
+In order to start the client application you have to do the
+following:&lt;br&gt;&lt;br&gt;
+&lt;li&gt;change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)&lt;/li&gt;
+&lt;li&gt;issue the following command:&lt;/li&gt;
+&lt;pre&gt;
+java -Djava.security.policy=client.policy suncertify.client.Client
+&lt;/pre&gt;
+
+The user interface is very simple, the menu consists of three
+menu items:&lt;br&gt;&lt;br&gt;
+&lt;li&gt;File (Connect Remote, Connect Local, Disconnect, Exit)&lt;/li&gt;
+&lt;li&gt;Look&amp;amp;Feel (dynamic list of available look and feels)&lt;/li&gt;
+&lt;li&gt;Help (Quick Help, About)&lt;/li&gt;
+&lt;br&gt;&lt;br&gt;
+
+There are two dropdown list boxes:
+&lt;li&gt;Departing From&lt;/li&gt;
+&lt;li&gt;Arriving To&lt;/li&gt;
+&lt;br&gt;&lt;br&gt;
+
+And two buttons:
+&lt;li&gt;Search&lt;/li&gt;
+&lt;li&gt;Book&lt;/li&gt;
+&lt;br&gt;&lt;br&gt;
+
+There is also combination of drop down list box and input field
+where you can type the number of seats
+you want to book on the particular flight or you can
+select 1, 2, 3 or 4 seats from the drop down list.&lt;br&gt;&lt;br&gt;
+
+The suggested usage of the application is as follows:&lt;br&gt;&lt;br&gt;
+
+&lt;b&gt;
+1. Connect to the database using File/Connect menu item&lt;br&gt;
+2. Use Origin/Destination boxes and Search button
+   to find desired flight(s)&lt;br&gt;
+3. Select the desired fligh&lt;br&gt;
+4. Select or enter the number of seats&lt;br&gt;
+5. Use Book button to book the seats&lt;br&gt;
+6. Repeat steps 2-5&lt;br&gt;
+6. When you are done, use File/Disconnect menu item to
+ disconnect from the database
+&lt;/b&gt;
+
+&lt;/p&gt;
+
+&lt;a name=server&gt;&lt;/a&gt;&lt;a href=#top&gt;Top&lt;/a&gt;
+&lt;H3&gt;Database Server&lt;/h3&gt;
+&lt;p&gt;
+The purpose of database server is to provide remote access
+to the Fly by Night data. Database server always provides
+access to the specific database file.&lt;br&gt;&lt;br&gt;
+
+Usage of database server is as follows:&lt;br&gt;&lt;br&gt;
+&lt;li&gt;change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)&lt;/li&gt;
+&lt;li&gt;issue the following command:&lt;/li&gt;
+&lt;pre&gt;
+java -Djava.security.policy=server.policy suncertify.server.Server
+[&amp;lt;serverName&amp;gt; &amp;lt;serverDNSname&amp;gt; &amp;lt;port&amp;gt; &amp;lt;java.rmi.server.codebase&amp;gt;]
+&lt;/pre&gt;
+
+If invoked with no arguments, the defaults are going to be used:
+&lt;li&gt;Server Name: fbnServer&lt;/li&gt;
+&lt;li&gt;Server URL: localhost&lt;/li&gt;
+&lt;li&gt;Server Port: 5015&lt;/li&gt;
+&lt;li&gt;RMI Codebase: http://localhost/&lt;/li&gt;
+&lt;/p&gt;
+
+&lt;a name=dctool&gt;&lt;/a&gt;&lt;a href=#top&gt;Top&lt;/a&gt;
+&lt;H3&gt;Data Conversion Tool&lt;/h3&gt;
+&lt;p&gt;
+The purpose of the conversion tool is to convert legacy
+data files (ASCII text files) into binary files readable
+by the Fly by Night Database Engine.&lt;br&gt;&lt;br&gt;
+
+Usage of the conversion tool is simple:&lt;br&gt;&lt;br&gt;
+&lt;li&gt;change your working directory to the
+   application root directory (the one you unpacked
+   distribution .jar file into)&lt;/li&gt;
+&lt;li&gt;Start the module witht the following command:
+&lt;pre&gt;java suncertify.dataconverter.Converter &amp;lt;legacy file&amp;gt; &amp;lt;DB file&amp;gt;&lt;/pre&gt;&lt;/li&gt;
+
+The conversion tool will display it's progress.
+If DB file already exists, you will have chance to choose
+either to append new data or to create a brand new file (the later
+option will erase old data in the file). If anything goes wrong with
+the particular information in legacy file, that information is going
+to be skipped and you will be informed about the problematic line
+number in the legacy file.&lt;br&gt;&lt;br&gt; Once the conversion is over, you can
+start using the converted file by connecting to it from the Client
+Application.
+&lt;br&gt;&lt;br&gt;
+
+Example:
+
+&lt;pre&gt;
+&gt;java suncertify.dataconverter.Converter testascii.txt a.db
+File a already exists.
+Append data (y) or make a new file (n - default) ?  &gt; n
+Making a new a file...
+Processing ascii file...
+Line 1: OK
+Line 2: OK
+Line 3: OK
+.
+.
+.
+Line 20: OK
+Line 21: OK
+Line 22: OK
+Line 23: OK
+Line 24: OK
+
+&gt;_
+
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/Client.java</summary>
+            <pre class="original">package suncertify.client;
+
+import javax.swing.*;
+
+import suncertify.client.gui.*;
+
+/**
+ * Client class for Fly by Night application.
+ * Just instantiates &lt;code&gt;MainFrame&lt;/code&gt;
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+public class Client
+{
+	/**
+	 * Main method just instantiates &lt;code&gt;MainFrame&lt;/code&gt;
+	 * 
+	 * @param String[] args
+	 */
+	public static void main(String[] args)
+	{
+		MainFrame mf = new MainFrame();
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/dataconverter/Converter.java</summary>
+            <pre class="original">package suncertify.dataconverter;
+
+import java.io.*;
+
+import suncertify.db.*;
+
+/**
+ * Converts ASCII database file to proprietary binary database file.
+ * This class really just checks input parameters and transfers the
+ * control to the converting engine - &lt;code&gt;ConverterEngine&lt;/code&gt;.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.1
+ */
+public class Converter
+{	
+	private static final int NUMBER_OF_ARGUMENTS = 2;
+	
+	/**
+	 * The main method.
+	 * Checks validity of input params and either outputs usage or
+	 * transfers control to the convertor engine.
+	 * 
+	 * @param String[] args - ASCII file name and db file name
+	 */
+	public static void main(String[] args)
+	{
+		if(args.length != NUMBER_OF_ARGUMENTS)
+		{
+			// usage
+			System.out.println("Welcome to Data Converter Utility.");
+			System.out.println("Usage: Converter " +
+						   "&lt;ASCII file name&gt; &lt;DB file name&gt;");
+		}
+		else
+		{
+			String asciiFileName = args[0];
+			String dbFileName = args[1];
+			
+			if(!createDatabase(dbFileName))
+			{
+				System.out.println("Invalid arguments. Try again.");
+			}
+			else
+			{
+				ConverterEngine ce = new ConverterEngine();
+				try
+				{	
+					ce.convert(asciiFileName, dbFileName);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Creates link towards database.
+	 * &lt;code&gt;true&lt;/code&gt; return value means OK, &lt;code&gt;false&lt;/code&gt; means
+	 * that something went wrong (&lt;code&gt;IOException&lt;/code&gt; caught).
+	 * Creates new database if it is necessary.
+	 * 
+	 * @param String dbFileName - the name of db file
+	 * 
+	 * @return boolean
+	 */
+	private static boolean createDatabase(String dbFileName)
+	{
+		try
+		{
+			File f = new File(dbFileName);
+			if(f.exists())
+			{
+				if(deleteExistingFile(dbFileName))
+				{
+					f.delete();
+					Data data = new Data(dbFileName, Fields.getFieldInfo());
+				}
+				else
+				{
+					// nothing
+				}
+			}
+			else
+			{
+				Data data = new Data(dbFileName, Fields.getFieldInfo());
+			}
+			
+			return true;
+		}
+		catch(IOException iox)
+		{
+			System.out.println("ArgumentsParser: Can't check existance of " +
+							   dbFileName + " file: " + iox.toString());
+			return false;
+		}
+	}
+	
+	/**
+	 * Handles the situation where db file already exists.
+	 * Interacts with user.
+	 * Returns &lt;code&gt;true&lt;/code&gt; if new database have to be created
+	 * and &lt;code&gt;false&lt;/code&gt; if user wants to append to the existing one.
+	 * 
+	 * @param String fileName
+	 * 
+	 * @return boolean
+	 */
+	private static boolean deleteExistingFile(String fileName)
+		throws IOException
+	{
+		final int INPUT_BUFFER_LENGTH = 1024;
+		
+		byte[] inputBuffer = new byte[INPUT_BUFFER_LENGTH];
+		
+		System.out.println("File " + fileName + " already exists.");
+		System.out.print("Append data (y) or " +
+						 "make a new file (n - default) ?  &gt; ");
+		System.in.read(inputBuffer);
+		if(inputBuffer[0] == (byte)'y' || inputBuffer[0] == (byte)'Y')
+		{
+			System.out.println("Appending...");
+			return false;
+		}
+		else
+		{
+			System.out.println("Making a new " + fileName + " file...");
+			return true;
+		}
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/dataconverter/ConverterEngine.java</summary>
+            <pre class="original">package suncertify.dataconverter;
+
+import java.io.*;
+import java.util.*;
+
+import suncertify.db.*;
+
+/**
+ * The engine for converting ASCII file to proprietary db format file.
+ * The resulting file is created by &lt;code&gt;Data&lt;/code&gt; constructor
+ * and all lines have been inserted using &lt;code&gt;Data&lt;/code&gt;'s API
+ * (method &lt;code&gt;add&lt;/code&gt; specifically).
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.1
+ */
+public class ConverterEngine
+{
+	private static final String DATA_DELIMITER = "^";
+	
+	/**
+	 * Converts ASCII file to proprietary binary db file.
+	 * Calls &lt;code&gt;processLine&lt;/code&gt; for each line in ASCII file.
+	 * 
+	 * @param String asciiFileName
+	 * @param String dbFileName
+	 * 
+	 * @exception IllegalArgumentException
+	 */
+	public void convert(String asciiFileName, String dbFileName)
+		throws IllegalArgumentException
+	{
+		try
+		{
+			Data data = new Data(dbFileName);
+			FileReader fileReader = new FileReader(asciiFileName);
+			LineNumberReader lineNumberReader = new LineNumberReader
+															(fileReader);
+			
+			String line = null;
+			System.out.println("Processing ASCII file...");
+			while((line = lineNumberReader.readLine()) != null)
+			{
+				System.out.print("Line " + lineNumberReader.getLineNumber() +
+								 ": ");
+				processLine(data, line); // can throw IllegalArgumentException
+			}
+			lineNumberReader.close();
+			fileReader.close();
+		}
+		catch(IOException iox)
+		{
+			System.out.println("\n\nConverterEngine reported error: " +
+							   iox.toString());
+		}
+	}
+	
+	/**
+	 * Processes one line of the input ASCII file
+	 * Reports the progress to the user. If the line cannot be parsed,
+	 * gives the output to the user and skips that line.
+	 * 
+	 * @param Data database
+	 * @param String line
+	 */
+	private void processLine(Data database, String line)
+		throws IllegalArgumentException
+	{
+			String[] data = new String[9];
+			StringTokenizer stringTokenizer = new StringTokenizer
+												(line, DATA_DELIMITER);
+			String nextToken = null;
+			
+			FieldInfo[] columns = database.getFieldInfo();
+			
+			boolean skip = false;
+			for(int i=0; i&lt;9; i++)
+			{
+				try
+				{
+					nextToken = stringTokenizer.nextToken();
+					
+					if(((FieldInfo)columns[i]).getLength() &lt;
+					   nextToken.length())
+					{
+						System.out.println("Field length overflow: " +
+							nextToken.length() +
+							" detected, should be less than " +
+								((FieldInfo)columns[i]).getLength() +
+										   ". Skipped.");
+						return;
+					}
+					
+					data[i] = nextToken;
+				}
+				catch(Exception e)
+				{
+					System.out.println(" Unparseable. (" + e.toString() +
+									   ") Skipped.");
+					skip = true;
+					break;
+				}
+			}
+			
+			if(!skip)
+			{
+				try
+				{
+					database.add(data); // can throw IllegalArgumentException
+					System.out.println("OK");
+				}
+				catch(DatabaseException dx)
+				{
+					System.out.println("ConverterEngine: can't add data to" +
+									   " database: " + dx.toString() +
+									   ". Skipped.");
+				}
+			}
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/dataconverter/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package implements data conversion tool.
+The conversion tool is used to convert legacy data
+into the database format.
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/Data.java</summary>
+            <pre class="original">package suncertify.db;
+
+import java.io.*;
+import java.util.*;
+
+/**
+ * This class provides the basic database services. It uses four
+ * other support classes: DataInfo, FieldInfo, Fields and DatabaseException
+ *
+ * @version 1.1  17-Nov-1997
+ */
+public class Data
+{
+	// Static lock - ensures that all instances of data class inside server's
+	// JVM share the same lock
+	private static DatabaseLock lock = new DatabaseLock();
+	
+	// wild character for criteria find
+	private static final String WILD_CHARACTER = "*";
+	
+    private static final byte LIVE_RECORD = 0;
+    private static final byte DELETED_RECORD = 1;
+    private static final int MAGIC = 0xC0C0BABE;
+
+    private static final String UNEXPECTED =
+		"Data: Unexpected database access problem";
+
+    private FieldInfo [] description;
+    private int headerLen;
+    private int recordLen = 1;
+    private int recordCount;
+    private RandomAccessFile db;
+    //final static char sc = 'A'; ---&gt; this is unused var...
+
+    /**
+    * This constructor opens an existing database given the name
+    * of the disk file containing it.
+    *
+    * @param String dbname The name of the database file to open.
+    * 
+    * @exception java.io.IOException
+    */
+    public Data(String dbname) throws IOException
+	{
+        File f = new File(dbname);
+		
+        if (f.exists() &amp;&amp; f.canRead() &amp;&amp; f.canWrite())
+		{
+            db = new RandomAccessFile(f, "rw");
+            headerLen = db.readInt();
+			
+			if(headerLen &gt; db.length() || headerLen &lt; 0)
+				throw new IOException("Data: corrupted database file.\n " +
+					"Invalid header length.\n" +
+					"(probably not fly by night file):\n" + dbname);
+			
+            int nFields= db.readInt();
+            recordCount = db.readInt();
+            description = new FieldInfo[nFields];
+            for (int i=0; i&lt;nFields; i++)
+			{
+                description[i] = new FieldInfo(db.readUTF(), db.readInt());
+                recordLen += description[i].getLength();
+            }
+            if (db.readInt() != MAGIC)
+			{
+                throw new IOException("Data: corrupted database file.\n" +
+					"Magic not found in file " + dbname);
+            }
+            if (db.getFilePointer() != headerLen)
+			{
+                throw new IOException("Data: corrupted database file.\n" +
+					"Header length incorrect in file " + dbname);
+            }
+        }
+		else
+		{
+            throw new IOException("Data: request to open non-existant\n" +
+				"or inaccessible file: " + dbname);
+        }
+    }
+
+    /**
+    * This constructor creates a new database file, using the name
+    * provided for the disk file and using the FieldInfo array to
+    * describe the field names and sizes that should be created.
+    *
+    * @param String dbname The name of the database file to open.
+    * @param FieldInfo[] fields The list of fields for the schema of
+    *          this database.
+    * 
+    * @exception IOException Thrown if cannot create database file.
+    */
+    public Data(String dbname, FieldInfo[] fields) throws IOException
+	{
+        File f = new File(dbname);
+        if (!f.exists())
+		{
+            db = new RandomAccessFile(f, "rw");
+            db.writeInt(0);  // filler for header length
+            db.writeInt(fields.length);
+            recordCount = 0;
+            db.writeInt(recordCount);
+
+            for (int i = 0; i &lt; fields.length; i++)
+			{
+				db.writeUTF(fields[i].getName());
+				db.writeInt(fields[i].getLength());
+				recordLen += fields[i].getLength();
+            }
+            description = fields;
+            db.writeInt(MAGIC);
+            headerLen = (int)db.getFilePointer();
+            db.seek(0);
+            db.writeInt(headerLen);
+        }
+		else
+		{
+            throw new IOException("Data: request to create code-existing " +
+                                  "file" + dbname);
+        }
+    }
+
+    /**
+    * This method returns a description of the database schema, as an
+    * array of FieldInfo objects.
+    *
+    * @return FieldInfo[] The array of FieldInfo objects that comprise
+    *          the schema to this database.
+    */
+	public synchronized FieldInfo [] getFieldInfo() { return description; }
+
+    /**
+    * Gets the number of records stored in the database.
+    */
+    public synchronized int getRecordCount() { return recordCount; }
+
+    /**
+    * Gets a requested record from the database based on record number.
+    * @param recNum The number of the record to read (first record is 1).
+    * @return DataInfo for the record or null if the record has been marked for
+    *    deletion.
+    * 
+    * @exception DatabaseException Thrown if database file cannot be accessed.
+    */
+    public synchronized DataInfo getRecord(int recNum)
+		throws DatabaseException
+	{
+        try
+		{
+           if (recNum&lt;1)
+		   {
+              throw new DatabaseException("Record number must be greater than 1");
+           }
+
+            seek(recNum);
+            
+            String records[] = readRecord();
+            if (records == null)
+			{
+               return null;
+            }
+
+            return new DataInfo(recNum, description, records);
+        }
+		catch(IOException ex)
+		{
+            throw new DatabaseException(UNEXPECTED);
+        }
+    }
+
+	// codeserve old api
+	public synchronized DataInfo find(int whichField, String toMatch)
+		throws IllegalArgumentException, DatabaseException
+	{
+		if(whichField &lt; 0 || whichField &gt; Fields.getFieldNamesAsVector().size())
+			throw new IllegalArgumentException("Field number " + whichField +
+				" doesn't exist");
+		
+		String fieldName = (String)Fields.getFieldNamesAsVector().elementAt(whichField);
+		DataInfo dataInfo[] = find(fieldName, toMatch);
+		if(dataInfo == null)
+		{
+			return null;
+		}
+		else
+		{
+			return dataInfo[0];
+		}
+	}
+	
+    /**
+    * This method searches the database for all entries with a field
+    * which exactly matches the string supplied. If the required
+    * record cannot be found, this method returns null. For this
+    * assignment, the key field is the record number field.
+    *
+    * @param whichField The name of the field where to seek for the match
+    * @param toMatch The key field value to match upon for
+    *           a successful find.
+    * @return DataInfo The matching record.
+    * 
+    * @exception DatabaseException
+    *	Thrown when database file could not be accessed.
+    * @exception IllegalArgumentException
+    *	Thrown when field name doesn't exist
+    */
+    public synchronized DataInfo[] find(String whichField, String toMatch)
+		throws DatabaseException, IllegalArgumentException
+	{	
+        invariant();
+		
+		if(!Fields.getFieldNamesAsVector().contains(whichField))
+			throw new IllegalArgumentException("Field name " + whichField +
+					" doesn't exist");
+		
+		Vector resultSetOfKeys = new Vector();
+		DataInfo[] resultSet = null;
+		boolean found = false;
+		
+		if(toMatch.equals(WILD_CHARACTER))
+		{
+			found = true;
+			for(int i=1; i&lt;=this.recordCount; i++)
+				resultSetOfKeys.addElement(new Integer(i));
+		}
+		else
+		{
+			int whichFieldInt = Fields.getFieldNamesAsVector().indexOf(whichField);
+		
+			try
+			{
+	            seek(1);
+
+		        String [] values = null;
+
+				for (int r = 1; r &lt;= recordCount; r++)
+				{
+	                values = readRecord();
+	
+		            if ((values != null) &amp;&amp; (values[whichFieldInt].equals(toMatch)))
+					{
+				        found = true;
+						resultSetOfKeys.addElement(new Integer(r));
+					}
+				}
+			}
+			catch (IOException e)
+			{
+	            throw new DatabaseException(UNEXPECTED + e);
+			}
+		}
+				
+		if (found)
+		{
+			//System.out.println("resultSetOfKeys: " + resultSetOfKeys);
+				
+			resultSet = new DataInfo[resultSetOfKeys.size()];
+			for(int i = 0; i &lt; resultSetOfKeys.size(); i++)
+			{
+				resultSet[i] = getRecord
+					(((Integer)resultSetOfKeys.elementAt(i)).intValue());
+			}
+		}
+		
+		return resultSet;
+	}
+	
+	/**
+	 * This method searches the database for entries matching the criteria
+	 * supplied. Criteria take a form of a comma separated list of
+	 * &lt;field name&gt;=&lt;'value to match'&gt; specifications. This method searches
+	 * for EXACT matches only. Example: "Carrier='SpeedyAir',Origin='SFO'"
+	 * If the required  record cannot be found, this method returns null. 
+	 * 
+	 * @param criteria The list of specifications
+	 * 
+	 * @exception DatabaseException Thrown when database file could not be
+	 *                              accessed.
+	 * @exception InvalidArgumentException Thrown when the argument syntax is
+	 *									   incorrect
+	 */
+	public synchronized DataInfo[] criteriaFind(String criteria)
+		throws IllegalArgumentException, DatabaseException
+	{
+		if(criteria.trim().length() == 0)
+			throw new IllegalArgumentException
+				("Tried to match empty criteria");
+		
+		DataInfo[] resultSet = null;
+		DataInfo[] dataInfo = null;
+		
+		Vector fields = new Vector();
+		Vector values = new Vector();
+		Vector finalResultSet = null;
+		
+		String field = null;
+		String value = null;
+		String nextToken = null;
+		int position = -1;
+		
+		StringTokenizer stringTokenizer = new StringTokenizer(criteria, ",");
+		
+		while(stringTokenizer.hasMoreTokens())
+		{
+			nextToken = stringTokenizer.nextToken();
+			
+			position = nextToken.indexOf("=");
+			if(position &lt; 0)
+				throw new IllegalArgumentException
+					("Specification must be in form 'field'='value'");
+			
+			// parse field
+			field = nextToken.substring(0, position);
+
+			if(field.trim().length() == 0)
+				throw new IllegalArgumentException("Empty field name");
+			
+			// validate field name
+			if(!Fields.getFieldNamesAsVector().contains(field))
+				throw new IllegalArgumentException("Invalid field name: " +
+																	field);
+			
+			// parse value
+			value = nextToken.substring(position + 1, nextToken.length());
+			
+			if(!(value.startsWith("'") &amp;&amp; value.endsWith("'")))
+			{
+			   throw new IllegalArgumentException
+				("Value must be in the form 'value'");		
+			}
+			else
+			{
+				value = value.substring(1, value.length() - 1);
+			}
+			
+			if(value.trim().length() == 0)
+				throw new IllegalArgumentException("Empty field value");
+			
+			fields.addElement(field);
+			values.addElement(value);
+		}
+		
+		// now, search for each criteria narrowing the result set
+		for(int i=0; i&lt;fields.size(); i++)
+		{	
+			resultSet = find((String)fields.elementAt(i),
+							 (String)values.elementAt(i));
+			if(resultSet == null)
+			{
+				finalResultSet = new Vector();
+				break;
+			}
+			else
+			{
+				if(finalResultSet == null)
+				{
+					finalResultSet = new Vector();
+					for(int j=0; j&lt;resultSet.length; j++)
+						finalResultSet.addElement
+							(new Integer(resultSet[j].getRecordNumber()));
+				}
+				else
+				{
+					Vector temp = new Vector();
+					for(int j=0; j&lt;resultSet.length; j++)
+					{
+						if(finalResultSet.contains
+							(new Integer(resultSet[j].getRecordNumber())))
+						{
+							temp.addElement(new Integer(resultSet[j].getRecordNumber()));
+						}
+					}
+					finalResultSet = temp;
+				}
+			}
+		}
+		
+		if(finalResultSet.size() == 0)
+		{
+			dataInfo = null;
+		}
+		else
+		{
+			dataInfo = new DataInfo[finalResultSet.size()];
+			for(int i = 0; i &lt; dataInfo.length; i++)
+			{
+				dataInfo[i] = getRecord
+					(((Integer)finalResultSet.elementAt(i)).intValue());
+			}
+		}
+		
+		return dataInfo;
+	}
+
+    /**
+    * This method adds a new record to the database. The array of
+    * strings must have exactly the same number of elements as the
+    * field count of the database schema, otherwise a RuntimeException
+    * is issued. The first field, the key, must be unique in the
+    * database or a RuntimeException is thrown.
+    *
+    * @param newData The elements of the record to add.
+    * 
+    * @exception DatabaseException Attempted to add a duplicate key or
+    *        database file could not be accessed.
+    * @exception InvalidArgumentException Propagated from find method
+    */
+    public synchronized void add(String [] newData)
+		throws DatabaseException, IllegalArgumentException
+	{
+        invariant();
+		
+		String fieldName = (String)Fields.getFieldNamesAsVector().elementAt(0);
+		
+        if (find(fieldName, newData[0]) != null)
+		{
+            throw new DatabaseException("Attempt to add a duplicate key");
+        }
+
+        try
+		{
+            seek(++recordCount);
+            writeRecord(newData);
+            db.seek(8);
+            db.writeInt(recordCount);
+        }
+        catch (IOException e)
+		{
+            throw new DatabaseException(UNEXPECTED + e);
+        }
+    }
+
+    /**
+    * This method updates the record specified by the record number
+    * field in the DataInfo argument. The fields are all modified
+    * to reflect the values in that argument. If the key field
+    * specified in the argument matches any record other than the
+    * one indicated by the record number of the argument, then a
+    * RuntimeException is thrown.
+    *
+    * @param newData The updated record to modify.
+    * 
+    * @exception DatabaseException Thrown if attempting to add a duplicate
+    *       key.
+    */
+    public synchronized void modify(DataInfo newData)
+		throws DatabaseException, IllegalArgumentException
+	{
+        invariant();
+		
+		String fieldName = (String)Fields.getFieldNamesAsVector().elementAt(0);
+		
+        DataInfo[] test = find(fieldName, (newData.getValues())[0]);
+        if ((test != null) &amp;&amp;
+            (test[0].getRecordNumber()!=newData.getRecordNumber()))
+        {
+            throw new DatabaseException("Attempt to create a "+
+                                        "duplicate key by modification");
+        }
+
+        try
+		{
+            seek(newData.getRecordNumber());
+            writeRecord(newData.getValues());
+        } catch (IOException e)
+		{
+            throw new DatabaseException(UNEXPECTED + e);
+        }
+    }
+
+    /**
+    * This method deletes the record referred to by the record
+    * number in the DataInfo argument.
+    *
+    * @param DataInfo newData The record to delete.
+    * 
+    * @exception DatabaseException Thrown if database cannot be accessed.
+    */
+    public synchronized void delete(DataInfo toDelete)
+		throws DatabaseException
+	{
+        invariant();
+        try
+		{
+            seek(toDelete.getRecordNumber());
+            db.write(DELETED_RECORD);
+        } catch (IOException e)
+		{
+            throw new DatabaseException(UNEXPECTED + e);
+        }
+    }
+
+    /**
+    * This method closes the database, flushing any outstanding
+    * writes at the same time. Any attempt to access the
+    * database after this results in a IOException.
+    */
+    public synchronized void close()
+	{
+        try
+		{
+            db.close();
+        }
+		catch (IOException e) { /* ignore */ }
+
+        db = null;
+    }
+
+    protected synchronized void finalize()
+	{
+        if (db != null)
+		{
+			System.out.println("from finalize");
+            close();
+        }
+    }
+
+    /**
+    * Reads a record from the current cursor position of the underlying random
+    * access file.
+    * 
+    * @return The array of strings that make up a database record.
+    * 
+    * @exception IOException Generated if the RandomAccessFile cannot read from
+    *        the database file.
+    */
+    private synchronized String[] readRecord() throws IOException
+	{
+        int offset = 1;
+        String[] rv = null;
+        byte[] buffer = new byte[recordLen];
+		byte[] tempBytes = null;
+
+        db.read(buffer);
+        if (buffer[0] == LIVE_RECORD)
+		{
+            rv = new String[description.length];
+            for (int i = 0; i &lt; description.length; i++)
+			{
+				// START --- THIS REPLACES DEPRECATED METHOD BELOW
+				tempBytes = new byte[description[i].getLength()];
+				System.arraycopy(buffer, offset, tempBytes, 0,
+								 description[i].getLength());
+                rv[i] = new String(tempBytes);
+				// END ---
+				
+				// DEPRECATED, replaced 
+				//rv[i] = new String(buffer, 0, offset, description[i].getLength());
+                
+				offset += description[i].getLength();
+            }
+        }
+        return rv;
+    }
+
+    /**
+    * Writes a new record to the database using the current location of the
+    * underlying random access file.
+    * 
+    * @param newData An array of strings in the database specified order.
+    * 
+    * @exception IOException Generated if the RandomAccessFile cannot write to
+    *        the file or the wrong number of fields are specified.
+    */
+    private synchronized void writeRecord(String[] newData) throws IOException
+	{
+        if (newData.length != description.length)
+		{
+            throw new IOException
+				("Data: Wrong number of fields in writeRecord() " +
+                                  newData.length + " given, " +
+								  description.length + " required");
+        }
+
+        int size, space, toCopy;
+        byte[] buffer = new byte[recordLen];
+        buffer[0] = LIVE_RECORD;
+        int offset = 1;
+		String tempString = null;
+		byte[] tempBuffer = null;
+
+        for (int i = 0; i &lt; description.length; i++)
+		{
+            space = description[i].getLength();
+            size = newData[i].length();
+            toCopy = (size &lt;= space) ? size : space;
+
+			// START --- THIS REPLACES DEPRECATED METHOD BELOW
+			tempString = newData[i].substring(0, toCopy);
+			tempBuffer = tempString.getBytes();
+			System.arraycopy(tempBuffer, 0, buffer, offset, tempBuffer.length);
+			// END ---
+		
+			// DEPRECATED, replaced 
+            //newData[i].getBytes(0, toCopy, buffer, offset);
+			
+            offset += space;
+        }
+
+        db.write(buffer);
+    }
+
+    /**
+    * Moves the current database record pointer to the specified record.
+    * 
+    * @param recno The record number to position the cursor.
+    * 
+    * @exception IOException If the record position is invalid.
+    */
+    private synchronized void seek(int recno) throws IOException
+	{
+        db.seek(headerLen + (recordLen * (recno - 1)));
+    }
+
+    /**
+    * Lock the requested record. If the argument is -1, lock the whole
+    * database. This method blocks until the lock succeeds. No timeouts
+    * are defined for this.
+    * 
+    * @param record The record number to lock.
+    * @param clientId - the client's ID
+    * 
+    * @exception DatabaseException If the record position is invalid.
+    */
+    public synchronized void lock(int record, String clientId)
+		throws DatabaseException
+	{
+		if(record == -1) // whole database locking logic
+		{
+			lock.lockDb(clientId);
+		}
+		else // regular record locking logic
+		{
+			// check if the record number is valid
+			if(record &lt; 0 || record &gt; getRecordCount())
+			{
+				throw new DatabaseException
+					("Lock Error: invalid record " + record);
+			}
+			else
+			{
+				lock.lockRow(clientId, record);
+			}
+		}
+    }
+
+    /**
+    * Unlock the requested record. If the argument is -1, unlock the whole
+    * database.
+    * 
+    * @param int record - number of the record
+    * @param String clientId - client's ID
+    * 
+    * @exception DatabaseException - if the caller does not have lock
+    * or the record number is invalid
+    */
+    public synchronized void unlock(int record, String clientId)
+		throws DatabaseException
+	{
+		if(record == -1)
+		{
+			lock.unlockDb(clientId);
+		}
+		else
+		{
+			// check if the record number is valid
+			if(record &lt; 0 || record &gt; getRecordCount())
+			{
+				throw new DatabaseException
+					("Lock Error: invalid record " + record);
+			}
+			else
+			{
+				lock.unlockRow(clientId, record);
+			}	
+		}
+    }
+
+    /**
+    * Ensures that the database structure is valid.
+    * 
+    * @exception RuntimeException If structure has become corrupted.
+    */
+    protected final synchronized void invariant()
+	{
+        boolean ok = false;
+        try
+		{
+            if (db.length() == headerLen + (recordLen * recordCount))
+			{
+                ok = true;
+            }
+        } catch (Exception e)
+		{
+            throw new RuntimeException(UNEXPECTED + e);
+        }
+
+        if (!ok)
+		{
+            throw new RuntimeException("Data: Internal error");
+        }
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/DatabaseException.java</summary>
+            <pre class="original">package suncertify.db;
+
+/**
+ * Defines DatabaseException
+ */
+public class DatabaseException extends Exception
+{
+	/**
+	 * This constructor does nothing.
+	 * In this case, &lt;code&gt;Exception&lt;/code&gt; is going to be used.
+	 */
+    public DatabaseException()
+	{
+		// nothing
+	}
+
+	/**
+	 * This constructor calls &lt;code&gt;Exception&lt;/code&gt;'s constructor 
+	 * with passed argument message
+	 * 
+	 * @param String msg
+	 */
+    public DatabaseException(String message)
+	{
+        super(message);
+    }
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/DatabaseLock.java</summary>
+            <pre class="original">package suncertify.db;
+
+import java.util.*;
+
+/**
+ * Locking object with embedded locking engine.
+ * Database has just one static instance of this class.
+ * 
+ * @author Mihailo Despotovic
+ * 
+ * @version 1.5
+ */
+public class DatabaseLock
+{
+	// Integer row - String clientId combination
+	private Hashtable lockedRecords = new Hashtable();
+	
+	// placeholder for the id of the client who locked whole db
+	private String locker = null;
+	
+	/**
+	 * Tries to lock the whole database.
+	 * If succedes, puts client id into &lt;code&gt;locker&lt;/code&gt; variable.
+	 * If someone else locked whole db, or there are locked records,
+	 * waits.
+	 * 
+	 * @param String clientId
+	 */
+	public synchronized void lockDb(String clientId)
+	{	
+		try
+		{
+			while(locker != null &amp;&amp; !locker.equals(clientId)
+				  ||
+				  thereAreForeignLocks(clientId))
+			{
+				try
+				{
+					wait();
+				}
+				catch(InterruptedException intex)
+				{
+					// ignore
+				}
+			}
+		
+			locker = clientId;
+			notifyAll();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			notifyAll();
+		}
+	}
+	
+	/**
+	 * Unlocks whole database
+	 * 
+	 * @param String clientId
+	 * 
+	 * @exception DatabaseException - thrown when database is already locked
+	 */
+	public synchronized void unlockDb(String clientId)
+		throws DatabaseException
+	{	
+		if(!locker.equals(clientId))
+		{
+			notifyAll();
+			throw new DatabaseException("DB Already Locked!");
+		}
+		else
+		{		
+			locker = null;
+			lockedRecords.clear(); // clear row level locks
+			notifyAll();
+		}
+	}
+	
+	public synchronized void lockRow(String clientId, int row)
+	{			
+		try
+		{
+			Integer temp = new Integer(row);
+			while(
+				  (
+				   locker != null &amp;&amp;
+				   !locker.equals(clientId)) // db is locked by someone else
+				  
+				  ||
+				  
+				  (
+				   lockedRecords.containsKey(temp) &amp;&amp;
+				   !lockedRecords.get(temp).equals(clientId) // record locked
+															 // by someone else
+				   )
+				  )
+			{
+				try
+				{
+					wait();
+				}
+				catch(InterruptedException intex)
+				{
+					// ignore
+				}
+			}
+		
+			// maybe I already locked whole db?
+			if(clientId.equals(locker))
+			{
+				notifyAll();
+				return;
+			}
+		
+			// maybe I already locked this record?
+			if(lockedRecords.get(temp) ==  null)
+			{
+				lockedRecords.put(temp, clientId);
+			}
+			notifyAll();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			notifyAll();
+		}
+	}
+	
+	/**
+	 * Unlocks one row in database
+	 * 
+	 * @param String clientId
+	 * @param int row
+	 * 
+	 * @exception DatabaseException - thrown when DB is already locked
+	 * by soemeone else
+	 */
+	public synchronized void unlockRow(String clientId, int row)
+		throws DatabaseException
+	{	
+		// db locked by someone else?
+		if(locker != null &amp;&amp; !locker.equals(clientId))
+		{
+			notifyAll();
+			throw new DatabaseException("DB Already Locked!");
+		}
+		
+		// db locked by me?
+		if(locker != null &amp;&amp; locker.equals(clientId))
+		{
+			notifyAll();
+			return;
+		}
+		
+		// db is not locked, check row level...
+		Integer temp = new Integer(row);
+		if(clientId.equals(lockedRecords.get(temp)))
+		{
+			// remove lock
+			lockedRecords.remove(temp);
+			notifyAll();
+		}
+		else
+		{
+			// ignore attempt to remove non-existant lock
+			// (see requirements documentation)
+			notifyAll();
+		}
+	}
+	
+	/**
+	 * Checks if there are any locked records by other clients.
+	 * This method must not been synchronized since it is called
+	 * by already synchronized method iniside the same object
+	 * 
+	 * @param String clientId
+	 * 
+	 * @return boolean
+	 */
+	private boolean thereAreForeignLocks(String clientId)
+	{
+		// but here, we need to synchronize regarding lockedRecords
+		// because Iterator is not thread-safe
+		synchronized(lockedRecords)
+		{
+			if(lockedRecords.size() == 0) return false; // no locked records
+		
+			Collection values = lockedRecords.values();
+			Iterator i = values.iterator();
+		
+			while(i.hasNext())
+			{
+				if(!(((String)i.next()).equals(clientId)))
+					return true;
+			}
+			
+			return false;
+		}
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/DataInfo.java</summary>
+            <pre class="original">package suncertify.db;
+
+import java.io.*;
+
+/**
+ * This class embodies the description of a record from the database. 
+ * It describes a record number, a list of Strings which reflect 
+ * the values of the fields in, and a description of each field.
+ *
+ * @version 1.0  11-Sep-1997
+ */
+public class DataInfo implements Serializable
+{
+  /**
+   * @serial int recordNumber
+   */
+  private int recordNumber;
+  
+  /**
+   * @serial String[] values
+   */
+  private String [] values;
+  
+  /**
+   * @serial FieldInfo[] fields
+   */
+  private FieldInfo [] fields;
+  
+  //final static char sc = 'A';
+
+  /**
+   * This constructor creates a DataInfo object which has null 
+   * Strings for its field values.
+   *
+   * @param recordNumber - the unique number for this record.
+   * @param fields - the array of FieldInfo objects
+   *                             which recodesent the names and
+   *                             lenghts of the fields in this
+   *                             DataInfo object.
+   */
+  public DataInfo(int recordNumber, FieldInfo [] fields)
+  {
+    this.recordNumber = recordNumber;
+    this.fields = new FieldInfo[fields.length];
+    System.arraycopy(fields, 0, this.fields, 0, fields.length);
+    this.values = new String[fields.length];
+  }
+
+  /**
+   * This constructor creates a DataInfo object that contains 
+   * Strings for its field values.
+   *
+   * @param recordNumber - the unique number for this record.
+   * @param fields - the array of FieldInfo objects
+   *                             which recodesent the names and
+   *                             lenghts of the fields in this
+   *                             DataInfo object.
+   * @param values - The values for the field values.
+   */
+  public DataInfo(int recordNumber, FieldInfo [] fields, String [] values)
+  {
+    this(recordNumber, fields);
+    System.arraycopy(values, 0, this.values, 0, values.length);
+  }
+
+  /**
+   * This method returns the record number associated with this 
+   * DataInfo.
+   *
+   * @returns int - the unique record number of this DataInfo
+   */
+  public synchronized int getRecordNumber() { return recordNumber; }
+
+  /**
+   * This method returns an array of Strings, which reflect the 
+   * values of the fields in this DataItem.   
+   *
+   * @returns String[] - String array of all the field values 
+   *                     of this DataInfo.
+   */
+  public synchronized String[] getValues() { return values; }
+
+  /**
+   * This method returns an array of FieldInfo objects. These 
+   * describe the database schema in terms of the name and 
+   * width of each field.   
+   *
+   * @returns FieldInfo[] - FieldInfo array of all the fields
+   *                        of this DataInfo.
+   */
+  public synchronized FieldInfo[] getFields() { return fields; }
+
+  /**
+   * This method constructs and returns a String which describes 
+   * this DataInfo object in a form suitable for debug output.
+   *
+   * @returns String - A textual recodesentation of this DataInfo.
+   */
+  public synchronized String toString() {
+    StringBuffer rv = new StringBuffer(super.toString() +
+      "recordNumber = " + recordNumber +
+      "\nFields:");
+    for (int i = 0; i &lt; fields.length; i++) {
+      rv.append("Name = " + fields[i].getName() +
+	" value = " + values[i] + "\n");
+    }
+    return rv.toString();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/FieldInfo.java</summary>
+            <pre class="original">package suncertify.db;
+
+import java.io.*;
+
+/**
+ * This class embodies the name of a field and the maximum width 
+ * that it may have.
+ * 
+ * @version 1.0  11-Sep-1997
+ */
+public class FieldInfo implements Serializable
+{
+  /**
+   * @serial String name
+   */
+  private String name;
+  
+  /**
+   * @serial int length
+   */
+  private int length;
+  //final static char sc = 'A';
+
+  /**
+   * This constructs an initialized FieldInfo object.
+   *
+   * @param String name - the name of the field.
+   * @param int length - the length of the field.
+   */
+  public FieldInfo(String name, int length) {
+    this.name = name;
+    this.length = length;
+  }
+
+  /**
+   * This method returns the name of the field.
+   *
+   * @returns String - the name of the field.
+   */
+  public synchronized String getName() {
+    return name;
+  }
+
+  /**
+   * This method returns the length of the field.
+   *
+   * @returns int - the length of the field.
+   */
+  public synchronized int getLength() {
+    return length;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/Fields.java</summary>
+            <pre class="original">package suncertify.db;
+
+import java.util.*;
+
+/**
+ * Database description.
+ * We define field names and their lenghts here.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+public class Fields
+{	
+	// field names
+	private static final String FIELD1 = "FlightNumber";
+	private static final String FIELD2 = "OriginAirport";
+	private static final String FIELD3 = "DestinationAirport";
+	private static final String FIELD4 = "Carrier";
+	private static final String FIELD5 = "Price";
+	private static final String FIELD6 = "Day";
+	private static final String FIELD7 = "Time";
+	private static final String FIELD8 = "Duration";
+	private static final String FIELD9 = "AvailableSeats";
+	
+	// field lengths
+	private static final int FIELD1_LEN =  5;
+	private static final int FIELD2_LEN =  3;
+	private static final int FIELD3_LEN =  3;
+	private static final int FIELD4_LEN = 30;
+	private static final int FIELD5_LEN =  5;
+	private static final int FIELD6_LEN =  3;
+	private static final int FIELD7_LEN =  5;
+	private static final int FIELD8_LEN =  6;
+	private static final int FIELD9_LEN =  3;
+	
+	/**
+	 * Returns field names and lenghts.
+	 * 
+	 * @return FieldInfo[]
+	 */
+	public synchronized static FieldInfo[] getFieldInfo()
+	{
+		FieldInfo fieldInfo[] = new FieldInfo[9];
+		
+		fieldInfo[0] = new FieldInfo(FIELD1, FIELD1_LEN);
+		fieldInfo[1] = new FieldInfo(FIELD2, FIELD2_LEN);
+		fieldInfo[2] = new FieldInfo(FIELD3, FIELD3_LEN);
+		fieldInfo[3] = new FieldInfo(FIELD4, FIELD4_LEN);
+		fieldInfo[4] = new FieldInfo(FIELD5, FIELD5_LEN);
+		fieldInfo[5] = new FieldInfo(FIELD6, FIELD6_LEN);
+		fieldInfo[6] = new FieldInfo(FIELD7, FIELD7_LEN);
+		fieldInfo[7] = new FieldInfo(FIELD8, FIELD8_LEN);
+		fieldInfo[8] = new FieldInfo(FIELD9, FIELD9_LEN);
+		
+		return fieldInfo;
+	}
+	
+	/**
+	 * Returns field names as Vector
+	 * 
+	 * @return Vector
+	 */
+	public synchronized static Vector getFieldNamesAsVector()
+	{
+		Vector v = new Vector();
+		v.addElement(FIELD1);
+		v.addElement(FIELD2);
+		v.addElement(FIELD3);
+		v.addElement(FIELD4);
+		v.addElement(FIELD5);
+		v.addElement(FIELD6);
+		v.addElement(FIELD7);
+		v.addElement(FIELD8);
+		v.addElement(FIELD9);
+		
+		return v;
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/db/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package implements Database engine functionality.
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/server/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package implements Database Server functionality. 
+The server uses RMI technology in order to provide clients with 
+information from database. 
+&lt;P&gt;&lt;/P&gt;&lt;PRE&gt;&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/server/RemoteDataRmiImplementation.java</summary>
+            <pre class="original">package suncertify.server;
+
+import java.rmi.*;
+import java.rmi.server.*;
+import java.io.*;
+
+import suncertify.db.*;
+
+/**
+ * Remote database implementation.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.2
+ */
+public class RemoteDataRmiImplementation extends UnicastRemoteObject
+	implements RemoteDataRmiInterface
+{	
+	/**
+	 * Database access object
+	 * 
+	 * @serial Data database
+	 */
+	private Data database = null;
+	
+	/**
+	 * The constructor just calls UnicastRemoteObject's constructor
+	 * 
+	 * @exception RemoteException
+	 */
+	public RemoteDataRmiImplementation()
+		throws RemoteException
+	{
+		super();
+	}
+	
+	/**
+	 * openDatabase implementation.
+	 * Opens database by using the &lt;code&gt;Data&lt;/code&gt;'s constructor.
+	 * Uses the binary file given as a parameter.
+	 * 
+	 * @param String databaseFileName
+	 * 
+	 * @exception RemoteException
+	 * @exception IOException
+	 */
+	public synchronized void openDatabase(String databaseFileName)
+		throws RemoteException, IOException
+	{
+		if(database == null)
+		{
+			database = new Data(databaseFileName);
+		}
+	}
+	
+	/**
+	 * getFieldInfo implementation.
+	 * 
+	 * @return FieldInfo[]
+	 */
+	public synchronized FieldInfo[] getFieldInfo()
+	{
+		return database.getFieldInfo();
+	}
+	
+	/**
+	 * getRecordCount implementation.
+	 * Returns the number of records in database.
+	 * 
+	 * @return int
+	 */
+	public synchronized int getRecordCount()
+	{
+		return database.getRecordCount();
+	}
+	
+	/**
+	 * getRecord implementation.
+	 * 
+	 * @param int recNum
+	 * 
+	 * @return DataInfo
+	 * 
+	 * @exception DatabaseException
+	 */
+    public synchronized DataInfo getRecord(int recNum)
+		throws DatabaseException
+	{
+		return database.getRecord(recNum);
+	}
+	
+	/**
+	 * find implementation (version which takes column number)
+	 * 
+	 * @param int whichField
+	 * @param String toMatch
+	 * 
+	 * @return DataInfo
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception DatabaseException
+	 */
+	public synchronized DataInfo find(int whichField, String toMatch)
+		throws IllegalArgumentException, DatabaseException
+	{
+		return database.find(whichField, toMatch);
+	}
+	
+	/**
+	 * find implementation (version which takes column name)
+	 * 
+	 * @param String whichField
+	 * @param String toMatch
+	 * 
+	 * @return DataInfo[]
+	 * 
+	 * @exception DatabaseException
+	 * @exception IllegalArguementException
+	 */
+    public synchronized DataInfo[] find(String whichField, String toMatch)
+		throws DatabaseException, IllegalArgumentException
+	{
+		return database.find(whichField, toMatch);		
+	}
+	
+	/**
+	 * add implementation
+	 * 
+	 * @param String[] newData
+	 * 
+	 * @exception DatabaseException
+	 * @exception IllegalArgumentException
+	 */
+    public synchronized void add(String[] newData)
+		throws DatabaseException, IllegalArgumentException
+	{
+		database.add(newData);
+	}
+	
+	/**
+	 * delete implementation
+	 * 
+	 * @param DataInfo toDelete
+	 * 
+	 * @exception DatabaseException
+	 */
+    public synchronized void delete(DataInfo toDelete)
+		throws DatabaseException
+	{
+		database.delete(toDelete);
+	}
+	
+	/**
+	 * close implementation
+	 */
+    public synchronized void close()
+	{
+		database.close();
+	}
+	
+	/**
+	 * modify implementation
+	 * 
+	 * @param DataInfo newData
+	 */
+	public synchronized void modify(DataInfo newData)
+		throws DatabaseException
+	{	
+		database.modify(newData);
+	}
+	
+	/**
+	 * criteriaFind implementation
+	 * 
+	 * @param String criteria
+	 * 
+	 * @return DataInfo[]
+	 * 
+	 * @exception DatabaseException
+	 */
+	public synchronized DataInfo[] criteriaFind(String criteria)
+		throws DatabaseException
+	{
+		return database.criteriaFind(criteria);
+	}
+	
+	/**
+	 * lock implementation
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 * 
+	 * @exception DatabaseException
+	 */
+	public synchronized void lock(int record, String clientId)
+		throws DatabaseException
+	{
+		database.lock(record, clientId);
+	}
+
+	/**
+	 * unlock implementation
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 * 
+	 * @exception DatabaseException
+	 */
+	public synchronized void unlock(int record, String clientId)
+		throws DatabaseException
+	{
+		database.unlock(record, clientId);
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/server/RemoteDataRmiInterface.java</summary>
+            <pre class="original">package suncertify.server;
+
+import java.io.*;
+import java.rmi.*;
+
+import suncertify.db.*;
+
+/**
+ * Remote database interface.
+ * This interface has all public methods of &lt;code&gt;Data&lt;/code&gt; class.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.1
+ */
+public interface RemoteDataRmiInterface
+	extends Remote
+{	
+	/**
+	 * Open database.
+	 * This method actually opens database binary file
+	 * 
+	 * @param String databaseFileName - name of the binary database file
+	 * 
+	 * @exception RemoteException
+	 * @exception IOException
+	 */
+	public void openDatabase(String databaseFileName)
+		throws RemoteException, IOException;
+	
+	/**
+	 * getFieldInfo stub
+	 * 
+	 * @return FieldInfo[]
+	 */
+	public FieldInfo[] getFieldInfo()
+		throws RemoteException;
+
+	/**
+	 * getRecordCount stub
+	 * 
+	 * @return int
+	 * 
+	 * @exception RemoteException
+	 */
+    public int getRecordCount()
+		throws RemoteException;
+	
+	/**
+	 * getRecord stub
+	 * 
+	 * @param int recNum - the number of the record
+	 * 
+	 * @return DataInfo
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 */
+    public DataInfo getRecord(int recNum)
+		throws RemoteException, DatabaseException;
+	
+	/**
+	 * find stub, version which accepts the column number
+	 * 
+	 * @param int whichField - where to find
+	 * @param String toMatch - what to find
+	 * 
+	 * @return DataInfo
+	 * 
+	 * @exception RemoteException
+	 * @exception IllegalArgumentException
+	 * @exception DatabaseException
+	 */
+	public DataInfo find(int whichField, String toMatch)
+		throws RemoteException, IllegalArgumentException, DatabaseException;
+	
+	/**
+	 * find stub, version which accepts the column name
+	 * 
+	 * @param String whichField - where
+	 * @param String toMatch - what
+	 * 
+	 * @return DataInfo[]
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 * @exception IllegalArgumentException
+	 */
+    public DataInfo[] find(String whichField, String toMatch)
+		throws RemoteException, DatabaseException, IllegalArgumentException;
+	
+	/**
+	 * criteriaFind stub
+	 * 
+	 * @param String criteria
+	 * 
+	 * @return DataInfo[]
+	 * 
+	 * @exception RemoteException
+	 * @exception IllegalArgumentException
+	 * @exception DatabaseException
+	 */
+	public DataInfo[] criteriaFind(String criteria)
+		throws RemoteException, IllegalArgumentException, DatabaseException;
+	
+	/**
+	 * add stub
+	 * 
+	 * @param String[] newData
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 * @exception IllegalArgumentException
+	 */
+    public void add(String[] newData)
+		throws RemoteException, DatabaseException, IllegalArgumentException;
+	
+	/**
+	 * delete stub
+	 * 
+	 * @param DataInfo toDelete
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 */
+    public void delete(DataInfo toDelete)
+		throws RemoteException, DatabaseException;
+	
+	/**
+	 * close stub
+	 * 
+	 * @exception RemoteException
+	 */
+    public void close()
+		throws RemoteException;
+	
+	/**
+	 * modify stub
+	 * 
+	 * @param DataInfo newData
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 * @exception IllegalArgumentException
+	 */
+    public void modify(DataInfo newData)
+		throws RemoteException, DatabaseException, IllegalArgumentException;
+	
+	/**
+	 * lock stub
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 */
+	public void lock(int record, String clientId)
+		throws RemoteException, DatabaseException;
+	
+	/**
+	 * unlock stub
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 */
+	public void unlock(int record, String clientId)
+		throws RemoteException, DatabaseException;
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/server/Server.java</summary>
+            <pre class="original">package suncertify.server;
+
+import java.net.*;
+import java.io.*;
+import java.rmi.*;
+import java.rmi.registry.*;
+
+/**
+ * RMI Server.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.2
+ */
+public class Server
+{
+	// debug
+	private static final boolean DEBUG = false;
+	
+	private static final String DEFAULTS = "defaults";
+	
+	// default server parameters
+	private static final String DEFAULT_SERVER_URL = "localhost";
+	private static final String DEFAULT_SERVER_NAME = "fbnServer";
+	private static final int DEFAULT_SERVER_PORT = 1099;
+	private static final String DEFAULT_RMI_CODEBASE = "http://localhost/rmi/";
+	
+	// limit for port number
+	private static final int MAX_PORT_NUMBER = 1024;
+
+	/**
+	 * Main method.
+	 * Starts the server uding either default parameters or
+	 * parameters supplied by command line.
+	 * 
+	 * @param String args[]
+	 */
+	public static void main(String args[])
+	{
+		System.out.println("Welcome to Fly by Night RMI Server");
+		
+		String temp = argumentsParsed(args);
+		if(temp != null &amp;&amp; !temp.equals(DEFAULTS))
+		{
+			System.out.print("ERROR: ");
+			System.out.println(temp);
+			usage();
+			System.exit(0);
+		}
+		
+		String serverName = null;
+		String serverUrl = null;
+		int serverPort = -1;
+		String codebase = null;
+		if(temp == null)
+		{
+			serverName = args[0];
+			serverUrl = args[1];
+			serverPort = Integer.parseInt(args[2]);
+			codebase = args[3];
+		}
+		else
+		{
+			System.out.println("Using defaults:");
+			printDefaults();
+			serverName = DEFAULT_SERVER_NAME;
+			serverUrl = DEFAULT_SERVER_URL;
+			serverPort = DEFAULT_SERVER_PORT;
+			codebase = DEFAULT_RMI_CODEBASE;
+		}
+		
+		if(DEBUG)
+			System.out.println
+					  ("Creating registry for port " + serverPort + "...");
+		else System.out.print(".");
+		
+		try
+		{
+			java.rmi.registry.LocateRegistry.createRegistry(serverPort);
+		}
+		catch(RemoteException rex)
+		{
+			System.out.println("Exception caught: " + rex.toString());
+			rex.printStackTrace();
+		}
+		if(DEBUG) System.out.println("Registry created.");
+		else System.out.print(".");
+		
+		if(DEBUG) System.out.println("Setting java.rmi.server.codebase...");
+		else System.out.print(".");
+		System.setProperty("java.rmi.server.codebase", codebase);
+		if(DEBUG) System.out.println("java.rmi.server.codebase set.");		
+		else System.out.print(".");
+		
+		if(DEBUG) System.out.println
+			("Creating and installing security manager...");
+		else System.out.print(".");
+		
+		if(System.getSecurityManager() == null)
+		{
+			System.setSecurityManager(new RMISecurityManager());
+		}
+		
+		if(DEBUG) System.out.println
+			("Security manager created and installed.");
+		else System.out.print(".");
+		
+		try
+		{
+			if(DEBUG) System.out.println ("Creating server...");
+			else System.out.print(".");
+			
+			RemoteDataRmiImplementation databaseServer =
+						new RemoteDataRmiImplementation();
+			
+			if(DEBUG) System.out.println ("Server created.");
+			else System.out.print(".");
+			
+			if(DEBUG) System.out.println
+				("Binding RMI service to " + serverName + "...");
+			else System.out.print(".");
+			
+			Naming.rebind(serverName, databaseServer);
+			
+			if(DEBUG) System.out.println
+				("Binded RMI service to " + serverName + ".");
+			else System.out.println(".");
+			
+			System.out.println("Server " + serverName + 
+				" is ready and listening on port " + serverPort + ".");
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Exception caught: " + ex.toString());
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Parses command line arguements.
+	 * 
+	 * @param String[] args
+	 * 
+	 * @return String
+	 */
+	private static String argumentsParsed(String[] args)
+	{
+		if(args.length == 0) return DEFAULTS;
+		
+		if(args.length != 4) return "Number of arguments is wrong";
+		
+		String serverName = args[0];
+		String url = args[1];
+		String port = args[2];
+		String base = args[3];		
+		
+		// parse port
+		int temp = -1;
+		try
+		{
+			temp = Integer.parseInt(port);
+			if(temp &lt; 0) throw new NumberFormatException();
+		}
+		catch(NumberFormatException nfe)
+		{
+			return "Invalid port number: " + port;
+		}
+		if(temp &lt;= MAX_PORT_NUMBER)
+		{
+			return "Please, use port number greater than " + MAX_PORT_NUMBER;
+		}
+		
+		// parse codebase url
+		try
+		{
+			URL u = new URL(base);
+		}
+		catch(MalformedURLException mx)
+		{
+			return "Invalid codebase URL: " + base;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Prints the usage.
+	 */
+	private static void usage()
+	{
+		System.out.println("usage: " + 
+			"Server [&lt;serverName&gt; &lt;DNS name&gt; &lt;port&gt;" +
+						   " &lt;java.rmi.server.codebase&gt;]");
+		System.out.println("If invoked with no arguments, defaults are " +
+						   "going to be used:");
+		printDefaults();
+	}
+	
+	/**
+	 * Prints the defaults.
+	 */
+	private static void printDefaults()
+	{
+		System.out.println(" Server Name: " + DEFAULT_SERVER_NAME);
+		System.out.println(" Server URL: " + DEFAULT_SERVER_URL);
+		System.out.println(" Server Port: " + DEFAULT_SERVER_PORT);
+		System.out.println(" RMI Codebase: " + DEFAULT_RMI_CODEBASE);
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/MainFrame.java</summary>
+            <pre class="original">package suncertify.client.gui;
+
+import java.util.*;
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.rmi.*;
+import java.net.*;
+
+import suncertify.db.*;
+import suncertify.client.gui.util.*;
+import suncertify.client.gui.data.*;
+import suncertify.server.*;
+
+/**
+ * Fly by Night client application.
+ * This class creates GUI and gives user the control over the application.
+ * 
+ * @author Mihailo Despotovic
+ * @version 4.2
+ */
+public class MainFrame extends JFrame
+	implements ActionListener
+{	
+	// client id (for locking logic)
+	private static String CLIENT_ID = null;
+	
+	// final vars
+	private static final String APP_TITLE = "Fly by Night Client Application";
+	private static final String RMI_PROTOCOL_NAME = "rmi://";
+	private static final int APP_WIDTH = 700;
+	private static final int APP_HEIGHT = 500;
+	private static final String HELP =
+		"Quick hints for using the application\n" + 
+		"\n" +
+		"1. Connect to the database using File/Connect menu item\n" +
+		"2. Use Origin/Destination boxes and Search button to find" + 
+				" desired flight(s)\n" +
+		"3. Select the desired flight\n" +
+		"4. Enter the number of seats\n" +
+		"5. Use Book button to book the seats\n" +
+		"6. Use File/Disconnect menu item to disconnect from the database";
+	
+	// debug switch
+	private static boolean DEBUG = false;
+	
+	// look and feel dynamic vector - always read what is available
+	private static Vector lookAndFeels = new Vector();
+	private static Vector lafMenuItems = new Vector();
+	
+	// active gui components
+	private static JComboBox seatsComboBox = null;
+	private static JComboBox fromComboBox = null;
+	private static JComboBox toComboBox = null;
+	private static ColoredLabel statusLabel = null;
+	private static JButton bookButton = null;
+	private static JButton searchButton = null;
+	private static JRadioButtonMenuItem localMenuItem = null;
+	private static JRadioButtonMenuItem remoteMenuItem = null;
+	private static JMenuItem disconnectMenuItem = null;
+	private static JTable flightsTable = null;
+	private static JPanel flightsPanel = null;
+	private static JScrollPane flightsScrollPane = null;
+	private static ColoredLabel flightsLabel = null;
+	
+	// remote database vars
+	private static String remoteDatabaseUrl = null;
+	private static String remoteDatabaseName = null;
+	
+	// db proxy
+	private static DatabaseProxy dbProxy = null;
+	
+	// remote dialog vars
+	private static RemoteDialog remoteDialog = null;
+	
+	/**
+	 * Sets remote dialog for connection to remote RMI server/database.
+	 * @param RemoteDialog rd
+	 */
+	public void setRemoteDialog(RemoteDialog rd) { remoteDialog = rd; }
+	
+	/**
+	 * The constuctor of the &lt;code&gt;MainFrame&lt;/code&gt;.
+	 * Sets basic thing as action listener, size, position and inits GUI.
+	 */
+	public MainFrame()
+	{
+		super();
+		if(DEBUG) System.out.println("MainFrame constructor");
+		
+		// determine client id
+		try
+		{
+			CLIENT_ID =	"" + InetAddress.getLocalHost().hashCode()
+				+ System.currentTimeMillis();
+		}
+		catch(java.net.UnknownHostException uhe)
+		{
+			CLIENT_ID = "" + System.currentTimeMillis();
+		}
+		
+		// handle close button gracefully
+		addWindowListener
+		(new WindowAdapter()
+			{
+				public void windowClosing(WindowEvent we)
+				{
+					if(DEBUG) System.out.println("Window Exiting (code 0)");
+					System.exit(0);
+				}
+			}
+		 );
+		
+		// set some basic properties
+		setResizable(false);
+		setTitle(APP_TITLE);
+		
+		int xPosition =	(int)
+			(this.getToolkit().getScreenSize().getWidth() - APP_WIDTH)/2;
+		int yPosition =	(int)
+			(this.getToolkit().getScreenSize().getHeight() - APP_HEIGHT)/2;
+		
+		setBounds(xPosition, yPosition, APP_WIDTH, APP_HEIGHT);	
+		getContentPane().setLayout(new BorderLayout());
+		
+		// create dbProxy
+		dbProxy = new DatabaseProxy();
+		
+		// create combo boxes now
+		fromComboBox = new JComboBox();
+		toComboBox = new JComboBox();
+		
+		initGui();
+		refreshGui();
+
+		setVisible(true);
+	}
+	
+	/**
+	 * Called once - when the app starts.
+	 */
+	private void initGui()
+	{
+		if(DEBUG) System.out.println("initGui");
+		
+		populateLookAndFeels();
+		initMenu();
+		initSearchPanel();
+		initStatusPanel();
+		initFlightsPanel();
+	}
+	
+	/**
+	 * Called whenever GUI models change.
+	 */
+	private void refreshGui()
+	{
+		if(DEBUG) System.out.println("refreshGui");
+		
+		if(dbProxy.getIsConnected())
+		{
+			seatsComboBox.setSelectedIndex(0);
+			disconnectMenuItem.setEnabled(true);
+			
+			fromComboBox.setEnabled(true);;
+			toComboBox.setEnabled(true);
+			searchButton.setEnabled(true);
+			bookButton.setEnabled(true);
+			seatsComboBox.setEnabled(true);
+			flightsScrollPane.setVisible(true);
+			
+			if(flightsTable.getModel().getRowCount() &gt; 0)
+			{
+				flightsLabel.setText("List of available flights - " +
+						"click on the desired flight, enter the " +
+						"number of seats and click on Book");
+			}
+			else
+			{
+				flightsLabel.setText("No records found. Try changing your " +
+									 "search criteria");
+			}
+			flightsLabel.setForeground(Color.black);
+		}
+		else
+		{
+			seatsComboBox.setSelectedIndex(0);
+			disconnectMenuItem.setEnabled(false);
+			
+			fromComboBox.setEnabled(false);
+			toComboBox.setEnabled(false);
+			seatsComboBox.setEnabled(false);
+			statusLabel.setText("Not connected to Database - please, use " +
+					"File - Connect menu option");
+			statusLabel.setForeground(Color.red);
+			searchButton.setEnabled(false);
+			bookButton.setEnabled(false);
+			flightsScrollPane.setVisible(false);
+			
+			flightsLabel.setText("Unable to display any flights. " +
+								 "Please connect to the database");
+			flightsLabel.setForeground(Color.red);
+		}
+		
+		repaint();
+	}
+	
+	/**
+	 * Inits searchPanel (comboBoxes, GUI for booking)
+	 */
+	private void initSearchPanel()
+	{
+		if(DEBUG) System.out.println("initSearchPanel");
+		
+		JPanel searchPanelCenter = new JPanel();
+		searchPanelCenter.setLayout(new GridLayout(3, 1));
+		
+		JPanel p1 = new JPanel();
+		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		p1.add(new ColoredLabel("Search Available Flights", Color.black));
+		
+		JPanel p2 = new JPanel();
+		p2.setLayout(new FlowLayout(FlowLayout.LEFT));
+		p2.add(new ColoredLabel("Origin Airport", Color.darkGray));
+		populateFromTo();
+		p2.add(fromComboBox);
+		p2.add(new ColoredLabel("Destination Airport", Color.darkGray));
+		p2.add(toComboBox);
+		searchButton = new JButton("Search");
+		searchButton.addActionListener(this);
+		searchButton.setToolTipText("Search Flights");
+		p2.add(searchButton);		
+		
+		JPanel p4 = new JPanel();
+		p4.setLayout(new FlowLayout(FlowLayout.LEFT));
+		p4.add(new ColoredLabel("Number of seats to book", Color.darkGray));
+		seatsComboBox = new JComboBox();
+		p4.add(seatsComboBox);
+		seatsComboBox.addItem("1");
+		seatsComboBox.addItem("2");
+		seatsComboBox.addItem("3");
+		seatsComboBox.addItem("4");
+		seatsComboBox.setEditable(true);
+		bookButton = new JButton("Book");
+		bookButton.addActionListener(this);
+		bookButton.setToolTipText("Book Seat(s)");
+		p4.add(bookButton);
+		
+		searchPanelCenter.add(p1);
+		searchPanelCenter.add(p2);
+		searchPanelCenter.add(p4);
+		
+		JPanel searchPanelSouth = new JPanel();
+		searchPanelSouth.setLayout(new FlowLayout(FlowLayout.LEFT));
+		flightsLabel = new ColoredLabel("Please connect to the database",
+										Color.red);
+		
+		searchPanelSouth.add(flightsLabel);
+		
+		JPanel searchPanel = new JPanel();
+		searchPanel.setLayout(new BorderLayout());
+		searchPanel.add(searchPanelSouth, BorderLayout.SOUTH);
+		searchPanel.add(searchPanelCenter, BorderLayout.CENTER);
+		
+		getContentPane().add(searchPanel, BorderLayout.NORTH);
+	}
+	
+	/**
+	 * Inits status panel (holds messages towards user)
+	 */
+	private void initStatusPanel()
+	{
+		if(DEBUG) System.out.println("initStatusPanel");
+		
+		JPanel statusPanel = new JPanel();
+		statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		statusLabel = new ColoredLabel("");
+		
+		statusPanel.add(statusLabel);
+		getContentPane().add(statusPanel, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Inits flights panel (&lt;code&gt;JTable&lt;/code&gt; stuff)
+	 */
+	private void initFlightsPanel()
+	{
+		if(DEBUG) System.out.println("initFlightsPanel");
+		
+		populateFlights();
+		flightsTable.getSelectionModel().setSelectionMode
+			(ListSelectionModel.SINGLE_SELECTION);
+		flightsTable.setAutoscrolls(true);
+		flightsTable.setAutoResizeMode(flightsTable.AUTO_RESIZE_OFF);
+		flightsScrollPane = new JScrollPane(flightsTable);
+		getContentPane().add(flightsScrollPane, BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Inits the menu. There are options to connect/disconnect to
+	 * both local and remote db.
+	 */
+	private void initMenu()
+	{
+		if(DEBUG) System.out.println("initMenu");
+		
+		JMenuBar bar = new JMenuBar();
+		
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic((char)KeyEvent.VK_F);
+		JMenu connectMenu = new JMenu("Connect");
+		localMenuItem = new JRadioButtonMenuItem("Local Database");
+		localMenuItem.setActionCommand("local");
+		localMenuItem.setAccelerator
+			(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
+		localMenuItem.addActionListener(this);
+		remoteMenuItem = new JRadioButtonMenuItem("Remote Database");
+		remoteMenuItem.setActionCommand("remote");
+		remoteMenuItem.setAccelerator
+			(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+		remoteMenuItem.addActionListener(this);
+		connectMenu.add(localMenuItem);
+		connectMenu.add(remoteMenuItem);
+		fileMenu.add(connectMenu);
+		disconnectMenuItem = new JMenuItem("Disconnect");
+		disconnectMenuItem.setActionCommand("disconnect");
+		disconnectMenuItem.setAccelerator
+			(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK));
+		disconnectMenuItem.addActionListener(this);
+		fileMenu.add(disconnectMenuItem);
+		fileMenu.addSeparator();
+		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		exitMenuItem.setMnemonic((char)KeyEvent.VK_X);
+		exitMenuItem.setActionCommand("Exit");
+		exitMenuItem.addActionListener(this);
+		fileMenu.add(exitMenuItem);
+		
+		JMenu styleMenu = new JMenu("Look&amp;Feel");
+		styleMenu.setMnemonic((char)KeyEvent.VK_L);
+		LookAndFeel l = UIManager.getLookAndFeel();
+		for(int i=0; i&lt;lookAndFeels.size(); i++)
+		{
+			String name = ((UIManager.LookAndFeelInfo)
+							lookAndFeels.elementAt(i)).getName();
+			JRadioButtonMenuItem item = new JRadioButtonMenuItem(name);
+			item.setActionCommand(name);
+			item.setName(name);
+			if(l.getName().equals(name)) item.setSelected(true);
+			lafMenuItems.addElement(item);
+			item.addActionListener(this);
+			styleMenu.add(item);
+		}
+		
+		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setMnemonic((char)KeyEvent.VK_H);
+		JMenuItem helpMenuItem = new JMenuItem("Quick Hints");
+		helpMenuItem.setActionCommand("help");
+		helpMenuItem.setAccelerator
+			(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_MASK));
+		helpMenuItem.addActionListener(this);
+		helpMenu.add(helpMenuItem);
+		helpMenu.addSeparator();
+		JMenuItem aboutMenuItem = new JMenuItem("About");
+		aboutMenuItem.setAccelerator
+			(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		aboutMenuItem.setActionCommand("About");
+		aboutMenuItem.addActionListener(this);
+		helpMenu.add(aboutMenuItem);
+		
+		bar.add(fileMenu);
+		bar.add(styleMenu);
+		bar.add(helpMenu);
+		setJMenuBar(bar);
+	}
+	
+	/**
+	 * High level method - just calls &lt;code&gt;populateFromTo&lt;/code&gt;
+	 * and &lt;code&gt;populateFlights&lt;/code&gt;
+	 */
+	private void populateGui()
+	{
+		if(DEBUG) System.out.println("populateGui");
+		
+		populateFromTo();
+		populateFlights();
+	}
+	
+	/**
+	 * Populates from and to HashSets so the comboboxes can use that info.
+	 */
+	private void populateFromTo()
+	{	
+		if(DEBUG) System.out.println("populateFromTo");
+		
+		HashSet from = new HashSet();
+		HashSet to = new HashSet();
+		
+		if(dbProxy.getIsConnected())
+		{
+			String fromString = null;
+			String toString = null;
+			
+			DataInfo[] dataInfo = null;
+			try
+			{
+				dataInfo = dbProxy.criteriaFind("Day='*'");
+			}
+			catch(DatabaseException dbe)
+			{
+				dbe.printStackTrace();
+			}
+			catch(RemoteException re)
+			{
+				re.printStackTrace();
+			}
+			
+			for(int i = 0; i &lt; dataInfo.length; i++)
+			{
+				fromString = dataInfo[i].getValues()[1];
+				toString = dataInfo[i].getValues()[2];
+					
+				// this will implicitelly get rid of duplicates (HashSet)
+				from.add(fromString);
+				to.add(toString);
+			}
+		}
+		
+		DefaultComboBoxModel modelFrom =  
+			(DefaultComboBoxModel)fromComboBox.getModel();
+		if(modelFrom.getSize() &gt; 0)	modelFrom.removeAllElements();
+				
+		DefaultComboBoxModel modelTo =
+			(DefaultComboBoxModel)toComboBox.getModel();
+		if(modelTo.getSize() &gt; 0) modelTo.removeAllElements(); 
+		
+		// add here all airports so they are going to be the first ones
+		modelFrom.addElement("All Airports");
+		modelTo.addElement("All Airports");
+		
+		// now, add the rest
+		Iterator i = from.iterator();
+		while(i.hasNext())
+		{
+			modelFrom.addElement(i.next()); 
+		}
+		
+		i = to.iterator();
+		while(i.hasNext())
+		{
+			modelTo.addElement(i.next()); 
+		}
+	}
+	
+	/**
+	 * Populates flights table
+	 */
+	private void populateFlights()
+	{	
+		if(DEBUG) System.out.println("populateFlights");
+		
+		if(!dbProxy.getIsConnected())
+		{
+			flightsTable = new JTable();
+		}
+		else
+		{
+			try
+			{
+				TableModel ftModel = new FlightsTableModel(dbProxy,
+													   makeCriteria());
+			flightsTable.setModel(ftModel);
+			}
+			catch(RemoteException re)
+			{
+				re.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Makes criteria for &lt;code&gt;criteriaFind&lt;/code&gt; method so the JTable
+	 * is populated with result set rather than with whole db.
+	 */
+	private String makeCriteria()
+	{
+		if(DEBUG) System.out.println("makeCriteria");
+		
+		String from = null;
+		String to = null;
+		String criteria = null;
+		
+		from = ((String)fromComboBox.getSelectedItem()).equals("All Airports") ?
+			   "*" : (String)fromComboBox.getSelectedItem();
+		
+		to = ((String)toComboBox.getSelectedItem()).equals("All Airports") ?
+			   "*" : (String)toComboBox.getSelectedItem();
+		
+		criteria = "OriginAirport='" + from + "'," +
+				   "DestinationAirport='" + to + "'";
+
+		if(DEBUG) System.out.println("Criteria: " + criteria);
+		
+		return criteria;
+	}
+	
+	/**
+	 * Dynamically populates all look and feels so the menu can
+	 * display choices
+	 */
+	private void populateLookAndFeels()
+	{
+		UIManager.LookAndFeelInfo laf[] = UIManager.getInstalledLookAndFeels();
+		for(int i=0; i&lt;laf.length; i++)
+			lookAndFeels.addElement(laf[i]);
+	}
+
+	/**
+	 * Action listener for this frame itself.
+	 */
+	public void actionPerformed(ActionEvent ae)
+	{	
+		String command = ae.getActionCommand();
+		
+		if(DEBUG) System.out.println("--&gt; actionPerformed: " + command);
+		
+		if(command.equals("Exit"))
+		{
+			if(dbProxy.getIsConnected()) dbProxy.disconnect();
+			if(DEBUG) System.out.println("Exiting (code 0)");
+			System.exit(0);
+		}	
+		else if(command.equals("About"))
+		{
+			JOptionPane.showMessageDialog(this,
+					"Fly by Night Client Application\n" +
+					"(C)2000 Mihailo Despotovic\n" +
+					"Sun Java 2 Developer Assignment\n",
+					"About Client Application",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if(command.equals("help"))
+		{
+			JOptionPane.showMessageDialog(this, HELP, "User Help",
+				JOptionPane.INFORMATION_MESSAGE);
+										  
+		}
+		else if(command.equals("Book"))
+		{
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			int selectedRow = flightsTable.getSelectedRow();
+			int seats = 0;
+			try
+			{
+				seats = Integer.parseInt(seatsComboBox.getSelectedItem().toString().trim());
+				if(seats &lt; 1) throw new NumberFormatException();
+
+				if(DEBUG) System.out.println("Selected row: " + selectedRow);
+				if(selectedRow &lt; 0)
+				{
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					JOptionPane.showMessageDialog(this,
+					"Please select a flight by clicking on it",
+					"No flight selected",
+					JOptionPane.WARNING_MESSAGE);
+				}
+				else
+				{
+					String flightNumber = (String)flightsTable.getModel().
+										getValueAt(selectedRow, 0);
+					
+					DataInfo dataInfo = dbProxy.criteriaFind
+						("FlightNumber='" + flightNumber + "'")[0];
+					
+					int availableSeats =
+						Integer.parseInt
+							(dataInfo.getValues()
+								[FlightsTableModel.SEATS_COLUMN].trim());
+					
+					if(availableSeats &lt; seats)
+					{
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						JOptionPane.showMessageDialog(this,
+							"Not enough available seats",
+							"No seats", JOptionPane.ERROR_MESSAGE);
+					}
+					else
+					{
+						int recordNumber = dataInfo.getRecordNumber();
+
+						int numberOfColumns = dbProxy.getFieldInfo().length;
+						
+						String[] values = new String
+											 [numberOfColumns];
+						
+						for(int i = 0; i &lt; numberOfColumns - 1; i++)
+							values[i] = (String)flightsTable.getModel().
+										getValueAt(selectedRow, i);
+						
+						// 1. lock
+						dbProxy.lock(selectedRow, CLIENT_ID);
+						
+						// 2. refresh
+						populateFlights();
+						
+						// 3. update
+						// the last column is number of seats
+						values[numberOfColumns - 1] = "" +
+							(Integer.parseInt(((String)flightsTable.getModel().
+								getValueAt(selectedRow, numberOfColumns - 1))
+									.trim()) - seats);
+						
+						DataInfo newData = new DataInfo(recordNumber,
+								dbProxy.getFieldInfo(), values);
+						dbProxy.modify(newData);
+						
+						// 4. unlock
+						dbProxy.unlock(selectedRow, CLIENT_ID);
+						
+						// refresh table model after update
+						populateFlights();
+						
+						// inform user
+						String temp = "";
+						if(seats &gt; 1) temp = "s"; 
+						
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						JOptionPane.showMessageDialog(this,
+						seats + " seat" + temp + " booked successfully",
+						"OK", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				JOptionPane.showMessageDialog(this,
+					"Please enter correct number of seats",
+					"Invalid number of seats",
+					JOptionPane.ERROR_MESSAGE);
+			}
+			catch(DatabaseException dbe)
+			{
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				JOptionPane.showMessageDialog(this,
+					dbe.toString(), "DatabaseException",
+					JOptionPane.ERROR_MESSAGE);
+			}
+			catch(RemoteException re)
+			{
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				JOptionPane.showMessageDialog(this,
+					re.toString(), "RemoteException",
+					JOptionPane.ERROR_MESSAGE);			
+			}
+			catch(IOException iox)
+			{
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				JOptionPane.showMessageDialog(this,
+					"IOException", iox.toString(),
+					JOptionPane.ERROR_MESSAGE);	
+			}
+			finally
+			{
+				// reselect the row on table gui
+				flightsTable.setRowSelectionInterval
+					(selectedRow, selectedRow);
+			}
+		}
+		else if(command.equals("Search"))
+		{
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			populateFlights();
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		else if(command.equals("local"))
+		{
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			dbProxy.disconnect();
+			
+			JFileChooser fileChooser =
+				new JFileChooser("Find your database file");
+			fileChooser.showOpenDialog(this);
+			
+			String fileName = fileChooser.getSelectedFile() == null ?
+							  null : fileChooser.getSelectedFile().toString();
+			
+			if(fileName != null)
+			{
+				File file = new File(fileName);
+				if(!file.exists())
+				{
+					dbProxy.disconnect();
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					JOptionPane.showMessageDialog(this,
+						fileName,  "File doesn't exist", JOptionPane.OK_OPTION);
+					localMenuItem.setSelected(false);
+				}
+				else
+				{
+					boolean exception = false;
+					String eString = null;
+					try
+					{
+						dbProxy.connect(fileName);
+						populateGui();
+						statusLabel.setText("Connected to Local Database " +
+											("(File: " + fileName + ")"));
+						statusLabel.setForeground(Color.black);
+						localMenuItem.setSelected(true);
+						remoteMenuItem.setSelected(false);
+					}
+					catch(IOException e)
+					{
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						JOptionPane.showMessageDialog(this,
+							e.toString(), "Can't open database",
+							JOptionPane.OK_OPTION);
+						localMenuItem.setSelected(false);
+						remoteMenuItem.setSelected(false);
+					}
+				}
+			}
+			else
+			{
+				// user canceled file dialog
+				localMenuItem.setSelected(false);
+			}
+		}
+		else if(command.equals("remote"))
+		{	
+			dbProxy.disconnect();
+			
+			// create remote dialog here
+			RemoteDialog rd = new RemoteDialog(this, this);
+			
+			if(remoteDatabaseUrl != null)
+			{
+				try
+				{
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					dbProxy.connect(remoteDatabaseUrl, remoteDatabaseName);
+					populateGui();
+					statusLabel.setText("Connected to Remote Database at " + 
+										remoteDatabaseUrl);
+					statusLabel.setForeground(Color.black);
+					localMenuItem.setSelected(false);
+					remoteMenuItem.setSelected(true);
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+				catch(RemoteException re)
+				{
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					remoteMenuItem.setSelected(false);
+					JOptionPane.showMessageDialog(this,
+						re.toString(), "Can't access remote Database",
+						JOptionPane.OK_OPTION);
+				}
+				catch(IOException ioe)
+				{
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					remoteMenuItem.setSelected(false);
+					JOptionPane.showMessageDialog(this,
+						ioe.toString(), "Can't access remote Database",
+						JOptionPane.OK_OPTION);
+				}
+				catch(NotBoundException nbe)
+				{
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					remoteMenuItem.setSelected(false);
+					JOptionPane.showMessageDialog(this,
+						nbe.toString(), "Can't access remote Database",
+						JOptionPane.OK_OPTION);
+				}
+			}
+		}
+		else if(command.equals("disconnect"))
+		{
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			dbProxy.disconnect();
+			localMenuItem.setSelected(false);
+			remoteMenuItem.setSelected(false);
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		else if(command.equals("Connect"))
+		{	
+			// parse port
+			try
+			{
+				int port = Integer.parseInt
+					(remoteDialog.getPort().trim());
+				if(port &lt; 0) throw new NumberFormatException();
+				
+				remoteDatabaseUrl = RMI_PROTOCOL_NAME +
+									remoteDialog.getUrl() + ":" +
+									remoteDialog.getPort() + "/" +
+									remoteDialog.getServerName();
+				
+								
+				remoteDatabaseName = remoteDialog.getDatabaseName();
+				
+				if(DEBUG) System.out.println("URL:" + remoteDatabaseUrl);
+				remoteDialog.dispose();
+				remoteDialog = null;
+			}
+			catch(NumberFormatException ne)
+			{
+				remoteMenuItem.setSelected(false);
+				JOptionPane.showMessageDialog(this,
+					"Please, reenter the port number", "Invalid port",
+					JOptionPane.OK_OPTION);
+			}
+		}
+		else if(command.equals("Cancel")) // this is from remoteDialog
+		{
+			remoteMenuItem.setSelected(false);
+			remoteDatabaseUrl = null;
+			remoteDialog.dispose();
+			remoteDialog = null;
+		}
+		
+		// look and feel loop
+		for(int i=0; i&lt;lookAndFeels.size(); i++)
+		{
+			if(((UIManager.LookAndFeelInfo)lookAndFeels.
+				elementAt(i)).getName().equals(command))
+			{	
+				UIManager.LookAndFeelInfo l =
+					(UIManager.LookAndFeelInfo)lookAndFeels.elementAt(i);
+				
+				try
+				{
+					UIManager.setLookAndFeel(l.getClassName());
+					SwingUtilities.updateComponentTreeUI(this);
+					
+					for(int j=0; j&lt;lafMenuItems.size(); j++)
+					{
+						JRadioButtonMenuItem item =
+							(JRadioButtonMenuItem)lafMenuItems.elementAt(j);
+						
+						if(!item.getName().equals(l.getName()))
+							item.setSelected(false);
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+			
+		// whatever action has been performed, always refresh GUI
+		refreshGui();
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package contains client implementation.
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/RemoteDialog.java</summary>
+            <pre class="original">package suncertify.client.gui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+import suncertify.client.gui.util.*;
+
+/**
+ * Collects information about connecting to remote database from user
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.3
+ */
+public class RemoteDialog extends JDialog
+{	
+	// dialog properties
+	private static final String DIALOG_TITLE = "Find remote server";
+	private static final int WIDTH = 350;
+	private static final int HEIGHT = 200;
+	
+	// default values for dialog's textfields
+	private static final String DEFAULT_SERVER_URL = "localhost";
+	private static final String DEFAULT_SERVER_PORT = "1099";
+	private static final String DEFAULT_SERVER_NAME = "fbnServer";
+	private static final String DEFAULT_DATABASE_NAME = "db";
+	
+	// dialog's textfields
+	private static JTextField urlTextField = null;
+	private static JTextField portTextField = null;
+	private static JTextField serverNameField = null;
+	private static JTextField databaseNameField = null;
+	
+	/**
+	 * Returns url value entered by user
+	 * 
+	 * @return String
+	 */
+	public String getUrl() { return urlTextField.getText(); }
+	
+	/**
+	 * Returns port value entered by user
+	 * 
+	 * @return String
+	 */
+	public String getPort() { return portTextField.getText(); }
+	
+	/**
+	 * Returns server name entered by user
+	 * 
+	 * @return String
+	 */
+	public String getServerName() { return serverNameField.getText(); }
+	
+	/**
+	 * Returns remote database name entered by user
+	 * 
+	 * @return String
+	 */
+	public String getDatabaseName() { return databaseNameField.getText(); }
+	
+	/**
+	 * Constructs &lt;code&gt;RemoteDialog&lt;/code&gt;
+	 * Positions the dialog onto the screen, sets some basics properties
+	 * and action listener and makes it visible to the user.
+	 * This dialog is modal.
+	 * 
+	 * @param MainFrame mainFrame
+	 * @param ActionListener al
+	 */
+	public RemoteDialog(MainFrame mainFrame, ActionListener al)
+	{	
+		super(mainFrame, DIALOG_TITLE, true);
+		
+		setSizeAndPosition(mainFrame);
+		initGui(al);		
+		
+		// set remoteDialog of caller to this one
+		mainFrame.setRemoteDialog(this);
+		
+		setVisible(true);
+	}	
+
+	/**
+	 * Sets size and position of the dialog.
+	 * This method will position dialog into the middle of the screen
+	 * by using &lt;code&gt;getToolkit&lt;/code&gt; metohods. It will also set bounds
+	 * to &lt;code&gt;WIDTH&lt;/code&gt; and &lt;code&gt;HEIGHT&lt;/code&gt; private static variables.
+	 * 
+	 * @param MainFrame mainFrame
+	 */
+	private void setSizeAndPosition(MainFrame mainFrame)
+	{
+		int xPosition =	(int)
+			(mainFrame.getToolkit().getScreenSize().getWidth() - WIDTH)/2;
+		int yPosition =	(int)
+			(mainFrame.getToolkit().getScreenSize().getHeight() - HEIGHT)/2;
+		this.setBounds(xPosition, yPosition, WIDTH, HEIGHT);
+	}
+	
+	/**
+	 * Inits dialog's GUI and sets up the action listener.
+	 * 
+	 * @param ActionListener al
+	 */
+	private void initGui(ActionListener al)
+	{
+		getContentPane().setLayout(new BorderLayout());
+		JPanel cont = new JPanel();
+		cont.setLayout(new GridBagLayout());
+		
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// input fields
+		// remote database file name
+		addComponent(cont, new ColoredLabel("Database Name: ", Color.black),
+					 0, 0, c.EAST, c);
+		databaseNameField = new JTextField(15);
+		databaseNameField.setText(DEFAULT_DATABASE_NAME);
+		addComponent(cont, databaseNameField, 1, 0, c.WEST, c);
+	
+		// RMI server name
+		addComponent(cont, new ColoredLabel("Server Name: ", Color.black),
+					 0, 1, c.EAST, c);
+		serverNameField = new JTextField(15);
+		serverNameField.setText(DEFAULT_SERVER_NAME);
+		addComponent(cont, serverNameField, 1, 1, c.WEST, c);
+
+		// RMI server url
+		addComponent(cont, new ColoredLabel("Server URL: ", Color.black),
+					 0, 2, c.EAST, c);
+		urlTextField = new JTextField(15);
+		urlTextField.setText(DEFAULT_SERVER_URL);
+		addComponent(cont, urlTextField, 1, 2, c.WEST, c);
+		
+		// RMI server port
+		addComponent(cont, new ColoredLabel("Server Port: ", Color.black),
+					 0, 3, c.EAST, c);
+		portTextField = new JTextField(5);
+		portTextField.setText(DEFAULT_SERVER_PORT);
+		addComponent(cont, portTextField, 1, 3, c.WEST, c);
+		
+		// buttons
+		JButton okButton = new JButton("Connect");
+		JButton cancelButton = new JButton("Cancel");
+		okButton.addActionListener(al);
+		cancelButton.addActionListener(al);
+		
+		JPanel fp = new JPanel();
+		fp.setLayout(new FlowLayout(FlowLayout.CENTER));
+		fp.add(okButton);
+		fp.add(cancelButton);
+		
+		getContentPane().add(cont, BorderLayout.CENTER);
+		getContentPane().add(fp, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Method for adding component into GridBagLayput-ed container
+	 * 
+	 * @param Container cont
+	 * @param Component comp
+	 * @param int x
+	 * @param int y
+	 * @param int anchor
+	 * @param GridBagConstraints c
+	 */
+	private void addComponent(Container cont, Component comp,
+							  int x, int y, int anchor, GridBagConstraints c)
+	{
+		c.gridx = x;
+		c.gridy = y;
+		c.anchor = anchor;
+		cont.add(comp, c);
+	}
+	
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/data/DatabaseProxy.java</summary>
+            <pre class="original">package suncertify.client.gui.data;
+
+import java.io.*;
+import java.rmi.*;
+import java.net.*;
+
+import suncertify.server.*;
+import suncertify.db.*;
+
+/**
+ * Encapsulates behavior of &lt;code&gt;Data&lt;/code&gt; class by handling both
+ * local and remote database. The client should just refer to the
+ * instance of this class in order to do all database related operations.
+ * 
+ * Uses Proxy structural pattern.
+ * 
+ * @author Mihailo Despotovic
+ * @version 3.1
+ */
+public class DatabaseProxy
+{
+	// connection, database position
+	private boolean isConnected = false;
+	private boolean isRemoteDatabase = false;
+	
+	// database info
+	private String localDatabaseFileName = null;
+	private Data database = null;
+	private RemoteDataRmiInterface remoteDatabase = null;
+	
+	// debug info
+	private static final boolean DEBUG = false;
+	
+	/**
+	 * Returns the status of the connection. &lt;code&gt;true&lt;/code&gt; means
+	 * that connection has been established and &lt;code&gt;false&lt;/code&gt; means
+	 * that there is no connection yet.
+	 * 
+	 * @return boolean
+	 */
+	public boolean getIsConnected()
+	{
+		return isConnected;
+	}
+	
+	/**
+	 * Connect to the local database.
+	 * 
+	 * @param String localDatabaseFileName
+	 * 
+	 * @exception IOException
+	 */
+	public void connect(String localDatabaseFileName)
+		throws IOException
+	{
+		database = new Data(localDatabaseFileName);
+		isConnected = true;
+		isRemoteDatabase = false;
+	}
+	
+	/**
+	 * Connect to the remote database.
+	 * 
+	 * @param String remoteDatabaseUrl
+	 * @param remoteDatabaseName
+	 * 
+	 * @exception NotBoundException
+	 * @exception MalformedURLException
+	 * @exception RemoteException
+	 * @exception IOException
+	 */
+	public void connect(String remoteDatabaseUrl,
+						String remoteDatabaseName)
+		throws NotBoundException, MalformedURLException,
+			   RemoteException, IOException
+	{	
+		if(DEBUG) System.out.println("RMI Connecting to:" + remoteDatabaseUrl);
+		remoteDatabase = (RemoteDataRmiInterface)Naming.lookup
+			(remoteDatabaseUrl);
+				
+		remoteDatabase.openDatabase(remoteDatabaseName);
+		isConnected = true;
+		isRemoteDatabase = true;
+	}
+	
+	/**
+	 * Disconnects from the database.
+	 * Automatically detects from where to disconnect.
+	 */
+	public void disconnect()
+	{	
+		if(isConnected)
+		{
+			if(!isRemoteDatabase)
+			{
+				if(database != null)
+					database.close();
+			}
+			else
+			{
+				if(remoteDatabase != null)
+					remoteDatabase = null;
+			}
+		}
+		
+		isConnected = false;
+		remoteDatabase = null;
+		isRemoteDatabase = false;
+	}
+	
+	/**
+	 * Proxy stub method for &lt;code&gt;criteriaFind&lt;/code&gt; in &lt;code&gt;Data&lt;/code&gt;
+	 * 
+	 * @param String criteria
+	 * 
+	 * @return DataInfo[]
+	 * 
+	 * @exception DatabaseException
+	 * @exception RemoteException
+	 */
+	public DataInfo[] criteriaFind(String criteria)
+		throws DatabaseException, RemoteException
+	{
+		if(!isRemoteDatabase)
+			return database.criteriaFind(criteria);
+		else
+			return remoteDatabase.criteriaFind(criteria);						
+	}
+
+	/**
+	 * Proxy stub method for &lt;code&gt;getFieldInfo&lt;/code&gt; in &lt;code&gt;Data&lt;/code&gt;
+	 * 
+	 * @return FieldInfo[]
+	 * 
+	 * @exception RemoteException
+	 */
+	public FieldInfo[] getFieldInfo()
+		throws RemoteException
+	{
+		if(!isRemoteDatabase)
+			return database.getFieldInfo();
+		else
+			return remoteDatabase.getFieldInfo();
+	}
+	
+	/**
+	 * Proxy stub method for &lt;code&gt;modify&lt;/code&gt; in &lt;code&gt;Data&lt;/code&gt;
+	 * 
+	 * @param DataInfo newData
+	 * 
+	 * @exception RemoteException
+	 * @exception DatabaseException
+	 * @exception IOException
+	 */
+	public void modify(DataInfo newData)
+		throws RemoteException, DatabaseException, IOException
+	{
+		int record = newData.getRecordNumber();
+		
+		if(!isRemoteDatabase)
+		{
+			if(DEBUG) System.out.println("Local modifying...");
+			database.modify(newData);
+			if(DEBUG) System.out.println("Local modify OK");
+		}
+		else
+		{
+			if(DEBUG) System.out.println("Remote modifying...");
+			remoteDatabase.modify(newData);
+			if(DEBUG) System.out.println("Remote modify OK");
+		}
+	}
+	
+	/**
+	 * Locks the record
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 */
+	public void lock(int record, String clientId)
+		throws DatabaseException, RemoteException
+	{
+		if(!isRemoteDatabase)
+		{
+			database.lock(record, clientId);
+		}
+		else
+		{
+			remoteDatabase.lock(record, clientId);
+		}
+	}
+	
+	/**
+	 * Unlocks the record
+	 * 
+	 * @param int record
+	 * @param String clientId
+	 */
+	public void unlock(int record, String clientId)
+		throws DatabaseException, RemoteException
+	{
+		if(!isRemoteDatabase)
+		{
+			database.unlock(record, clientId);
+		}
+		else
+		{
+			remoteDatabase.unlock(record, clientId);
+		}
+	}				 
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/data/FlightsTableModel.java</summary>
+            <pre class="original">package suncertify.client.gui.data;
+
+import javax.swing.table.*;
+import java.rmi.*;
+
+import suncertify.db.*;
+import suncertify.server.*;
+
+/**
+ * Provides TableModel for flights table in GUI
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.1
+ */
+public class FlightsTableModel extends AbstractTableModel
+{
+	private static DatabaseProxy dbProxy = null;
+	private static DataInfo[] resultSet = null;
+	
+	public static final int SEATS_COLUMN = 8;
+	
+	/**
+	 * Create TableModel by connecting to the appropriate database
+	 * and by applying criteria string to obtain result set.
+	 * That result set is going to be displayed.
+	 * Works with an instance of &lt;code&gt;DatabaseProxy&lt;/code&gt; object.
+	 * 
+	 * @param DatabaseProxy dbp
+	 * @param String criteria
+	 */
+	public FlightsTableModel(DatabaseProxy dbp, String criteria)
+		throws RemoteException
+	{
+		super();
+		dbProxy = dbp;
+		
+		try
+		{
+			resultSet = dbProxy.criteriaFind(criteria);
+		}
+		catch(DatabaseException dbe)
+		{
+			System.out.println("Can't criteriaFind database");
+			dbe.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Returns the number of columns
+	 * 
+	 * @return int
+	 */
+	public int getColumnCount()
+	{
+		try
+		{
+			return dbProxy.getFieldInfo().length;
+		}
+		catch(RemoteException re)
+		{
+			re.printStackTrace();
+			return -1;
+		}
+	}
+	
+	/**
+	 * Returns the number of rows
+	 * 
+	 * @return int
+	 */
+	public int getRowCount()
+	{	
+		if(resultSet == null) return 0;
+		else return resultSet.length;
+	}
+	
+	/**
+	 * Returns the name of column
+	 * 
+	 * @param int column
+	 * 
+	 * @return String
+	 */
+	public String getColumnName(int column)
+	{
+		try
+		{
+			return dbProxy.getFieldInfo()[column].getName();
+		}
+		catch(RemoteException re)
+		{
+			re.printStackTrace();
+			return "ERROR_COLUMN_NAME";
+		}
+	}
+	
+	/**
+	 * Returns value at row/column intersection
+	 * 
+	 * @param int row
+	 * @param int column
+	 * 
+	 * @return Object
+	 */
+	public Object getValueAt(int row, int column)
+	{
+		if(resultSet == null)
+			return "null resultSet"; // "impossible"
+		else
+			return resultSet[row].getValues()[column].trim();
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/data/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package contains data related objects.
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/util/ColoredLabel.java</summary>
+            <pre class="original">package suncertify.client.gui.util;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * ColoredLabel.
+ * Extends &lt;code&gt;JLabel&lt;/code&gt; and provides functionallity to
+ * specify the foreground color at the constructor.
+ * 
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+public class ColoredLabel extends JLabel
+{
+	private static final Color DEFAULT_COLOR = Color.black;
+	
+	/**
+	 * This construcotor creates JLabel with custom color.
+	 * 
+	 * @param String text
+	 * @param Color color
+	 */
+	public ColoredLabel(String text, Color color)
+	{
+		super(text);
+		this.setForeground(color);
+	}
+	
+	/**
+	 * This constructor creates JLabel with default color (Black)
+	 * 
+	 * @param String text
+	 */
+	public ColoredLabel(String text)
+	{
+		super(text);
+		this.setForeground(DEFAULT_COLOR);
+	}
+}
+</pre>
+        </details>
+        <details>
+            <summary>suncertify/client/gui/util/package.html</summary>
+            <pre class="original">&lt;HTML&gt;
+&lt;HEAD&gt;
+
+&lt;TITLE&gt;
+Fly by Night Application Overview
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+
+This package contains common GUI objects.
+
+&lt;/P&gt;
+&lt;/PRE&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

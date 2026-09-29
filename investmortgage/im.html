@@ -42,6 +42,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -51,6 +56,7 @@
             th { background: #232323; }
             th, td { border-bottom: 1px solid #393939; }
             .negative { color: #ff7160; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -89,6 +95,86 @@
         </table>
     </div>
     <script src="im.js"></script>
+    <details class="original">
+        <summary>The original Java code: im.java</summary>
+        <pre class="original">/**
+ * Created by mihailod, May 4, 2008, 8:47:40 AM
+ */
+public class im {
+    // 30 years, 6%, $100K interests for each year
+    private static final double[] INTEREST = {
+    5966.59,
+    5890.85,
+    5810.44,
+    5725.07,
+    5634.43,
+    5538.20,
+    5436.04,
+    5327.57,
+    5212.42,
+    5090.16,
+    4960.37,
+    4822.56,
+    4676.26,
+    4520.93,
+    4356.03,
+    4180.95,
+    3995.07,
+    3797.73,
+    3588.22,
+    3365.79,
+    3129.64,
+    2878.92,
+    2612.74,
+    2330.14,
+    2030.11,
+    1711.57,
+    1373.39,
+    1014.35,
+    633.16,
+    228.47
+    };
+
+    // these should be command line params
+    private static double portfolioApr = 7.6;
+    private static double taxRate = 40;
+    private static double initialSum = 100000;
+    private static double income = 200000;
+
+    public static void main(String[] args) {
+
+        // multipliers
+        final double taxMultiplier = (100 - taxRate)/100;
+        final double portfolioMultiplier = (100 + portfolioApr)/100;
+
+        // initial values
+        double currentBalance = initialSum;
+        double totalInterest = 0;
+
+        // for each year compound the profit
+        for(int i = 0; i &lt; 30; i++) {
+            final double in = ((currentBalance * portfolioMultiplier) - currentBalance) * taxMultiplier;
+            final double out = INTEREST[i];
+
+            final double taxNoMortgage = income * (1 - taxMultiplier);
+            final double taxWithMortgage = (income - out) * (1 - taxMultiplier);
+            final double interestTaxReturn = taxNoMortgage - taxWithMortgage;
+
+            final double profit = in - out + interestTaxReturn;
+            currentBalance += profit;
+            totalInterest += out;
+
+            System.out.println("Year " + (i+1) + ": profit " + profit + ", new balance " + currentBalance);
+        }
+
+        System.out.println("-------------------");
+        System.out.println("After 30yrs total pre-tax interest paid: " + totalInterest);
+        System.out.println("After 30yrs final balance: " + currentBalance);
+        System.out.println("After 30yrs pre-tax profit: " + (currentBalance - totalInterest - initialSum));
+    }
+}
+</pre>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

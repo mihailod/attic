@@ -61,6 +61,11 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
@@ -73,6 +78,7 @@
             .how { color: #aeaeae; }
             .tools label { color: #b6b6b6; }
             #editor-message { color: #ff7160; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -157,6 +163,2137 @@
     <script src="media.js"></script>
     <script src="levels.js"></script>
     <script src="chuchu.js"></script>
+    <details class="original">
+        <summary>The original Java code and levels, 17 files</summary>
+        <details>
+            <summary>Editor.java</summary>
+            <pre class="original">import chuchurocket.editor.*;
+
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Editor
+{
+  public static void main(String[] args)
+  {
+    //Media.loadMedia();
+    new EditorFrame();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>Game.java</summary>
+            <pre class="original">import chuchurocket.game.*;
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Game
+{
+  public static void main(String[] args)
+  {
+    //Media.loadMedia();
+    new GameFrame();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>levels/1</summary>
+            <pre class="original">ChuChu Cheese Level File
+1
+1|2|00-1|2|00-1|2|00-1|2|00-0|0|00-0|0|00-0|0|00-0|0|10-0|0|00-0|0|10-0|0|00-0|0|01-1|3|00-3|3|00-0|0|00-0|0|00-0|0|00-3|3|00-0|0|01-0|0|00-0|0|00-0|0|01-0|0|00-0|0|01-1|3|00-0|0|00-0|0|00-3|3|00-0|0|00-4|2|00-0|0|01-0|0|10-0|0|00-0|0|11-0|0|00-0|0|01-1|3|00-3|3|00-0|0|00-0|0|00-0|0|00-3|3|00-0|0|00-0|0|10-0|0|00-0|0|10-0|0|00-2|1|11-0|0|00-0|0|10-0|0|10-0|0|00-0|0|10-0|0|10-0|0|11-0|0|00-0|0|00-0|0|01-0|0|00-1|4|01-0|0|01-0|0|00-0|0|00-0|0|00-0|0|10-0|0|10-0|0|00-0|0|00-4|3|00-0|0|00-0|0|00-1|4|01-0|0|01-0|0|00-0|0|01-0|0|00-0|0|10-0|0|10-2|1|00-0|0|00-0|0|00-0|0|01-0|0|00-1|4|01-0|0|01-0|0|10-0|0|00-0|0|01-0|0|10-0|0|10-0|0|00-0|0|10-0|0|00-0|0|11-0|0|00-1|4|01-2|3|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-1|1|10-1|1|10-1|1|10-1|1|10-1|1|11-
+3|2|2|1|
+</pre>
+        </details>
+        <details>
+            <summary>levels/2</summary>
+            <pre class="original">ChuChu Cheese Level File
+2
+0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-4|3|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-1|3|00-0|0|00-0|0|00-0|0|00-3|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|1|00-0|0|00-0|0|00-0|0|00-3|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|2|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-4|1|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-0|0|00-3|1|00-0|0|00-0|0|00-2|1|00-0|0|00-0|0|00-2|1|00-0|0|00-0|0|01-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|11-
+4|2|3|1|
+</pre>
+        </details>
+        <details>
+            <summary>levels/3</summary>
+            <pre class="original">ChuChu Cheese Level File
+2
+0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-2|1|00-0|0|00-0|0|00-0|0|00-4|1|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-1|3|00-0|0|00-0|0|00-0|0|00-3|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|1|00-0|0|00-0|0|00-0|0|00-3|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|2|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-4|1|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-1|4|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-1|3|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-2|1|00-0|0|00-0|0|00-2|1|00-0|0|00-0|0|01-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|11-
+4|2|3|1|
+</pre>
+        </details>
+        <details>
+            <summary>levels/4</summary>
+            <pre class="original">ChuChu Cheese Level File
+New Level
+0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-1|2|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|00-0|0|01-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|10-0|0|11-
+3|2|4|1|
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/editor/EditorFrame.java</summary>
+            <pre class="original">package chuchurocket.editor;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
+
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class EditorFrame extends JFrame implements ActionListener
+{
+  private JMenuItem restart = new JMenuItem("New");
+  private JMenuItem save = new JMenuItem("Save Level");
+  private JMenuItem load = new JMenuItem("Load Level");
+  private JMenuItem quit = new JMenuItem("Quit Editor");
+  private JMenuItem help = new JMenuItem("Instructions");
+  private JMenuItem about = new JMenuItem("About");
+
+  private JButton mouse = new JButton("Mouse");
+  private JButton cat = new JButton("Cat");
+  private JButton hole = new JButton("Hole");
+  private JButton rocket = new JButton("Cheese");
+  private JButton wall = new JButton("Wall");
+  private JButton arrow = new JButton("Arrow");
+
+  private JButton up = new JButton("^");
+  private JButton down = new JButton("V");
+  private JButton left = new JButton("&lt;");
+  private JButton right = new JButton("&gt;");
+
+  private JTextField name = new JTextField("New Level", 10);
+
+  public int state = Constants.STATE_MOUSE;
+  public int orientation = Constants.ORIENTATION_UP;
+
+  private BoardPanel ep = null;
+  private ArrowsPanel ap = null;
+  private Board board = new Board();
+
+  private JFileChooser jfc = new JFileChooser();
+
+  public EditorFrame()
+  {
+    super("ChuChu Cheese Level Editor");
+    Container cp = this.getContentPane();
+    cp.setLayout(new BorderLayout());
+
+    JMenuBar menuBar = new JMenuBar();
+
+    JMenu helpMenu = new JMenu("Help");
+    helpMenu.add(help);
+    helpMenu.addSeparator();
+    helpMenu.add(about);
+    help.addActionListener(this);
+    about.addActionListener(this);
+
+    JMenu menu = new JMenu("File");
+    menuBar.add(menu);
+    menuBar.add(helpMenu);
+    menu.add(restart);
+    menu.addSeparator();
+    menu.add(save);
+    menu.add(load);
+    menu.addSeparator();
+    menu.add(quit);
+    this.setJMenuBar(menuBar);
+    restart.addActionListener(this);
+    save.addActionListener(this);
+    load.addActionListener(this);
+    quit.addActionListener(this);
+
+    JPanel south = new JPanel(new BorderLayout());
+    ap = new ArrowsPanel(this, null);
+    south.add(ap, BorderLayout.EAST);
+    cp.add(south, BorderLayout.SOUTH);
+
+    JPanel actions = new JPanel(new GridLayout(0, 1, 5, 5));
+    JLabel nameLabel = new JLabel("Level Name", JLabel.LEFT);
+    nameLabel.setForeground(Color.black);
+    actions.add(nameLabel);
+    actions.add(name);
+    actions.add(new JPanel());
+    actions.add(wall);
+    actions.add(new JPanel());
+    JPanel p = new JPanel(new GridLayout(1, 2, 5, 5));
+    p.add(mouse); p.add(cat);
+    actions.add(p);
+    actions.add(new JPanel());
+    p = new JPanel(new GridLayout(1, 2, 5, 5));
+    p.add(rocket); p.add(hole);
+    actions.add(p);
+    actions.add(new JPanel());
+    actions.add(arrow);
+    mouse.addActionListener(this);
+    cat.addActionListener(this);
+    hole.addActionListener(this);
+    rocket.addActionListener(this);
+    wall.addActionListener(this);
+    arrow.addActionListener(this);
+
+    JPanel orientations = new JPanel(new GridLayout(3, 3, 4, 4));
+    orientations.add(new JPanel());
+    orientations.add(up);
+    orientations.add(new JPanel());
+    orientations.add(left);
+    orientations.add(new JPanel());
+    orientations.add(right);
+    orientations.add(new JPanel());
+    orientations.add(down);
+    orientations.add(new JPanel());
+    up.addActionListener(this);
+    left.addActionListener(this);
+    right.addActionListener(this);
+    down.addActionListener(this);
+
+    JPanel west = new JPanel(new BorderLayout());
+    west.add(actions, BorderLayout.NORTH);
+    west.add(orientations, BorderLayout.SOUTH);
+    JPanel west1 = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.fill = gbc.BOTH;
+    gbc.weightx = 1.0; gbc.weighty = 1.0;
+    west1.add(west, gbc);
+    cp.add(west1, BorderLayout.WEST);
+
+    ep = new BoardPanel(board, this, null);
+    cp.add(ep, BorderLayout.CENTER);
+
+    this.addWindowListener(new WindowAdapter(){
+      public void windowClosing(WindowEvent we) { quit(); }
+    });
+
+    resetButtons();
+    setButtons();
+    this.setResizable(false);
+    pack();
+    Constants.center(this);
+    show();
+  }
+
+  public void actionPerformed(ActionEvent ae)
+  {
+    Object o = ae.getSource();
+    if(o == save) save();
+    else if(o == load) load();
+    else if(o == quit) quit();
+    else if(o == help) help();
+    else if(o == about) about();
+    else if(o == restart) restart();
+    else if(o == cat) state = Constants.STATE_CAT;
+    else if(o == mouse) state = Constants.STATE_MOUSE;
+    else if(o == hole) state = Constants.STATE_HOLE;
+    else if(o == rocket) state = Constants.STATE_ROCKET;
+    else if(o == wall) state = Constants.STATE_WALL;
+    else if(o == arrow) state = Constants.STATE_ARROW;
+    else if(o == up) orientation = Constants.ORIENTATION_UP;
+    else if(o == down) orientation = Constants.ORIENTATION_DOWN;
+    else if(o == left) orientation = Constants.ORIENTATION_LEFT;
+    else if(o == right) orientation = Constants.ORIENTATION_RIGHT;
+    setButtons();
+  }
+
+  private void resetButtons()
+  {
+    mouse.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    cat.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    wall.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    rocket.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    hole.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    arrow.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    up.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    down.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    left.setBackground(Constants.BUTTON_COLOR_NORMAL);
+    right.setBackground(Constants.BUTTON_COLOR_NORMAL);
+  }
+
+  private void setButtons()
+  {
+    resetButtons();
+    switch(state)
+    {
+      case Constants.STATE_MOUSE : mouse.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.STATE_CAT : cat.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.STATE_HOLE : hole.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.STATE_ROCKET : rocket.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.STATE_WALL : wall.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.STATE_ARROW : arrow.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+    }
+    switch(orientation)
+    {
+      case Constants.ORIENTATION_UP : up.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.ORIENTATION_DOWN : down.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.ORIENTATION_LEFT : left.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+      case Constants.ORIENTATION_RIGHT : right.setBackground(Constants.BUTTON_COLOR_SELECTED); break;
+    }
+  }
+
+  private void save()
+  {
+    name.setText(name.getText().trim());
+    if(name.getText().length() == 0)
+    {
+      JOptionPane.showMessageDialog(this, "You must enter the level name.",
+                                    "Level Name", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    File file = null;
+    if(jfc.getSelectedFile() == null)
+      jfc.setSelectedFile(new File(name.getText()));
+    int res = jfc.showSaveDialog(this);
+    if(res != JFileChooser.APPROVE_OPTION)
+      return;
+
+    file = jfc.getSelectedFile();
+    jfc.setSelectedFile(file);
+    Constants.save(file, board, ap, this, name);
+  }
+
+  private void load()
+  {
+    int res = jfc.showOpenDialog(this);
+    if(res != JFileChooser.APPROVE_OPTION)
+      return;
+
+    File file = jfc.getSelectedFile();
+    if(!file.exists())
+    {
+      JOptionPane.showMessageDialog(this, "The file does not exist.", "Load Level Error", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+    jfc.setSelectedFile(file);
+    Constants.load(board, ap, file, this, name);
+    repaint();
+  }
+
+  private void restart()
+  {
+    board = new Board();
+    ap.clearArrows();
+    ep.setBoard(board);
+    repaint();
+  }
+
+  private void help()
+  {
+    JOptionPane.showMessageDialog(this, Constants.EDITOR_INSTRUCTIONS,
+                                  "Instructions", JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  private void about()
+  {
+    JOptionPane.showMessageDialog(this, Constants.EDITOR_ABOUT,
+                                  "About", JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  private void quit()
+  {
+    dispose();
+    System.exit(0);
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/game/GameEngine.java</summary>
+            <pre class="original">package chuchurocket.game;
+
+import java.awt.*;
+import java.util.*;
+import javax.swing.*;
+
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class GameEngine
+{
+  public static boolean moving = false;
+
+  private BoardPanel bp = null;
+  private Board b = null;
+  private static ArrayList mice = null;
+  private static ArrayList cats = null;
+  private static Graphics g = null;
+
+  private ListIterator li = null;
+  private ListIterator li2 = null;
+  private int pointer = -1;
+  private boolean noMice = false;
+  private Sprite sprite = null;
+  private Sprite sprite2 = null;
+
+  private static int speedMouse = Constants.SPEED_MOUSE;
+  private static int speedCat = Constants.SPEED_CAT;
+
+  public void setBoardPanel(BoardPanel boardPanel)
+  {
+    this.bp = boardPanel;
+    this.b = boardPanel.getBoard();
+    mice = new ArrayList();
+    cats = new ArrayList();
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+    {
+      int y = j*Constants.CELL_SIZE + Constants.WALL_WIDTH2;
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+      {
+        int x = i*Constants.CELL_SIZE + Constants.WALL_WIDTH2;
+        BoardElement be = b.board[j][i];
+        if(be.content == Constants.STATE_MOUSE)
+          mice.add(new Sprite(Constants.STATE_MOUSE, x, y, be.orientation, Constants.SPEED_MOUSE));
+        else if(be.content == Constants.STATE_CAT)
+          cats.add(new Sprite(Constants.STATE_CAT, x, y, be.orientation, Constants.SPEED_CAT));
+      }
+    }
+    Sprite.b = b;
+  }
+
+  public void start()
+  {
+    if(!moving)
+    {
+      speedMouse = Constants.SPEED_MOUSE;
+      speedCat = Constants.SPEED_CAT;
+      updateSpeed();
+      moving = true;
+      startMoving();
+      bp.repaint();
+    }
+  }
+
+  public void dash()
+  {
+    speedMouse = Constants.SPEED_MOUSE * Constants.SPEED_MULTIPLIER;
+    speedCat = Constants.SPEED_CAT * Constants.SPEED_MULTIPLIER;
+    updateSpeed();
+    if(!moving)
+    {
+      moving = true;
+      startMoving();
+      bp.repaint();
+    }
+  }
+
+  public void reset()
+  {
+    moving = false;
+    stopMoving();
+    bp.repaint();
+  }
+
+  private void updateSpeed()
+  {
+    li = mice.listIterator();
+    while(li.hasNext())
+    {
+      sprite = (Sprite)li.next();
+      if(sprite != null)
+        sprite.speed = speedMouse;
+    }
+    li = cats.listIterator();
+    while(li.hasNext())
+    {
+      sprite = (Sprite)li.next();
+      if(sprite != null)
+        sprite.speed = speedCat;
+    }
+  }
+
+  private void startMoving()
+  {
+    Thread t = new Thread()
+    {
+      public void run()
+      {
+        int counter = 0;
+        while(true) // the main game loop
+        {
+          counter++;
+          if(!moving)
+            break;
+          if(counter == 4) // paint every 4th frame
+          {
+            bp.repaint();
+            counter = 0;
+          }
+          moveSprites();
+          Thread.currentThread().yield();
+          try { Thread.sleep(Constants.TIME_DELAY4); }
+          catch(InterruptedException ie) { ; }
+        }
+      }
+    };
+    t.start();
+  }
+
+  private synchronized final void moveSprites()
+  {
+    // for all mice
+    pointer = -1;
+    li = mice.listIterator();
+    while(li.hasNext())
+    {
+      sprite = (Sprite)li.next();
+      pointer++;
+
+      if(sprite == null)
+        continue;
+
+      // move the mouse
+      sprite.move();
+
+      // check if it's in the cheese -&gt; remove it!
+      if(b.board[sprite.j][sprite.i].content == Constants.STATE_ROCKET)
+      {
+         // &amp;&amp; sprite.orientation == Constants.ORIENTATION_RIGHT || todo bugfix
+        //sprite.orientation == Constants.ORIENTATION_DOWN)
+        Media.SOUND_MOUSE_IN_CHEESE.play();
+        mice.set(pointer, null);
+      }
+      // check if it's in the hole -&gt; end game!
+      else if(b.board[sprite.j][sprite.i].content == Constants.STATE_HOLE)
+      {
+        Media.SOUND_MOUSE_IN_HOLE.play();
+        gameOver(sprite.j, sprite.i);
+        return;
+      }
+    }
+
+    // for all cats
+    li = cats.listIterator();
+    pointer = -1;
+    while(li.hasNext())
+    {
+      sprite = (Sprite)li.next();
+      pointer++;
+
+      if(sprite == null)
+        continue;
+
+      // move the cat
+      sprite.move();
+
+      // is cat in cheese? -&gt; end game!
+      if(b.board[sprite.j][sprite.i].content == Constants.STATE_ROCKET)
+      {
+        Media.SOUND_CAT_IN_CHEESE.play();
+        gameOver(sprite.j, sprite.i);
+        return;
+      }
+
+      // is cat in hole? -&gt; remove it!
+      if(b.board[sprite.j][sprite.i].content == Constants.STATE_HOLE)
+      {
+        Media.SOUND_CAT_IN_HOLE.play();
+        cats.set(pointer, null);
+      }
+    }
+
+    li = mice.listIterator();
+    noMice = true;
+    while(li.hasNext())
+    {
+      sprite = ((Sprite)li.next());
+      noMice = noMice &amp;&amp; (sprite == null);
+    }
+    if(noMice)
+    {
+      levelWon();
+      return;
+    }
+
+    // is any mouse caught by a cat? -&gt; end game!
+    li = mice.listIterator();
+    while(li.hasNext())
+    {
+      sprite = ((Sprite)li.next());
+      if(sprite == null)
+        continue;
+
+      li2 = cats.listIterator();
+      while(li2.hasNext())
+      {
+        sprite2 = ((Sprite)li2.next());
+        if(sprite2 == null)
+          continue;
+
+        if(sprite.i == sprite2.i &amp;&amp; sprite.j == sprite2.j)
+        {
+          Media.SOUND_CAT_IN_MOUSE.play();
+          gameOver(sprite.j, sprite.i);
+          return;
+        }
+      }
+    }
+  }
+
+  private void stopMoving()
+  {
+    setBoardPanel(bp); // recreate sprites at original positions
+  }
+
+  public static final void drawSprites(Graphics g)
+  {
+    Sprite sprite;
+    ListIterator li = mice.listIterator();
+    while(li.hasNext())
+    {
+      sprite = ((Sprite)li.next());
+      if(sprite != null)
+        sprite.draw(g);
+    }
+    li = cats.listIterator();
+    while(li.hasNext())
+    {
+      sprite = ((Sprite)li.next());
+      if(sprite != null)
+        sprite.draw(g);
+    }
+  }
+
+  private void gameOver(int i, int j)
+  {
+    JOptionPane.showMessageDialog(null, "Ouch!", "Ouch!", JOptionPane.INFORMATION_MESSAGE);
+    /*moving = false;
+    int x = Constants.CELL_SIZE*i + Constants.CELL_SIZE2;
+    int y = Constants.CELL_SIZE*j + Constants.CELL_SIZE2;
+    BoardPanel.gr.setColor(Color.white);
+    Stroke stroke = ((Graphics2D)BoardPanel.gr).getStroke();
+    ((Graphics2D)BoardPanel.gr).setStroke(new BasicStroke(5f));
+    Constants.drawCircle(BoardPanel.gr, i, j, Constants.CELL_SIZE2);
+    ((Graphics2D)BoardPanel.gr).setStroke(stroke);
+    try { Thread.sleep(5000); }
+    catch(InterruptedException ie) { ; }*/
+    reset();
+  }
+
+  private void levelWon()
+  {
+    Media.SOUND_LEVEL_UP.play();
+    JOptionPane.showMessageDialog(null, "Yeah!", "Yeah!", JOptionPane.INFORMATION_MESSAGE);
+    reset();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/game/GameFrame.java</summary>
+            <pre class="original">package chuchurocket.game;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
+
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class GameFrame extends JFrame implements ActionListener
+{
+  private GameEngine ge = null;
+
+  private CoolButton start = new CoolButton("play");
+  private CoolButton dash = new CoolButton("ff");
+  private CoolButton reset = new CoolButton("stop");
+
+  private JLabel levelLabel = new JLabel("", JLabel.CENTER)
+  {
+    public void paint(Graphics g)
+    {
+      //if(ge.moving)
+      //  return;
+      Constants.paintBlurredText(g, "LEVEL " + Constants.format(level),
+        getWidth(), getHeight(), Color.white);
+    }
+  };
+
+  private Board board = new Board();
+  private BoardPanel bp = new BoardPanel(board, null, this);
+  private ArrowsPanel ap = new ArrowsPanel(null, this);
+  public ArrowsPanel getArrowsPanel() { return ap; }
+
+  private int level = 1;
+
+  public GameFrame()
+  {
+    super("ChuChu Cheese V1.0 By Mihailo Despotovic, October 2003.");
+    this.setResizable(false);
+    this.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent we) { System.exit(0); } });
+    Container cp = this.getContentPane();
+    cp.setLayout(new BorderLayout());
+    cp.add(bp, BorderLayout.CENTER);
+    JPanel south = new JPanel(new BorderLayout());
+    ge = new GameEngine();
+
+    JPanel levelPanel = new JPanel(new BorderLayout())
+    {
+      public void paint(Graphics g)
+      {
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        super.paint(g);
+      }
+    };
+    levelLabel.setFont(Constants.FONT1);
+    levelLabel.setForeground(Color.white);
+    levelPanel.setBackground(Color.black);
+    levelPanel.add(levelLabel, BorderLayout.CENTER);
+
+    JPanel levelAndArrowsPanel = new JPanel(new BorderLayout());
+    levelAndArrowsPanel.add(ap, BorderLayout.CENTER);
+
+    JPanel buttons = new JPanel(new GridLayout(1, 3, 0, 0));
+    buttons.setBackground(Color.black);
+    buttons.add(start);
+    buttons.add(dash);
+    buttons.add(reset);
+    start.addActionListener(this);
+    dash.addActionListener(this);
+    reset.addActionListener(this);
+
+    south.add(levelAndArrowsPanel, BorderLayout.WEST);
+    south.add(levelPanel, BorderLayout.CENTER);
+    south.add(buttons, BorderLayout.EAST);
+
+    cp.add(south, BorderLayout.SOUTH);
+    pack();
+    start.initStatics(start.getWidth(), start.getHeight());
+    Constants.center(this);
+
+    // test level /////////////////
+    File file = new File("/4");
+    Constants.load(board, ap, file, this, new JTextField());
+    ge.setBoardPanel(bp);
+    //////////////////////////////
+
+    show();
+  }
+
+  public void actionPerformed(ActionEvent ae)
+  {
+    if(ae.getSource() == start)
+      ge.start();
+    else if(ae.getSource() == dash)
+      ge.dash();
+    else if(ae.getSource() == reset)
+      ge.reset();
+  }
+
+  public boolean isMoving()
+  {
+    return ge.moving;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/game/Sprite.java</summary>
+            <pre class="original">package chuchurocket.game;
+
+import java.awt.*;
+
+import chuchurocket.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Sprite
+{
+  private int content = -1;
+  public int orientation = -1;
+  public int speed = -1;
+
+  private int x = -1;
+  private int y = -1;
+  private int arrow = -1;
+
+  public int i = 0;
+  public int j = 0;
+
+  private int oldI = 0;
+  private int oldJ = 0;
+  private boolean newCell = false;
+
+  private int posX = -1;
+  private int posY = -1;
+
+  private int hotX = x;
+  private int hotY = y;
+
+  private boolean wallDown = false;
+  private boolean wallRight = false;
+  private boolean wallUp = false;
+  private boolean wallLeft = false;
+
+  //private int arrow = 0;
+
+  public static Board b = null;
+
+  public Sprite(int content, int x, int y, int orientation, int speed)
+  {
+    this.content = content;
+    this.x = x;
+    this.y = y;
+    this.orientation = orientation;
+    this.speed = speed;
+  }
+
+  public final void move()
+  {
+    calculate();
+    switch(orientation)
+    {
+      case Constants.ORIENTATION_DOWN :
+      {
+        y += speed;
+        if(!newCell)
+          return;
+        if(wallDown &amp;&amp; y &gt; posY)
+        {
+          y = posY;
+          orientation = Constants.ORIENTATION_LEFT;
+          x -= speed;
+        }
+        break;
+      }
+      case Constants.ORIENTATION_UP :
+      {
+        y -= speed;
+        if(!newCell)
+          return;
+        if(wallUp &amp;&amp; y &lt; posY)
+        {
+          y = posY;
+          orientation = Constants.ORIENTATION_RIGHT;
+          x += speed;
+        }
+        break;
+      }
+      case Constants.ORIENTATION_LEFT :
+      {
+        x -= speed;
+        if(!newCell)
+          return;
+        if(wallLeft &amp;&amp; x &lt; posX)
+        {
+          x = posX;
+          orientation = Constants.ORIENTATION_UP;
+          y -= speed;
+        }
+        break;
+      }
+      case Constants.ORIENTATION_RIGHT :
+      {
+        x += speed;
+        if(!newCell)
+          return;
+        if(wallRight &amp;&amp; x &gt; posX)
+        {
+          x = posX;
+          orientation = Constants.ORIENTATION_DOWN;
+          y += speed;
+        }
+        break;
+      }
+      default : { System.out.println("what?"); }
+    }
+  }
+
+  public final void draw(Graphics g)
+  {
+    switch(content)
+    {
+      case Constants.STATE_MOUSE : BoardElement.drawMouse(g, x, y, orientation); break;
+      case Constants.STATE_CAT : BoardElement.drawCat(g, x, y, orientation); break;
+    }
+  }
+
+  private synchronized final void calculate()
+  {
+    // compute the cell the sprite is in
+    i = x/Constants.CELL_SIZE;
+    j = y/Constants.CELL_SIZE;
+
+    // compute the "snap to grid" coordinates
+    posX = i*Constants.CELL_SIZE;
+    posY = j*Constants.CELL_SIZE;
+
+    // check which walls the sprite is surrounded with
+    wallDown = b.board[j][i].wallDown;
+    wallRight = b.board[j][i].wallRight;
+    wallUp = j == 0 || j &gt; 0 &amp;&amp; b.board[j-1][i].wallDown;
+    wallLeft = i == 0 || i &gt; 0 &amp;&amp; b.board[j][i-1].wallRight;
+
+    // compute the hot spots for direction change by arrows
+    hotX = x;
+    hotY = y;
+    if(orientation == Constants.ORIENTATION_LEFT)
+      hotX = x + Constants.CELL_SIZE - Constants.CELL_INSET * 2;
+    if(orientation == Constants.ORIENTATION_UP)
+      hotY = y + Constants.CELL_SIZE - Constants.CELL_INSET * 2;
+
+    // compute the cell the sprite is in according to hot spots
+    int myi = hotX/Constants.CELL_SIZE;
+    int myj = hotY/Constants.CELL_SIZE;
+    if(myi &gt; Constants.GAME_FIELD_WIDTH - 1)
+      myi = Constants.GAME_FIELD_WIDTH - 1;
+    if(myj &gt; Constants.GAME_FIELD_HEIGHT - 1)
+      myj = Constants.GAME_FIELD_HEIGHT - 1;
+    if(myi &lt; 0)
+      myi = 0;
+    if(myj &lt; 0)
+      myj = 0;
+
+    if(oldI != myi)
+    {
+      newCell = true;
+      oldI = myi;
+    }
+    else if(oldJ != myj)
+    {
+      newCell = true;
+      oldJ = myj;
+    }
+    else
+      newCell = false;
+
+    if(newCell)
+    {
+      System.out.println("hotX=" + hotX);
+      System.out.println("i=" + myi + "j=" + j + " arr " + b.board[myj][myi].contentArrow);
+    }
+
+    arrow = b.board[myj][myi].contentArrow;
+
+    // obey the arrow (if there is an arrow)
+    if(b.board[myj][myi].contentArrow &gt; 0)
+      orientation = b.board[myj][myi].contentArrow;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/ArrowsPanel.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*;
+
+import chuchurocket.game.*;
+import chuchurocket.editor.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class ArrowsPanel extends JPanel implements MouseListener
+{
+  private Vector arrows = new Vector();
+
+  private EditorFrame ef = null;
+  private GameFrame gf = null;
+
+  private int selectedArrow = -1;
+  public int getSelectedArrow()
+  {
+    if(selectedArrow &gt; -1 &amp;&amp; arrows.size() &gt; selectedArrow)
+      return ((Integer)arrows.elementAt(selectedArrow)).intValue();
+    else
+      return -1;
+  }
+  public void setLastArrowAsSelected()
+  {
+    if(arrows.size() &gt; 0)
+    {
+      selectedArrow = arrows.size() - 1;
+      repaint();
+    }
+  }
+
+  public ArrowsPanel(EditorFrame ef, GameFrame gf)
+  {
+    this.arrows = arrows;
+    this.ef = ef;
+    this.gf = gf;
+    this.setPreferredSize(new Dimension(Constants.CELL_SIZE * Constants.ARROWS_MAX + 2 * Constants.CELL_INSET,
+                                        Constants.CELL_SIZE + 2 * Constants.CELL_INSET));
+    this.addMouseListener(this);
+  }
+
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+    for(int i=0; i&lt;arrows.size(); i++)
+    {
+      sb.append(((Integer)arrows.elementAt(i)).toString());
+      sb.append("|");
+    }
+    return sb.toString();
+  }
+
+  public void setContentFromString(String s)
+  {
+    arrows.removeAllElements();
+    StringTokenizer st = new StringTokenizer(s, "|");
+    while(st.hasMoreTokens())
+      arrows.addElement(new Integer(st.nextToken()));
+  }
+
+  public void paint(Graphics g)
+  {
+    //if(gf.isMoving())
+    //  return;
+
+    Graphics2D g2 = (Graphics2D)g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g.setColor(Color.black);
+    g.fillRect(0, 0, Constants.ARROWS_MAX * Constants.CELL_SIZE + 8 * Constants.CELL_INSET,
+               Constants.CELL_SIZE + 2 * Constants.CELL_INSET);
+    for(int i=0; i&lt;Constants.ARROWS_MAX; i++)
+    {
+      if(arrows.size() &gt; i)
+      {
+        int orientation = ((Integer)arrows.elementAt(i)).intValue();
+        drawArrow(g, Constants.CELL_INSET + i*Constants.CELL_SIZE, Constants.CELL_INSET, orientation);
+        if(selectedArrow == i)
+        {
+          g.setColor(Color.white);
+          g.drawRect(Constants.CELL_INSET + i*Constants.CELL_SIZE, Constants.CELL_INSET,
+                     Constants.CELL_SIZE, Constants.CELL_SIZE);
+        }
+      }
+      else
+      {
+        int x = i * Constants.CELL_SIZE + Constants.CELL_INSET + 1;
+        int y = Constants.CELL_INSET;
+        int x1 = x + Constants.CELL_SIZE - 2*Constants.CELL_INSET;
+        int y1 = Constants.CELL_SIZE - 2*Constants.CELL_INSET;
+        int size = Constants.CELL_SIZE - 2*Constants.CELL_INSET;
+
+        Paint gradient = new GradientPaint(x, y, Color.blue, x1, y1, Color.black);
+        g2.setPaint(gradient);
+
+        g.fillRect(x, y, size, size + 2*Constants.CELL_INSET);
+      }
+    }
+  }
+
+  public static final void drawArrow(Graphics g, int x, int y, int orientation)
+  {
+    Color backup = g.getColor();
+
+    g.setColor(Constants.ARROW_BACKGROUND_COLOR);
+    g.fillRect(x + Constants.CELL_INSET,
+               y + Constants.CELL_INSET,
+               Constants.CELL_SIZE - 2 * Constants.CELL_INSET,
+               Constants.CELL_SIZE - 2 * Constants.CELL_INSET);
+
+    g.setColor(Constants.ARROW_FOREGROUND_COLOR);
+    int[] xx = new int[3];
+    int[] yy = new int[3];
+    int xr = 0;
+    int yr = 0;
+    int wr = 0;
+    int hr = 0;
+    switch(orientation)
+    {
+      case Constants.ORIENTATION_UP :
+      case Constants.ORIENTATION_DOWN :
+      {
+        xx[0] = x + Constants.CELL_SIZE / 2;
+        xx[1] = x + Constants.ARROW_INSET;
+        xx[2] = x + Constants.CELL_SIZE - Constants.ARROW_INSET;
+        yy[0] = orientation == Constants.ORIENTATION_UP ? y + Constants.ARROW_INSET : y  + Constants.CELL_SIZE - Constants.ARROW_INSET;
+        yy[1] = orientation == Constants.ORIENTATION_UP ? y + Constants.CELL_SIZE / 3 * 2 : y + Constants.CELL_SIZE / 3;
+        yy[2] = yy[1];
+        xr = x + Constants.CELL_SIZE / 3;
+        wr = Constants.CELL_SIZE / 3;
+        yr = orientation == Constants.ORIENTATION_UP ? y + Constants.CELL_SIZE / 2 : y + Constants.ARROW_INSET;
+        hr = Constants.CELL_SIZE / 2 - Constants.ARROW_INSET;
+        break;
+      }
+      case Constants.ORIENTATION_LEFT :
+      case Constants.ORIENTATION_RIGHT :
+      {
+        yy[0] = y + Constants.CELL_SIZE / 2;
+        yy[1] = y + Constants.ARROW_INSET;
+        yy[2] = y + Constants.CELL_SIZE - Constants.ARROW_INSET;
+        xx[0] = orientation == Constants.ORIENTATION_LEFT ? x + Constants.ARROW_INSET : x  + Constants.CELL_SIZE - Constants.ARROW_INSET;
+        xx[1] = orientation == Constants.ORIENTATION_LEFT ? x + Constants.CELL_SIZE / 3 * 2 : x + Constants.CELL_SIZE / 3;
+        xx[2] = xx[1];
+        yr = y + Constants.CELL_SIZE / 3;
+        hr = Constants.CELL_SIZE / 3;
+        xr = orientation == Constants.ORIENTATION_LEFT ? x + Constants.CELL_SIZE / 2 : x + Constants.ARROW_INSET;
+        wr = Constants.CELL_SIZE / 2 - Constants.ARROW_INSET;
+        break;
+      }
+    }
+    g.fillPolygon(xx, yy, 3);
+    g.fillRect(xr, yr, wr, hr);
+
+    g.setColor(backup);
+  }
+
+  public void clearArrows() { arrows.removeAllElements(); }
+
+  public void removeSelectedArrow()
+  {
+    arrows.removeElementAt(selectedArrow);
+    selectedArrow = -1;
+    repaint();
+  }
+
+  public void addArrow(int orientation)
+  {
+    arrows.addElement(new Integer(orientation));
+    selectedArrow = -1;
+    repaint();
+    this.getParent().repaint();
+  }
+
+  public void mouseReleased(MouseEvent me)
+  {
+    if(gf != null &amp;&amp; gf.isMoving())
+      return;
+    boolean rightButton = me.isPopupTrigger();
+    int x = me.getX() / Constants.CELL_SIZE; // x = 0, 1, 2, 3
+
+    if(ef != null) // editor mode
+    {
+      if(rightButton)
+      {
+        if(arrows.size() &gt; 0)
+          arrows.removeElementAt(arrows.size() - 1);
+      }
+      else
+      {
+        if(ef.state == Constants.STATE_ARROW &amp;&amp; arrows.size() &lt; Constants.ARROWS_MAX)
+        {
+          arrows.addElement(new Integer(ef.orientation));
+        }
+      }
+    }
+    else // game mode
+    {
+      if(!rightButton)
+      {
+        if(arrows.size() &gt; x)
+          selectedArrow = x;
+      }
+    }
+
+    repaint();
+    this.getParent().repaint();
+  }
+
+  public void mouseExited(MouseEvent me) { ; }
+  public void mouseEntered(MouseEvent me) { ; }
+  public void mouseClicked(MouseEvent me) { ; }
+  public void mousePressed(MouseEvent me) { ; }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/Board.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Board
+{
+  public BoardElement[][] board = null;
+
+  public Board()
+  {
+    board = new BoardElement[Constants.GAME_FIELD_HEIGHT][Constants.GAME_FIELD_WIDTH];
+    // all contents are NONE
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+        board[j][i] = new BoardElement(Constants.STATE_NOTHING, Constants.ORIENTATION_NONE);
+
+    // create the wall around the board
+    for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+      board[Constants.GAME_FIELD_HEIGHT-1][i].wallDown = true;
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+      board[j][Constants.GAME_FIELD_WIDTH-1].wallRight = true;
+  }
+
+  public void setContentFromString(String s)
+  {
+    StringTokenizer st = new StringTokenizer(s, "-");
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+        board[j][i] = new BoardElement(st.nextToken());
+  }
+
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+      {
+        sb.append(board[j][i].toString());
+        sb.append("-");
+      }
+    return sb.toString();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/BoardElement.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.awt.*;
+import java.util.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class BoardElement
+{
+  public int content = Constants.STATE_NOTHING;
+  public int orientation = Constants.ORIENTATION_NONE;
+  public int contentArrow = -1;
+
+  public boolean wallDown = false;
+  public boolean wallRight = false;
+
+  private static Composite cBackup = null;
+
+  public BoardElement(int content, int orientation)
+  {
+    this.content = content;
+    this.orientation = orientation;
+  }
+
+  public BoardElement(String s)
+  {
+    StringTokenizer st = new StringTokenizer(s, "|");
+    content = Integer.parseInt(st.nextToken());
+    orientation = Integer.parseInt(st.nextToken());
+    String walls = st.nextToken();
+    if(walls.charAt(0) == '1')
+      wallDown = true;
+    if(walls.charAt(1) == '1')
+      wallRight = true;
+  }
+
+  public String toString()
+  {
+    return content + "|" + orientation + "|" +
+           (wallDown ? "1" : "0") + (wallRight ? "1" : "0");
+  }
+
+  public void draw(Graphics g, int x, int y, boolean hideCatsAndMice)
+  {
+    // static content
+    if(contentArrow &gt; -1)
+    {
+      ArrowsPanel.drawArrow(g, x, y, contentArrow);
+      cBackup = ((Graphics2D)g).getComposite(); // optimize this
+      ((Graphics2D)g).setComposite(Constants.COMPOSITE);
+    }
+
+    if(content != Constants.STATE_NOTHING)
+    {
+      switch(content)
+      {
+        case Constants.STATE_ROCKET :
+        {
+          g.drawImage(Media.IMAGE_CHEESE, x + Constants.CELL_INSET, y + Constants.CELL_INSET, null);
+          break;
+        }
+        case Constants.STATE_HOLE :
+        {
+          g.drawImage(Media.IMAGE_SKULL, x + Constants.CELL_INSET, y + Constants.CELL_INSET, null);
+          break;
+        }
+        case Constants.STATE_ARROW : ArrowsPanel.drawArrow(g, x, y, orientation); break;
+      }
+
+      if(!hideCatsAndMice)
+      {
+        if(content == Constants.STATE_MOUSE)
+          drawMouse(g, x, y, orientation);
+        else if(content == Constants.STATE_CAT)
+          drawCat(g, x, y, orientation);
+      }
+    }
+
+    if(cBackup != null)
+      ((Graphics2D)g).setComposite(cBackup);
+  }
+
+  public static final void drawMouse(Graphics g, int x, int y, int orientation)
+  {
+    switch(orientation)
+    {
+      case Constants.ORIENTATION_UP :
+      {
+        g.setColor(Constants.MOUSE_COLOR_BODY);
+        Constants.fillCircle(g, x + Constants.CELL_SIZE2,
+                             y + Constants.CELL_SIZE2,
+                             Constants.MOUSE_FATNESS/2);
+
+        g.setColor(Constants.MOUSE_COLOR_TAIL);
+        g.fillRect(x + Constants.CELL_SIZE2 - 1,
+                   y + Constants.MOUSE_FATNESS + (Constants.CELL_SIZE - Constants.MOUSE_FATNESS)/2 - Constants.CELL_SIZE/6,
+                   3, Constants.CELL_SIZE/10);
+        g.fillRect(x + Constants.CELL_SIZE2,
+                   y + Constants.MOUSE_FATNESS + (Constants.CELL_SIZE - Constants.MOUSE_FATNESS)/2 - Constants.CELL_SIZE/15,
+                   1, Constants.CELL_SIZE/6);
+
+        g.setColor(Constants.MOUSE_COLOR_EARS);
+        int yEar = y + Constants.CELL_SIZE/3;
+        int xEar = x + Constants.CELL_SIZE/3;
+        // left ear
+        Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+        // right ear
+        xEar = x + Constants.CELL_SIZE/3*2;
+        Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+        break;
+      }
+      case Constants.ORIENTATION_DOWN :
+      {
+        g.setColor(Constants.MOUSE_COLOR_EARS);
+        int yEar = y + Constants.CELL_SIZE/3;
+        int xEar = x + Constants.CELL_SIZE/3;
+        // left ear
+        Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+        // right ear
+        xEar = x + Constants.CELL_SIZE/3*2;
+        Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+
+        g.setColor(Constants.MOUSE_COLOR_BODY);
+        Constants.fillCircle(g, x + Constants.CELL_SIZE2,
+                             y + Constants.CELL_SIZE2,
+                             Constants.MOUSE_FATNESS/2);
+
+        g.setColor(Constants.MOUSE_COLOR_EYES);
+        int yEye = y + Constants.CELL_SIZE/2;
+        int xEye = x + Constants.CELL_SIZE/7*3 - 1;
+        // left eye
+        g.fillOval(xEye, yEye - Constants.MOUSE_EYE_SIZE,
+                   Constants.MOUSE_EYE_SIZE,
+                   2*Constants.MOUSE_EYE_SIZE);
+        // rigth eye
+        xEye = x + Constants.CELL_SIZE/7*4;
+        g.fillOval(xEye, yEye - Constants.MOUSE_EYE_SIZE,
+                   Constants.MOUSE_EYE_SIZE,
+                   2*Constants.MOUSE_EYE_SIZE);
+        break;
+      }
+      case Constants.ORIENTATION_LEFT :
+      case Constants.ORIENTATION_RIGHT :
+      {
+        g.setColor(Constants.MOUSE_COLOR_TAIL);
+        if(orientation == Constants.ORIENTATION_LEFT)
+          g.drawLine(x + Constants.CELL_SIZE2, y + Constants.CELL_SIZE/2,
+                     x + Constants.CELL_SIZE2 + (int)(Constants.MOUSE_FATNESS*1.41/3 + 2),
+                     y + Constants.CELL_SIZE2 + (int)(Constants.MOUSE_FATNESS*1.41/3 + 2));
+        else
+          g.drawLine(x + Constants.CELL_SIZE2, y + Constants.CELL_SIZE/2,
+                     x + Constants.CELL_SIZE2 - (int)(Constants.MOUSE_FATNESS*1.41/3 + 2),
+                     y + (int)(Constants.CELL_SIZE2 + Constants.MOUSE_FATNESS*1.41/3 + 2));
+
+        g.setColor(Constants.MOUSE_COLOR_BODY);
+        Constants.fillCircle(g, x + Constants.CELL_SIZE2,
+                             y + Constants.CELL_SIZE2, Constants.MOUSE_FATNESS/2);
+
+        g.setColor(Constants.MOUSE_COLOR_EARS);
+        int yEar = y + Constants.CELL_SIZE/3;
+        int xEar = x + Constants.CELL_SIZE/3;
+        // left ear
+        if(orientation == Constants.ORIENTATION_RIGHT)
+          Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+        // right ear
+        else
+        {
+          xEar = x + Constants.CELL_SIZE/3*2;
+          Constants.fillCircle(g, xEar, yEar, Constants.MOUSE_EAR_SIZE/2);
+        }
+
+        g.setColor(Constants.MOUSE_COLOR_EYES);
+        int yEye = y + Constants.CELL_SIZE2;
+        int xEye = x + Constants.CELL_SIZE/7*3 - 1;
+        // left eye
+        if(orientation == Constants.ORIENTATION_LEFT)
+          g.fillOval(xEye, yEye - Constants.MOUSE_EYE_SIZE,
+                     Constants.MOUSE_EYE_SIZE, 2*Constants.MOUSE_EYE_SIZE);
+        // rigth eye
+        else
+        {
+          xEye = x + Constants.CELL_SIZE/7*4;
+          g.fillOval(xEye, yEye - Constants.MOUSE_EYE_SIZE,
+                     Constants.MOUSE_EYE_SIZE, 2*Constants.MOUSE_EYE_SIZE);
+        }
+      }
+    }
+  }
+
+  private static final int CLEFT = 180 - 25 + 45;
+  private static final int CUP = 90 - 25 + 45;
+  private static final int CDOWN = 270 - 25 + 45;
+  private static final int CAT_FATNESS2 = Constants.CAT_FATNESS/2;
+
+  public static final void drawCat(Graphics g, int x, int y, int orientation)
+  {
+    g.setColor(Constants.CAT_COLOR);
+    int startArc = 0;
+
+    if(orientation == Constants.ORIENTATION_RIGHT)
+      startArc = 25;
+    else if(orientation == Constants.ORIENTATION_LEFT)
+      startArc = CLEFT;
+    else if(orientation == Constants.ORIENTATION_UP)
+      startArc = CUP;
+    else if(orientation == Constants.ORIENTATION_DOWN)
+      startArc = CDOWN;
+
+    g.fillArc(x + Constants.CELL_SIZE2 - CAT_FATNESS2,
+              y + Constants.CELL_SIZE2 - CAT_FATNESS2,
+              Constants.CAT_FATNESS, Constants.CAT_FATNESS, startArc, 315);
+  }
+
+  public void drawWalls(Graphics g, int x, int y)
+  {
+    // walls
+    g.setColor(Constants.WALL_COLOR);
+    // special left wall
+    if(x == Constants.WALL_WIDTH2)
+      drawVerticalWall(g, x, y);
+    // special upper wall
+    if(y == Constants.WALL_WIDTH2)
+      drawHorizontalWall(g, x, y);
+    if(wallDown)
+      drawHorizontalWall(g, x, y + Constants.CELL_SIZE);
+    if(wallRight)
+      drawVerticalWall(g, x + Constants.CELL_SIZE, y);
+  }
+
+  private void drawHorizontalWall(Graphics g, int x, int y)
+  {
+    g.fillRect(x, y - Constants.WALL_WIDTH2, Constants.CELL_SIZE, Constants.WALL_WIDTH);
+    g.fillOval(x - Constants.WALL_WIDTH2, y - Constants.WALL_WIDTH,
+               Constants.WALL_WIDTH, Constants.WALL_WIDTHD);
+    g.fillOval(x - Constants.WALL_WIDTH2 + Constants.CELL_SIZE, y - Constants.WALL_WIDTH,
+               Constants.WALL_WIDTH, Constants.WALL_WIDTHD);
+  }
+
+  private void drawVerticalWall(Graphics g, int x, int y)
+  {
+    g.fillRect(x - Constants.WALL_WIDTH2, y, Constants.WALL_WIDTH, Constants.CELL_SIZE);
+    g.fillOval(x - Constants.WALL_WIDTH, y - Constants.WALL_WIDTH2,
+               Constants.WALL_WIDTHD, Constants.WALL_WIDTH);
+    g.fillOval(x - Constants.WALL_WIDTH, y - Constants.WALL_WIDTH2 + Constants.CELL_SIZE,
+               Constants.WALL_WIDTHD, Constants.WALL_WIDTH);
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/BoardPanel.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.awt.*;
+import java.awt.image.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+import chuchurocket.game.*;
+import chuchurocket.editor.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class BoardPanel extends JPanel implements MouseListener
+{
+  private Board b = null;
+  public Board getBoard() { return b; }
+  private EditorFrame ef = null;
+  private GameFrame gf = null;
+  private static Image buffer = null;
+  public static Graphics gr = null;
+
+  private static int w = 0;
+  private static int h = 0;
+
+  public BoardPanel(Board b, EditorFrame ef, GameFrame gf)
+  {
+    super(true);
+    this.b = b;
+    this.addMouseListener(this);
+    this.ef = ef;
+    this.gf = gf;
+    this.w = Constants.GAME_FIELD_WIDTH * Constants.CELL_SIZE + Constants.WALL_WIDTH;
+    this.h = Constants.GAME_FIELD_HEIGHT * Constants.CELL_SIZE + Constants.WALL_WIDTH;
+    this.setPreferredSize(new Dimension(w, h));
+    this.buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+    this.gr = buffer.getGraphics();
+  }
+
+  public void update(Graphics g) { paint(g); }
+  public void paint(Graphics g)
+  {
+    ((Graphics2D)gr).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    gr.drawImage(Media.IMAGE_BOARD, Constants.WALL_WIDTH2, Constants.WALL_WIDTH2, null);
+    drawStatics(gr);
+    if(gf != null &amp;&amp; gf.isMoving())
+      GameEngine.drawSprites(gr);
+    g.drawImage(buffer, 0, 0, w, h, this);
+  }
+
+  private final void drawStatics(Graphics g)
+  {
+    boolean even = false;
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+    {
+      int y = j*Constants.CELL_SIZE;
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+      {
+        int x = i*Constants.CELL_SIZE;
+
+        //even = (i &amp; 1) == 0;
+        //if((j &amp; 1) != 0)
+        //  even = !even;
+        //Color c = even ? Constants.CELL_EVEN_COLOR : Constants.CELL_ODD_COLOR;
+        //Paint gradient = new GradientPaint(x + Constants.WALL_WIDTH2, y + Constants.WALL_WIDTH2,
+        //   c, x + Constants.CELL_SIZE, y + Constants.CELL_SIZE, Color.white, true);
+        //((Graphics2D)g).setPaint(gradient);
+        //((Graphics2D)g).setPaint(gradient);
+        //  g.fillRect(x + Constants.WALL_WIDTH2, y + Constants.WALL_WIDTH2,
+        //             x + Constants.CELL_SIZE, y + Constants.CELL_SIZE);
+
+        b.board[j][i].draw(g, x + Constants.WALL_WIDTH2, y + Constants.WALL_WIDTH2, gf != null &amp;&amp; gf.isMoving());
+      }
+    }
+
+    for(int j=0; j&lt;Constants.GAME_FIELD_HEIGHT; j++)
+    {
+      int y = j*Constants.CELL_SIZE + Constants.WALL_WIDTH2;
+      for(int i=0; i&lt;Constants.GAME_FIELD_WIDTH; i++)
+      {
+        int x = i*Constants.CELL_SIZE + Constants.WALL_WIDTH2;
+        b.board[j][i].drawWalls(g, x, y);
+      }
+    }
+  }
+
+  public void mouseReleased(MouseEvent me)
+  {
+    if(gf != null &amp;&amp; gf.isMoving())
+      return;
+    boolean rightButton = me.isPopupTrigger();
+    int x = (me.getX() - Constants.WALL_WIDTH2) / Constants.CELL_SIZE;
+    int y = (me.getY() - Constants.WALL_WIDTH2) / Constants.CELL_SIZE;
+
+    BoardElement be = b.board[y][x];
+
+    if(ef != null) // editor mode
+    {
+      if(rightButton) // deleting objects (or walls), one by one for each click
+      {
+        if(be.content != Constants.STATE_NOTHING)
+        {
+          be.content = Constants.STATE_NOTHING;
+          be.orientation = Constants.ORIENTATION_NONE;
+        }
+        else
+        {
+          // "up"
+          if(y &gt; 0 &amp;&amp; b.board[y-1][x].wallDown)
+            b.board[y-1][x].wallDown = false;
+          else
+          {
+            if(be.wallRight)
+              be.wallRight = false;
+            else
+            {
+              if(be.wallDown)
+                be.wallDown = false;
+              else
+              {
+                // "left"
+                if(x &gt; 0 &amp;&amp; b.board[y][x-1].wallRight)
+                {
+                  BoardElement beLeft = b.board[y][x-1];
+                    beLeft.wallRight = false;
+                }
+              }
+            }
+          }
+        }
+      }
+      else // adding an object (or a wall)
+      {
+        if(ef.state != Constants.STATE_ARROW) // can't draw arrows in editor here
+        {
+          if(ef.state == Constants.STATE_WALL)
+          {
+            if(ef.orientation == Constants.ORIENTATION_DOWN)
+              be.wallDown = true;
+            else if(ef.orientation == Constants.ORIENTATION_RIGHT)
+              be.wallRight = true;
+            else if(ef.orientation == Constants.ORIENTATION_LEFT &amp;&amp; x &gt; 0) // "left"
+            {
+              BoardElement beLeft = b.board[y][x-1];
+              beLeft.wallRight = true;
+            }
+            else if(ef.orientation == Constants.ORIENTATION_UP &amp;&amp; y &gt; 0) // "up"
+            {
+              BoardElement beUp = b.board[y-1][x];
+              beUp.wallDown = true;
+            }
+          }
+          else
+          {
+            be.content = ef.state;
+            be.orientation = ef.orientation;
+          }
+        }
+      }
+    }
+    else // game mode, only arrows are allowed
+    {
+      if(rightButton) // delete arrow
+      {
+        if(be.contentArrow &gt; -1)
+        {
+          gf.getArrowsPanel().addArrow(be.contentArrow);
+          be.contentArrow = -1;
+          gf.getArrowsPanel().setLastArrowAsSelected();
+        }
+      }
+      else // add arrow
+      {
+        if(gf.getArrowsPanel().getSelectedArrow() &gt;= 0 &amp;&amp;
+           be.contentArrow &lt; 0 &amp;&amp;
+           be.content != Constants.STATE_HOLE &amp;&amp;
+           be.content != Constants.STATE_ROCKET)
+        {
+          be.contentArrow = gf.getArrowsPanel().getSelectedArrow();
+          gf.getArrowsPanel().removeSelectedArrow();
+        }
+      }
+    }
+    repaint();
+  }
+
+  public void mouseExited(MouseEvent me) { ; }
+  public void mouseEntered(MouseEvent me) { ; }
+  public void mouseClicked(MouseEvent me) { ; }
+  public void mousePressed(MouseEvent me) { ; }
+
+  public void setBoard(Board b)
+  {
+    this.b = b;
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/Constants.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.applet.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.awt.geom.*;
+import java.awt.font.*;
+import java.io.*;
+import java.net.*;
+import javax.swing.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Constants
+{
+  public static final String FILE_MARKER = "ChuChu Cheese Level File";
+
+  public static final int GAME_FIELD_WIDTH = 12;
+  public static final int GAME_FIELD_HEIGHT = 9;
+
+  public static final int STATE_NOTHING = 0;
+  public static final int STATE_MOUSE = 1;
+  public static final int STATE_CAT = 2;
+  public static final int STATE_HOLE = 3;
+  public static final int STATE_ROCKET = 4;
+  public static final int STATE_WALL = 5;
+  public static final int STATE_ARROW = 6;
+
+  public static final int ORIENTATION_NONE = 0;
+  public static final int ORIENTATION_LEFT = 1;
+  public static final int ORIENTATION_RIGHT = 2;
+  public static final int ORIENTATION_UP = 3;
+  public static final int ORIENTATION_DOWN = 4;
+
+  public static final Color BUTTON_COLOR_SELECTED = Color.green;
+  public static final Color BUTTON_COLOR_NORMAL = Color.lightGray;
+
+  public static final Composite COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f);
+
+  public static final int CELL_SIZE = 60; // EVERYTHING SHOULD BE RELATIVE TO THIS!!!
+  public static final int CELL_SIZE2 = CELL_SIZE/2;
+  public static final int CELL_INSET = CELL_SIZE/30;
+  public static final Color CELL_ODD_COLOR = Color.pink;
+  public static final Color CELL_EVEN_COLOR = Color.yellow;
+
+  public static final int WALL_WIDTH = (int)(CELL_SIZE/8f);
+  public static final int WALL_WIDTH2 = WALL_WIDTH/2;
+  public static final int WALL_WIDTHD = WALL_WIDTH*2;
+  public static final Color WALL_COLOR = Color.red;
+
+  public static final int ARROW_INSET = CELL_SIZE/8;
+  public static final Color ARROW_BACKGROUND_COLOR = Color.blue;
+  public static final Color ARROW_FOREGROUND_COLOR = Color.white;
+  public static final int ARROWS_MAX = 4;
+
+  public static final int MOUSE_FATNESS = CELL_SIZE/2;
+  public static final int MOUSE_EAR_SIZE = CELL_SIZE/3;
+  public static final int MOUSE_EYE_SIZE = CELL_SIZE/12;
+  public static final Color MOUSE_COLOR_BODY = Color.lightGray;
+  public static final Color MOUSE_COLOR_EARS = Color.darkGray;
+  public static final Color MOUSE_COLOR_TAIL = Color.black;
+  public static final Color MOUSE_COLOR_EYES = Color.black;
+
+  public static final Color CAT_COLOR = Color.red;
+  public static final int CAT_FATNESS = CELL_SIZE/3*2;
+
+  public static final String EDITOR_ABOUT = "ChuChu Cheese Editor V1.0\nCopyright (c) Mihailo Despotovic 2003.";
+  public static final String EDITOR_INSTRUCTIONS =
+      "Left-click on buttons and then the boards to insert objects.\n" +
+      "Right-click on an object to remove it.\n";
+
+  public static final Font FONT1 = new Font("dialog", Font.PLAIN, CELL_SIZE/2);
+
+  public static final int SPEED_MOUSE = CELL_SIZE/10;
+  public static final int SPEED_CAT = (int)(SPEED_MOUSE * 4f/5f);
+  public static final int SPEED_MULTIPLIER = 4;
+
+  public static final int TIME_DELAY = 40; // 25fps
+  public static final int TIME_DELAY4 = TIME_DELAY/4;
+
+  // some useful methods
+
+  public static void center(JFrame f)
+  {
+    int h = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    int w = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    f.setBounds((int)(w - f.getWidth())/2, (int)(h - f.getHeight())/2,
+                (int)f.getWidth(), (int)f.getHeight());
+  }
+
+  public static void fillCircle(Graphics g, int x, int y, int r)
+  {
+    x -= r;
+    y -= r;
+    int r2 = 2*r;
+    g.fillArc(x, y, r2, r2, 0, 360);
+  }
+
+  public static void drawCircle(Graphics g, int x, int y, int r)
+  {
+    x -= r;
+    y -= r;
+    int r2 = 2*r;
+    g.drawArc(x, y, r2, r2, 0, 360);
+  }
+
+  public static void load(Board board, ArrowsPanel ap, File file, JFrame host, JTextField name)
+  {
+    try
+    {
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      String line = br.readLine(); // check the file marker
+      if(!line.equals(Constants.FILE_MARKER))
+      {
+        br.close();
+        JOptionPane.showMessageDialog(host, "Not a level file", "Load Level Bad File", JOptionPane.ERROR_MESSAGE);
+        return;
+      }
+      line = br.readLine(); // level name
+      name.setText(line);
+      line = br.readLine(); // board
+      board.setContentFromString(line);
+      line = br.readLine(); // arrows
+      ap.setContentFromString(line);
+      br.close();
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(host, e.toString(), "Load Level Error", JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  public static void save(File file, Board board, ArrowsPanel ap, Frame host, JTextField name)
+  {
+    try
+    {
+      PrintWriter pw = new PrintWriter(new FileWriter(file));
+      pw.println(Constants.FILE_MARKER); // mark the file as a level file
+      pw.println(name.getText()); // the name of the level
+      pw.println(board.toString()); // the board configuration
+      pw.println(ap.toString()); // the arrows configuration
+      pw.flush();
+      pw.close();
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(host, e.toString(), "Save Level Error", JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  private static final float k = 1/100f;
+  private static final float kk[] =
+  {
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+     k,k,k,k,k,k,k,k,k,k,
+  };
+  private static final Kernel KERNEL_BLUR = new Kernel(10, 10, kk);
+  private static final ConvolveOp CONVOLVE_OP_BLUR = new ConvolveOp(KERNEL_BLUR);
+
+  public static final void paintBlurredText(Graphics g, String text, int w, int h, Color color)
+  {
+     FontMetrics fm = g.getFontMetrics(FONT1);
+     int xpos = (w - fm.stringWidth(text))/2;
+     int ypos = (h - (fm.getAscent() + fm.getDescent()))/2 + fm.getAscent() - fm.getDescent()/2;
+
+     BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+     Graphics2D g2 = bi.createGraphics();
+     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+     g2.setColor(Color.black);
+     g2.fillRect(0, 0, w, h);
+
+     g2.setPaint(color);
+     FontRenderContext frc = g2.getFontRenderContext();
+     Shape shape = new TextLayout(text, FONT1, frc).
+                   getOutline(AffineTransform.getTranslateInstance(xpos, ypos));
+     g2.setColor(color);
+     g2.fill(shape);
+     g2.dispose();
+
+     bi = CONVOLVE_OP_BLUR.filter(bi, null);
+
+     g2 = bi.createGraphics();
+     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+     g2.setPaint(color);
+     frc = g2.getFontRenderContext();
+     shape = new TextLayout(text, FONT1, frc).
+             getOutline(AffineTransform.getTranslateInstance(xpos, ypos));
+     g2.fill(shape);
+     g2.dispose();
+
+     g.drawImage(bi, 0, 0, w, h, null);
+  }
+
+  public static final String format(int number)
+  {
+    if(number &lt; 9)
+      return "00" + number;
+    else if(number &lt; 99)
+      return "0" + number;
+    else
+      return "" + number;
+  }
+
+  private static long time = System.currentTimeMillis();
+  public static void logTime(String s)
+  {
+    System.out.println(s + " " + (System.currentTimeMillis() - time));
+    time = System.currentTimeMillis();
+  }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/CoolButton.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class CoolButton extends JButton implements MouseListener
+{
+  private static int xxPlay[] = new int[3];
+  private static int yyPlay[] = new int[3];
+  private static int xx1FF[] = new int[3];
+  private static int yyFF[] = new int[3];
+  private static int xx2FF[] = new int[3];
+
+  private static int stopX = 0;
+  private static int stopY = 0;
+  private static int stopSize = 0;
+
+  private boolean pressed = false;
+
+  public void initStatics(int w, int h)
+  {
+    int inset = Constants.CELL_INSET;
+    int size = w - 2*inset;
+    int sizeY = h - 2*inset;
+
+    xxPlay[0] = inset + (int)(size/3f);
+    xxPlay[1] = inset + (int)(size/3f*2f);
+    xxPlay[2] = xxPlay[0];
+    yyPlay[0] = inset + (int)(sizeY/4f);
+    yyPlay[1] = inset + (int)(sizeY/2f);
+    yyPlay[2] = inset + (int)(sizeY/4f*3f);
+
+    float twoByFive = 2f/5f;
+
+    xx1FF[0] = inset + (int)(size/5f);
+    xx1FF[1] = inset + (int)(size*twoByFive);
+    xx1FF[2] = xx1FF[0];
+
+    yyFF[0] = inset + (int)(sizeY/4f);
+    yyFF[1] = inset + (int)(sizeY/2f);
+    yyFF[2] = yyFF[0] + (int)(sizeY/2f);
+
+    xx2FF[0] = xx1FF[0] + (int)(size*twoByFive);
+    xx2FF[1] = xx1FF[1] + (int)(size*twoByFive);
+    xx2FF[2] = xx1FF[2] + (int)(size*twoByFive);
+
+    xx1FF[0] += Constants.CELL_INSET*2;
+    xx1FF[1] += Constants.CELL_INSET*2;
+    xx1FF[2] += Constants.CELL_INSET*2;
+
+    stopX = inset + 2*size/4 - size/8;
+    stopY = inset + 2*sizeY/4 - size/8;
+    stopSize = size/4;
+
+    repaint();
+  }
+
+  public CoolButton(String text)
+  {
+    super(text);
+    this.setFocusPainted(false);
+    this.addMouseListener(this);
+  }
+
+  /*public Dimension gerPreferredSize()
+  {
+    return new Dimension(Constants.CELL_SIZE, Constants.CELL_SIZE);
+  }*/
+
+  public void paint(Graphics g)
+  {
+    Graphics2D g2 = (Graphics2D)g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g.setColor(Color.black);
+    g.fillRect(0, 0, getWidth(), getHeight());
+
+    String text = getText();
+    if(!pressed)
+      g.setColor(Color.white);
+    else
+    {
+      if("stop".equals(text))
+        g.setColor(Color.red);
+      else
+        g.setColor(Color.green);
+    }
+    if("play".equals(text))
+      g.fillPolygon(xxPlay, yyPlay, 3);
+    else if("ff".equals(text))
+    {
+      g.fillPolygon(xx1FF, yyFF, 3);
+      g.fillPolygon(xx2FF, yyFF, 3);
+    }
+    else if("stop".equals(text))
+      g.fillRect(stopX, stopY, stopSize, stopSize);
+    else
+      g.drawString("?", 20, 20);
+  }
+
+  public void mousePressed(MouseEvent me) { pressed = true; }
+  public void mouseReleased(MouseEvent me) { pressed = false; }
+  public void mouseExited(MouseEvent me) { ; }
+  public void mouseEntered(MouseEvent me) { ; }
+  public void mouseClicked(MouseEvent me) { ; }
+}
+</pre>
+        </details>
+        <details>
+            <summary>chuchurocket/util/Media.java</summary>
+            <pre class="original">package chuchurocket.util;
+
+import java.applet.*;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+
+/**
+ * &lt;p&gt;Title: ChuChu Rocket&lt;/p&gt;
+ * &lt;p&gt;Description: A java port of a well known SEGA's game for Dreamcast&lt;/p&gt;
+ * &lt;p&gt;Copyright: Copyright (c) 2003 Mihailo Despotovic (game idea (c)SEGA)&lt;/p&gt;
+ * &lt;p&gt;Company: &lt;/p&gt;
+ * @author Mihailo Despotovic
+ * @version 1.0
+ */
+
+public class Media
+{
+  public static Image IMAGE_CHEESE = null;
+  public static Image IMAGE_BOARD = null;
+  public static Image IMAGE_SKULL = null;
+
+  public static AudioClip SOUND_MOUSE_IN_CHEESE = null;
+  public static AudioClip SOUND_MOUSE_IN_HOLE = null;
+
+  public static AudioClip SOUND_CAT_IN_HOLE = null;
+  public static AudioClip SOUND_CAT_IN_MOUSE = null;
+  public static AudioClip SOUND_CAT_IN_CHEESE = null;
+
+  public static AudioClip SOUND_LEVEL_UP = null;
+  public static AudioClip SOUND_LEVEL_END = null;
+
+  public static void loadMedia()// load all images and wait until they are OK to avoid stupid asynchronous load...
+  {
+    try
+    {
+      SOUND_MOUSE_IN_CHEESE = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\mouseincheese.wav"));
+      SOUND_MOUSE_IN_HOLE = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\mouseinhole.wav"));
+
+      SOUND_CAT_IN_HOLE = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\catinhole.wav"));
+      SOUND_CAT_IN_MOUSE = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\catinmouse.wav"));
+      SOUND_CAT_IN_CHEESE = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\catincheese.wav"));
+
+      SOUND_LEVEL_UP = Applet.newAudioClip
+        (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\levelup.wav"));
+      //SOUND_LEVEL_END = Applet.newAudioClip
+      //  (new URL("file:\\d:\\mihailo\\javaprojects\\chuchurocket\\res\\levelend.wav"));
+    }
+    catch(Exception e) { e.printStackTrace(); }
+
+    IMAGE_CHEESE = Toolkit.getDefaultToolkit().getImage("d:\\mihailo\\javaprojects\\chuchurocket\\res\\cheese.gif").
+                   getScaledInstance(Constants.CELL_SIZE - 2*Constants.CELL_INSET, Constants.CELL_SIZE - 2*Constants.CELL_INSET, Image.SCALE_DEFAULT);
+    IMAGE_BOARD = Toolkit.getDefaultToolkit().getImage("d:\\mihailo\\javaprojects\\chuchurocket\\res\\board.gif").
+                   getScaledInstance(Constants.GAME_FIELD_WIDTH*Constants.CELL_SIZE,
+                   Constants.GAME_FIELD_HEIGHT*Constants.CELL_SIZE, Image.SCALE_DEFAULT);
+    IMAGE_SKULL = Toolkit.getDefaultToolkit().getImage("d:\\mihailo\\javaprojects\\chuchurocket\\res\\skull.gif").
+                   getScaledInstance(Constants.CELL_SIZE - 2*Constants.CELL_INSET, Constants.CELL_SIZE - 2*Constants.CELL_INSET, Image.SCALE_DEFAULT);
+    while(IMAGE_CHEESE.getWidth(null) &lt; 0 || IMAGE_BOARD.getWidth(null) &lt; 0 ||
+          IMAGE_SKULL.getWidth(null) &lt; 0 ) // wait until they are OK
+    {
+      try { Thread.sleep(200); }
+      catch(InterruptedException ie) { ; }
+    }
+  }
+}
+</pre>
+        </details>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>

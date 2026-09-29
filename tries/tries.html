@@ -44,11 +44,17 @@
         /* the way back to the attic, for when this page is opened on its own */
         nav.attic { font-size: 14px; margin: 0 0 6px; }
         nav.attic.end { margin: 32px 0 16px; }
+        details.original { margin: 20px 0 0; }
+        details.original summary { cursor: pointer; font-weight: 600; }
+        details.original details { margin: 8px 0 0 16px; }
+        details.original details summary { font: 600 13px ui-monospace, monospace; }
+        pre.original { font: 12px/1.45 ui-monospace, monospace; background: #f6f6f6; border: 1px solid #ddd; padding: 8px; overflow-x: auto; tab-size: 4; }
         /* dark mode: made from the colors above, for when the system is dark */
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e8e8e8; }
             .intro { color: #aeaeae; }
             pre { border: 1px solid #6d6d6d; }
+            pre.original { background: #1b1b1b; border: 1px solid #454545; }
         }
     </style>
 </head>
@@ -69,6 +75,27 @@
     <p id="summary"></p>
     <pre id="output"></pre>
     <script src="tries.js"></script>
+    <details class="original">
+        <summary>The original Java code: Try.java</summary>
+        <pre class="original">/**
+ * Created by mihailod, 03.06.2008., 09.27.56
+ */
+public class Try {
+    public static void main(final String[] args) {
+        double p = 0.01;
+        double cutoff = 0.8;
+
+        double res = 0;
+        int i = 0;
+        while(res &lt;  cutoff) {
+            res += p * Math.pow((1 - p), i);
+            System.out.println("After " + (i+1) + " tries, p = " + res);
+            i++;
+        }
+    }
+}
+</pre>
+    </details>
     <nav class="attic end"><a href="https://mihailod.github.io/attic/">← Mihailo Despotovic's Software Attic, 1985–2015</a></nav>
 </body>
 </html>
